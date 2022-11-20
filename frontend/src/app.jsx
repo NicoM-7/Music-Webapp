@@ -11,7 +11,7 @@ function App() {
             <div className='App'>
                 <h1>Different page</h1>
                 <Routes>
-                    <Route path="/tracks" element={<Tracks />} />
+                    <Route path="/tracks" element={<Tracks/>}/>
                 </Routes>
             </div>
         </BrowserRouter>
