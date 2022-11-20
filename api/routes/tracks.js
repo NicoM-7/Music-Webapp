@@ -31,15 +31,19 @@ trackRouter.get('', (req, res) => {
             FROM tracks
             LEFT JOIN albums ON tracks.albumID=albums.albumID
             LEFT JOIN artists ON tracks.artistID=artists.artistID
-            WHERE trackTitle LIKE ?
-            AND albumName LIKE ?
-            AND artistName LIKE ?
-            AND trackGenres LIKE ?
+            WHERE (similar_text_ratio(trackTitle, ?) > 70 OR trackTitle LIKE ?)
+            AND (similar_text_ratio(albumName, ?) > 70 OR albumName LIKE ?)
+            AND (similar_text_ratio(artistName, ?) > 70 OR artistName LIKE ?)
+            AND (similar_text_ratio(trackGenres, ?) > 70 OR trackGenres LIKE ?)
             LIMIT ?;`,
         [
+            req.query.track,
             "%" + req.query.track + "%",
+            req.query.album,
             "%" + req.query.album + "%",
+            req.query.artist,
             "%" + req.query.artist + "%",
+            req.query.genre,
             "%" + req.query.genre + "%",
             parseInt(req.query.results)
         ],

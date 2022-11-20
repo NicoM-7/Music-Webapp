@@ -2,9 +2,9 @@ COMMENT 'Source: https://github.com/zufuliu/algorithm/blob/main/SimilarText/simi
 
 DELIMITER $$
 
-CREATE FUNCTION 'similar_text'(
-	's1' VARCHAR(255) CHARSET utf32,
-	's2' VARCHAR(255) CHARSET utf32
+CREATE FUNCTION `similar_text`(
+	`s1` VARCHAR(255) CHARSET utf32,
+	`s2` VARCHAR(255) CHARSET utf32
 )
 RETURNS INT
 LANGUAGE SQL
@@ -99,9 +99,9 @@ BEGIN
 	RETURN sum_len - 2*sim;
 END$$
 
-CREATE FUNCTION 'similar_text_ratio'(
-	's1' VARCHAR(255) CHARSET utf32,
-	's2' VARCHAR(255) CHARSET utf32
+CREATE FUNCTION `similar_text_ratio`(
+	`s1` VARCHAR(255) CHARSET utf32,
+	`s2` VARCHAR(255) CHARSET utf32
 )
 RETURNS INT
 LANGUAGE SQL

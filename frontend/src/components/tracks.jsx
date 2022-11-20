@@ -20,7 +20,7 @@ function Tracks() {
         if (event.key === "Enter") {
             event.preventDefault();
 
-            const results = 50;
+            const results = 10;
 
             fetch("http://" + window.location.hostname + ":9000/api/tracks?" +
                 "track=" + inputs.track +
@@ -37,6 +37,7 @@ function Tracks() {
                 .then(httpResp => {
                     return httpResp.json().then(data => {
                         if (httpResp.ok) {
+                            data = data.map(track => track.trackTitle)
                             alert(JSON.stringify(data));
                         }
                         else {
