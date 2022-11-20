@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './index.css';
 import Tracks from  "./components/tracks";
 import Login from "./components/login";
-import PrivateRoute from './components/privateRoute';
+import HomePage from "./components/homePage";
 
 function App() {
     return (
@@ -14,7 +14,7 @@ function App() {
                 <Routes>
                     <Route path="/tracks" element={<Tracks/>}/>
                     <Route path="/login" element={<Login/>}/>
-                    <PrivateRoute path="/authenticated" element={<Tracks/>}/>
+                    <Route path="/homePage" element={<HomePage/>}/>
                 </Routes>
             </div>
         </BrowserRouter>
