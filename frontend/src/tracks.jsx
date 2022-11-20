@@ -8,6 +8,8 @@ function Tracks() {
         genre: "",
     });
 
+    const [tracks, setTracks] = useState({});
+
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
@@ -17,7 +19,34 @@ function Tracks() {
     const handleSubmit = (event) => {
         if (event.key === "Enter") {
             event.preventDefault();
-            alert(JSON.stringify(inputs));
+
+            const results = 50;
+
+            fetch("http://" + window.location.hostname + ":9000/api/tracks?" +
+                "track=" + inputs.track +
+                "&artist=" + inputs.artist +
+                "&album=" + inputs.album +
+                "&genre=" + inputs.genre +
+                "&results=" + results,
+                {
+                    method: "GET",
+                    headers: new Headers({
+                        'Content-Type': 'application/json'
+                    })
+                })
+                .then(httpResp => {
+                    return httpResp.json().then(data => {
+                        if (httpResp.ok) {
+                            alert(JSON.stringify(data));
+                        }
+                        else {
+                            throw new Error(httpResp.status + "\n" + JSON.stringify(data));
+                        }
+                    })
+                })
+                .catch(err => {
+                    alert(err);
+                });
         }
     }
 
