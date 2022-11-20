@@ -23,10 +23,10 @@ function Tracks() {
             const results = 10;
 
             fetch("http://" + window.location.hostname + ":9000/api/tracks?" +
-                "track=" + inputs.track +
-                "&artist=" + inputs.artist +
-                "&album=" + inputs.album +
-                "&genre=" + inputs.genre +
+                "track=" + inputs.track.trim() +
+                "&artist=" + inputs.artist.trim() +
+                "&album=" + inputs.album.trim() +
+                "&genre=" + inputs.genre.trim() +
                 "&results=" + results,
                 {
                     method: "GET",
