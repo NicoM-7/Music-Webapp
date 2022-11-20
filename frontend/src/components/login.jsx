@@ -1,4 +1,5 @@
 import React from 'react';
+import { signInWithGoogle } from "../firebase"
 
 function Login() {
     return (
@@ -16,6 +17,7 @@ function Login() {
                     <input type="submit"/>
                 </div>
             </form>
+            <button onClick={signInWithGoogle}>Login With Google</button>
         </div>
     );
 }

@@ -14,7 +14,6 @@ function App() {
                 <Routes>
                     <Route path="/tracks" element={<Tracks/>}/>
                     <Route path="/login" element={<Login/>}/>
-                    <PrivateRoute path="/authenticated" element={<Tracks/>}/>
                 </Routes>
             </div>
         </BrowserRouter>
