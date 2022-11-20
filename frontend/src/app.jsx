@@ -4,14 +4,15 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import './index.css';
 import Tracks from './components/tracks';
+import Login from "./components/login";
 
 function App() {
     return (
         <BrowserRouter>
             <div className='App'>
-                <h1>Different page</h1>
                 <Routes>
                     <Route path="/tracks" element={<Tracks />} />
+                    <Route path="/login" element={<Login />} />
                 </Routes>
             </div>
         </BrowserRouter>
