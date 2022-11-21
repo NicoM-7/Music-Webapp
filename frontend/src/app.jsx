@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './index.css';
 import Tracks from "./components/tracks";
 import Login from "./components/login";
-import PrivateWrapper from "./components/privateRoute";
+import PrivateWrapper from "./components/privateWrapper";
 import HomePage from "./components/homePage";
 
 function App() {
@@ -11,6 +11,7 @@ function App() {
         <BrowserRouter>
             <div className='App'>
                 <Routes>
+                    <Route path = "" element = {<HomePage/>}/>
                     <Route path="/tracks" element={<Tracks />} />
                     <Route path="/login" element={<Login />} />
                     <Route element={<PrivateWrapper/>}>
