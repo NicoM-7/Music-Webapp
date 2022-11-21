@@ -8,6 +8,7 @@ function Tracks() {
         artist: "",
         album: "",
         genre: "",
+        similarity: false,
     });
 
     const [tracks, setTracks] = useState([]);
@@ -15,6 +16,12 @@ function Tracks() {
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
+        setInputs(values => ({ ...values, [name]: value }))
+    }
+
+    const handleCheckboxChange = (event) => {
+        const name = event.target.name;
+        const value = event.target.checked;
         setInputs(values => ({ ...values, [name]: value }))
     }
 
@@ -29,6 +36,7 @@ function Tracks() {
                 "&artist=" + inputs.artist.trim() +
                 "&album=" + inputs.album.trim() +
                 "&genre=" + inputs.genre.trim() +
+                "&similarity=" + inputs.similarity +
                 "&results=" + results,
                 {
                     method: "GET",
@@ -59,6 +67,8 @@ function Tracks() {
                 <input type="text" name="artist" onChange={handleChange} value={inputs.artist || ""} placeholder="Search by Artist" /><br />
                 <input type="text" name="album" onChange={handleChange} value={inputs.album || ""} placeholder="Search by Album" /><br />
                 <input type="text" name="genre" onChange={handleChange} value={inputs.genre || ""} placeholder="Search by Genre" /><br />
+                <label>Similarity Search </label>
+                <input type="checkbox" name="similarity" onChange={handleCheckboxChange} value={inputs.similarity} />
             </form>
             {
                 tracks.map((track) => <Track {...track} />)

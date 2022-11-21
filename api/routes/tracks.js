@@ -20,9 +20,24 @@ trackRouter.get('', (req, res) => {
     //     return;
     // }
 
+    const handleRes = (err, data) => {
+        db().end();
+
+        if (err) {
+            res.status(500).json(err);
+        }
+        else if (data.length === 0) {
+            res.status(404).json("No Tracks Found");
+        }
+        else {
+            res.json(data);
+        }
+    }
+
     db().connect();
 
-    db().query(`SELECT tracks.trackID,tracks.albumID,
+    if (req.query.similarity === "true") {
+        db().query(`SELECT tracks.trackID,tracks.albumID,
             albums.albumName,tracks.artistID,
             artists.artistName,tracks.trackTags,
             tracks.trackDateCreated,tracks.trackDateRecorded,
@@ -36,30 +51,42 @@ trackRouter.get('', (req, res) => {
             AND (similar_text_ratio(artistName, ?) > 70 OR artistName LIKE ?)
             AND (similar_text_ratio(trackGenres, ?) > 70 OR trackGenres LIKE ?)
             LIMIT ?;`,
-        [
-            req.query.track,
-            "%" + req.query.track + "%",
-            req.query.album,
-            "%" + req.query.album + "%",
-            req.query.artist,
-            "%" + req.query.artist + "%",
-            req.query.genre,
-            "%" + req.query.genre + "%",
-            parseInt(req.query.results)
-        ],
-        (err, data) => {
-            db().end();
+            [
+                req.query.track,
+                "%" + req.query.track + "%",
+                req.query.album,
+                "%" + req.query.album + "%",
+                req.query.artist,
+                "%" + req.query.artist + "%",
+                req.query.genre,
+                "%" + req.query.genre + "%",
+                parseInt(req.query.results)
+            ], handleRes);
+    }
+    else {
+        db().query(`SELECT tracks.trackID,tracks.albumID,
+            albums.albumName,tracks.artistID,
+            artists.artistName,tracks.trackTags,
+            tracks.trackDateCreated,tracks.trackDateRecorded,
+            tracks.trackDuration,tracks.trackGenres,
+            tracks.trackNumber,tracks.trackTitle
+            FROM tracks
+            LEFT JOIN albums ON tracks.albumID=albums.albumID
+            LEFT JOIN artists ON tracks.artistID=artists.artistID
+            WHERE trackTitle LIKE ?
+            AND albumName LIKE ?
+            AND artistName LIKE ?
+            AND trackGenres LIKE ?
+            LIMIT ?;`,
+            [
+                "%" + req.query.track + "%",
+                "%" + req.query.album + "%",
+                "%" + req.query.artist + "%",
+                "%" + req.query.genre + "%",
+                parseInt(req.query.results)
+            ], handleRes);
+    }
 
-            if (err) {
-                res.status(500).json(err);
-            }
-            else if (data.length === 0) {
-                res.status(404).json("No Tracks Found");
-            }
-            else {
-                res.json(data);
-            }
-        });
 });
 
 // Querys db for given track id and returns 1 result
