@@ -71,7 +71,7 @@ function Tracks() {
                 <input type="checkbox" name="similarity" onChange={handleCheckboxChange} value={inputs.similarity} />
             </form>
             {
-                tracks.map((track) => <Track {...track} />)
+                tracks.map((track) => <Track {...track} key={track.trackID} />)
             }
         </div>
     );

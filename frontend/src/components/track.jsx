@@ -3,8 +3,10 @@ import './track.css'
 function Track(track) {
 
     const toggleCollapsible = (event) => {
-        event.currentTarget.className.includes("active") ? event.currentTarget.className = "collapsible" : event.currentTarget.className += " active";
-        var content = event.currentTarget.nextElementSibling;
+        event.stopPropagation();
+
+        event.currentTarget.parentElement.className.includes("active") ? event.currentTarget.parentElement.className = "collapsible" : event.currentTarget.parentElement.className += " active";
+        var content = event.currentTarget.parentElement.nextElementSibling;
         if (content.style.display === "block") {
             content.style.display = "none";
         }
@@ -13,37 +15,33 @@ function Track(track) {
         }
     }
 
+    const openYoutube = async (event) => {
+        window.open(`https://www.youtube.com/results?search_query=  ${track.trackTitle}+by+${track.artistName}`, '_blank', 'noopener,noreferrer');
+    }
+
     return (
         <div>
-            <button type="button" className="collapsible" onClick={toggleCollapsible}>
-                <table>
-                    <tr>
-                        <td>{track.trackID}</td>
-                        <td>{track.trackTitle}</td>
-                        <td>{track.artistName}</td>
-                        <td>{track.trackDuration}</td>
-                    </tr>
-                </table>
+            <button type="button" className="collapsible">
+                <ul onClick={openYoutube}>
+                    <li id="trackID"><span>{track.trackID}</span></li>
+                </ul>
+                <ul onClick={toggleCollapsible}>
+                    <li id="trackTitle">{track.trackTitle}</li>
+                    <li id="artistName">{track.artistName}</li>
+                    <li id="trackDuration">{track.trackDuration}</li>
+                </ul>
             </button>
             <div className="content">
-                <table>
-                    <tr>
-                        <td>{track.albumID}</td>
-                        <td>{track.albumName}</td>
-                        <td>{track.artistID}</td>
-                        <td>{track.artistName}</td>
-                    </tr>
-                    <tr>
-                        <td>{track.trackGenres}</td>
-                    </tr>
-                    <tr>
-                        <td>{track.trackTags}</td>
-                    </tr>
-                    <tr>
-                        <td>{track.trackDateCreated}</td>
-                        <td>{track.trackDateRecorded}</td>
-                    </tr>
-                </table>
+                <ul>
+                    <li id="albumID">Album ID: {track.albumID}</li>
+                    <li id="albumName">Album: {track.albumName}</li>
+                    <li id="artistID">Artist ID: {track.artistID}</li>
+                    <li id="artistName">Artist: {track.artistName}</li>
+                    <li id="trackGenres">Genres: {track.trackGenres}</li>
+                    <li id="trackTags">Tags: {track.trackTags}</li>
+                    <li id="trackDateCreated">Created: {track.trackDateCreated}</li>
+                    <li id="trackDateRecorded">Recorded: {track.trackDateRecorded}</li>
+                </ul>
             </div>
         </div >
     );

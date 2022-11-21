@@ -2,7 +2,7 @@
     background-color: #777;
     color: white;
     cursor: pointer;
-    padding: 18px;
+    padding: 10px 0px;
     width: 100%;
     border: none;
     text-align: left;
@@ -16,8 +16,86 @@
 }
 
 .content {
-    padding: 0 18px;
+    padding: 0px;
     display: none;
     overflow: hidden;
     background-color: #f1f1f1;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+.collapsible li#trackID:hover span {
+    display: none;
+}
+
+.collapsible li#trackID:hover:before {
+    font-size: 13px;
+    content: "▶";
+}
+
+.collapsible li#trackID {
+    float: left;
+    text-align: center;
+    width: 5%;
+}
+
+.collapsible li#trackTitle {
+    float: left;
+    width: 45%;
+}
+
+.collapsible li#artistName {
+    float: left;
+    width: 45%;
+}
+
+.collapsible li#trackDuration {
+    float: left;
+    width: 5%;
+}
+
+.content {
+    padding: 0px 10px;
+}
+
+.content li#albumID {
+    float: left;
+    width: 10%;
+}
+
+.content li#albumName {
+    float: left;
+    width: 40%;
+}
+
+.content li#artistID {
+    float: left;
+    width: 10%;
+}
+
+.content li#artistName {
+    float: left;
+    width: 40%;
+}
+
+.content li#trackGenres {
+    width: 100%;
+}
+
+.content li#trackTags {
+    width: 100%;
+}
+
+.content li#trackDateCreated {
+    float: left;
+    width: 50%;
+}
+
+.content li#trackDateRecorded {
+    float: left;
+    width: 50%;
 }
