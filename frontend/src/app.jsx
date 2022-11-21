@@ -4,6 +4,7 @@ import './index.css';
 import Tracks from "./components/tracks";
 import Login from "./components/login";
 import PrivateWrapper from "./components/privateRoute";
+import HomePage from "./components/homePage";
 
 function App() {
     return (
@@ -13,7 +14,7 @@ function App() {
                     <Route path="/tracks" element={<Tracks />} />
                     <Route path="/login" element={<Login />} />
                     <Route element={<PrivateWrapper/>}>
-                        <Route path="/authenticated" element={<Tracks/>}/>
+                        <Route path="/authenticated" element={<HomePage/>}/>
                     </Route>
                 </Routes>
             </div>
