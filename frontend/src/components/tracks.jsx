@@ -10,7 +10,7 @@ function Tracks() {
         genre: "",
     });
 
-    const [tracks, setTracks] = useState({});
+    const [tracks, setTracks] = useState([]);
 
     const handleChange = (event) => {
         const name = event.target.name;
@@ -39,8 +39,7 @@ function Tracks() {
                 .then(httpResp => {
                     return httpResp.json().then(data => {
                         if (httpResp.ok) {
-                            data = data.map(track => track.trackTitle)
-                            alert(JSON.stringify(data));
+                            setTracks(data);
                         }
                         else {
                             throw new Error(httpResp.status + "\n" + JSON.stringify(data));
@@ -53,12 +52,6 @@ function Tracks() {
         }
     }
 
-    const renderTrack = (track) => {
-        return (
-            <Track />
-        );
-    }
-
     return (
         <div>
             <form onKeyDown={handleSubmit}>
@@ -67,7 +60,9 @@ function Tracks() {
                 <input type="text" name="album" onChange={handleChange} value={inputs.album || ""} placeholder="Search by Album" /><br />
                 <input type="text" name="genre" onChange={handleChange} value={inputs.genre || ""} placeholder="Search by Genre" /><br />
             </form>
-            <Track />
+            {
+                tracks.map((track) => <Track {...track} />)
+            }
         </div>
     );
 }

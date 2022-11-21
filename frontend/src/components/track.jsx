@@ -1,9 +1,10 @@
 import './track.css'
 
 function Track(track) {
+
     const toggleCollapsible = (event) => {
-        event.target.className.includes("active") ? event.target.className = "collapsible" : event.target.className += " active";
-        var content = event.target.nextElementSibling;
+        event.currentTarget.className.includes("active") ? event.currentTarget.className = "collapsible" : event.currentTarget.className += " active";
+        var content = event.currentTarget.nextElementSibling;
         if (content.style.display === "block") {
             content.style.display = "none";
         }
@@ -14,9 +15,35 @@ function Track(track) {
 
     return (
         <div>
-            <button type="button" className="collapsible" onClick={toggleCollapsible}>Track</button>
+            <button type="button" className="collapsible" onClick={toggleCollapsible}>
+                <table>
+                    <tr>
+                        <td>{track.trackID}</td>
+                        <td>{track.trackTitle}</td>
+                        <td>{track.artistName}</td>
+                        <td>{track.trackDuration}</td>
+                    </tr>
+                </table>
+            </button>
             <div className="content">
-                <p>aisdfbiasbgiuabgiuba</p>
+                <table>
+                    <tr>
+                        <td>{track.albumID}</td>
+                        <td>{track.albumName}</td>
+                        <td>{track.artistID}</td>
+                        <td>{track.artistName}</td>
+                    </tr>
+                    <tr>
+                        <td>{track.trackGenres}</td>
+                    </tr>
+                    <tr>
+                        <td>{track.trackTags}</td>
+                    </tr>
+                    <tr>
+                        <td>{track.trackDateCreated}</td>
+                        <td>{track.trackDateRecorded}</td>
+                    </tr>
+                </table>
             </div>
         </div >
     );
