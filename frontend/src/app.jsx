@@ -11,6 +11,7 @@ function App() {
         <BrowserRouter>
             <div className='App'>
                 <Routes>
+                    <Route path="" element={<HomePage />} />
                     <Route path="/tracks" element={<Tracks />} />
                     <Route path="/login" element={<Login />} />
                     <Route element={<PrivateWrapper/>}>
