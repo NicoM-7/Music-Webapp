@@ -5,7 +5,7 @@ function newConn() {
         host: 'localhost',
         user: 'root',
         password: 'root',
-        database: 'lab3db'
+        database: 'lab4db'
     });
     return conn;
 }

@@ -6,7 +6,7 @@ const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: 'root',
-    database: 'lab3db',
+    database: 'lab4db',
     multipleStatements: true
 });
 
@@ -252,7 +252,7 @@ function buildTracksDB() {
 
 // =========================================================================================
 
-//buildGenresDB();
-//buildAlbumsDB();
-//buildArtistsDB();
+buildGenresDB();
+buildAlbumsDB();
+buildArtistsDB();
 buildTracksDB();
