@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import Track from './track';
+
 function Tracks() {
     const [inputs, setInputs] = useState({
         track: "",
@@ -51,13 +53,22 @@ function Tracks() {
         }
     }
 
+    const renderTrack = (track) => {
+        return (
+            <Track />
+        );
+    }
+
     return (
-        <form onKeyDown={handleSubmit}>
-            <input type="text" name="track" onChange={handleChange} value={inputs.track || ""} placeholder="Search by Track" /><br />
-            <input type="text" name="artist" onChange={handleChange} value={inputs.artist || ""} placeholder="Search by Artist" /><br />
-            <input type="text" name="album" onChange={handleChange} value={inputs.album || ""} placeholder="Search by Album" /><br />
-            <input type="text" name="genre" onChange={handleChange} value={inputs.genre || ""} placeholder="Search by Genre" /><br />
-        </form>
+        <div>
+            <form onKeyDown={handleSubmit}>
+                <input type="text" name="track" onChange={handleChange} value={inputs.track || ""} placeholder="Search by Track" /><br />
+                <input type="text" name="artist" onChange={handleChange} value={inputs.artist || ""} placeholder="Search by Artist" /><br />
+                <input type="text" name="album" onChange={handleChange} value={inputs.album || ""} placeholder="Search by Album" /><br />
+                <input type="text" name="genre" onChange={handleChange} value={inputs.genre || ""} placeholder="Search by Genre" /><br />
+            </form>
+            <Track />
+        </div>
     );
 }
 
