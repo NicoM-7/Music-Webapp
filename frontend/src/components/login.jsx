@@ -13,6 +13,9 @@ function Login() {
         }
     }).catch((err) => console.log(err));
 }
+    const signUpPage = () => {
+        navigate("/signUp");
+    }
 
     return (
         <div className="form">
@@ -28,6 +31,10 @@ function Login() {
                 <div className="button-container">
                     <input type="submit"/>
                 </div>
+                <div className="button-container">
+                    <button onClick={signUpPage}>Sign Up</button>
+                </div>
+                
             </form>
             <button onClick={signInWithGoogle}>Login With Google</button>
         </div>
