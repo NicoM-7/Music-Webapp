@@ -1,9 +1,10 @@
 import React from "react";
-import {Navigate} from 'react-router-dom';
+import {Navigate, Outlet} from 'react-router-dom';
 import {auth} from "../firebase";
 
-const PrivateRoute = (children) => {
-    return (auth.currentUser != null) ? children : <Navigate to="/login"/>;
+const PrivateWrapper = () => {
+    
+    return ((auth.currentUser != null) ? <Outlet/> : <Navigate to="/login"/>);
   };
 
-export default PrivateRoute;
+export default PrivateWrapper;

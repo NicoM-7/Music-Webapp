@@ -1,7 +1,19 @@
 import React from 'react';
-import { signInWithGoogle } from "../firebase"
-
+import {useNavigate} from 'react-router-dom';
+import {auth} from "../firebase";
+import {GoogleAuthProvider, signInWithPopup} from "firebase/auth";
 function Login() {
+
+    let navigate = useNavigate();
+    const provider = new GoogleAuthProvider(); 
+    const signInWithGoogle = () => {
+    signInWithPopup(auth, provider).then((result) => {
+        if(auth.currentUser != null){
+            navigate("/authenticated");
+        }
+    }).catch((err) => console.log(err));
+}
+
     return (
         <div className="form">
             <form>
@@ -10,7 +22,7 @@ function Login() {
                     <input type="text" name="uname" required />
                 </div>
                 <div className="input-container">
-                    <label>Password </label>
+                    <label>Password</label>
                     <input type="password" name="pass" required />
                 </div>
                 <div className="button-container">
