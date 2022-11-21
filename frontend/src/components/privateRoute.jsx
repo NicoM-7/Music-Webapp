@@ -1,24 +1,9 @@
-// import React from 'react'
-// // import AuthService from './Services/AuthService'
-// import { redirect, Route } from 'react-router-dom'
+import React from "react";
+import {Navigate} from 'react-router-dom';
+import {auth} from "../firebase";
 
-// const PrivateRoute = ({ component: Component, ...rest }) => {
+const PrivateRoute = (children) => {
+    return (auth.currentUser != null) ? children : <Navigate to="/login"/>;
+  };
 
-//   // Add your own authentication on the below line.
-//   const isLoggedIn = AuthService.isLoggedIn()
-
-//   return (
-//     <Route
-//       {...rest}
-//       render={props => {
-//         return isLoggedIn ? (
-//           <Component {...props} />
-//         ) : (
-//           <redirect to={{ pathname: '/login', state: {from: props.location}}}/>
-//         )
-//       }}
-//     />
-//   )
-// }
-
-// export default PrivateRoute
+export default PrivateRoute;
