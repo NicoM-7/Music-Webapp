@@ -9,27 +9,28 @@ function Tracks() {
         album: "",
         genre: "",
         similarity: false,
+        results: 10,
     });
 
     const [tracks, setTracks] = useState([]);
 
+    const maxResults = 50;
+
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
-        setInputs(values => ({ ...values, [name]: value }))
+        setInputs(values => ({ ...values, [name]: value }));
     }
 
     const handleCheckboxChange = (event) => {
         const name = event.target.name;
         const value = event.target.checked;
-        setInputs(values => ({ ...values, [name]: value }))
+        setInputs(values => ({ ...values, [name]: value }));
     }
 
     const handleSubmit = (event) => {
         if (event.key === "Enter") {
             event.preventDefault();
-
-            const results = 10;
 
             fetch("http://" + window.location.hostname + ":9000/api/tracks?" +
                 "track=" + inputs.track.trim() +
@@ -37,7 +38,7 @@ function Tracks() {
                 "&album=" + inputs.album.trim() +
                 "&genre=" + inputs.genre.trim() +
                 "&similarity=" + inputs.similarity +
-                "&results=" + results,
+                "&results=" + inputs.results,
                 {
                     method: "GET",
                     headers: new Headers({
@@ -68,7 +69,9 @@ function Tracks() {
                 <input type="text" name="album" onChange={handleChange} value={inputs.album || ""} placeholder="Search by Album" /><br />
                 <input type="text" name="genre" onChange={handleChange} value={inputs.genre || ""} placeholder="Search by Genre" /><br />
                 <label>Similarity Search </label>
-                <input type="checkbox" name="similarity" onChange={handleCheckboxChange} value={inputs.similarity} />
+                <input type="checkbox" name="similarity" onChange={handleCheckboxChange} value={inputs.similarity} /><br />
+                <label>Results </label>
+                <input type="number" name="results" onChange={handleChange} value={inputs.results <= maxResults ? inputs.results || "" : maxResults} />
             </form>
             {
                 tracks.map((track) => <Track {...track} key={track.trackID} />)

@@ -16,7 +16,7 @@ function Track(track) {
     }
 
     const openYoutube = async (event) => {
-        window.open(`https://www.youtube.com/results?search_query=  ${track.trackTitle}+by+${track.artistName}`, '_blank', 'noopener,noreferrer');
+        window.open(`https://www.youtube.com/results?search_query=${track.artistName}+${track.trackTitle}`, '_blank', 'noopener,noreferrer');
     }
 
     return (
