@@ -219,6 +219,14 @@ function buildTracksDB() {
         .on('end', () => {
             let i = 0;
             for (let track of tracks) {
+                // Deconstructs genres object into just genre names
+                let trackGenres = track.track_genres !== "" ? JSON.parse(track.track_genres.replaceAll("'", '"')) : [];
+
+                let genreNames = "";
+                for (let i = 0; i < trackGenres.length; i++) {
+                    genreNames += trackGenres[i].genre_title + (i + 1 < trackGenres.length ? ", " : "");
+                }
+
                 db.query("INSERT INTO tracks VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
                     [
                         track.track_id,
@@ -228,7 +236,7 @@ function buildTracksDB() {
                         track.track_date_created.replaceAll('"', ""),
                         track.track_date_recorded.replaceAll('"', ""),
                         track.track_duration.replaceAll('"', ""),
-                        track.track_genres.replaceAll('"', ""),
+                        genreNames.replaceAll('"', ""),
                         track.track_number,
                         track.track_title.replace(/[;\\"]/g, "").trim()
                     ],
@@ -244,7 +252,7 @@ function buildTracksDB() {
 
 // =========================================================================================
 
-buildGenresDB();
-buildAlbumsDB();
-buildArtistsDB();
+//buildGenresDB();
+//buildAlbumsDB();
+//buildArtistsDB();
 buildTracksDB();
