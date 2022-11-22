@@ -1,4 +1,4 @@
-import './track.css'
+import '../styles/track.css'
 
 function Track(track) {
 
