@@ -10,62 +10,6 @@ const db = mysql.createConnection({
     multipleStatements: true
 });
 
-// Builds Genres table from CSV file
-function buildGenresDB() {
-    // Deletes the table if one already exists
-    db.query("DROP TABLE genres;", (err) => {
-        if (err) {
-            console.log("No Table to drop");
-        }
-        else {
-            console.log("Dropped Table");
-        }
-    }
-    );
-
-    // Creates new Table
-    db.query(
-        `CREATE TABLE genres (
-        genreID int NOT NULL,
-        genreNumTracks int DEFAULT NULL,
-        genreParent int DEFAULT NULL,
-        genreTitle varchar(45) DEFAULT NULL,
-        genreTopLevel int DEFAULT NULL,
-        PRIMARY KEY (genreID)
-        ) DEFAULT CHARSET=utf8mb4;`, (err) => {
-        if (err) {
-            throw err;
-        }
-        console.log("Genre Table Created");
-    }
-    );
-
-    // Adds genres from CSV file to the db
-    let genres = [];
-    fs.createReadStream('data/genres.csv')
-        .pipe(csv())
-        .on('data', (data) => genres.push(data))
-        .on('end', () => {
-            let i = 0;
-            for (let genre of genres) {
-                db.query(`INSERT INTO genres VALUES (?, ?, ?, ?, ?);`,
-                    [
-                        genre.genre_id,
-                        genre["#tracks"],
-                        genre.parent,
-                        genre.title.replaceAll('"', ""),
-                        genre.top_level
-                    ],
-                    (err) => {
-                        if (err) {
-                            throw err;
-                        }
-                        console.log("Inserted genre " + genre.genre_id + " into genres table \t" + ((++i) / genres.length) * 100 + " \t%");
-                    });
-            }
-        });
-}
-
 // Builds Albums table from CSV file
 function buildAlbumsDB() {
     // Deletes the table if one already exists
