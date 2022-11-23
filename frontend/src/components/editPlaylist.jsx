@@ -15,7 +15,7 @@ function EditPlaylist(playlist) {
 
     const fetchTracks = async () => {
         let newTracks = [];
-        let trackIds = details.tracks.split(",");
+        let trackIds = details.tracks;
 
         for (let id of trackIds) {
             await fetch("http://" + window.location.hostname + ":9000/api/open/tracks/" + id,
@@ -49,17 +49,49 @@ function EditPlaylist(playlist) {
         setDetails(values => ({ ...values, [name]: value }));
     }
 
+    const handleCheckboxChange = (event) => {
+        const name = event.target.name;
+        const value = event.target.checked;
+        setDetails(values => ({ ...values, [name]: value }));
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        console.log(details);
+    }
+
+    const removeTrack = (event) => {
+        let newTracks = details.tracks;
+        newTracks.splice(event.target.name, 1);
+        setDetails(values => ({ ...values, tracks: newTracks }));
+        fetchTracks();
+    }
+
     return (
         <div className='editPlaylist'>
             <h1>{details.name}</h1>
-            <textarea className='description' name="description" onChange={handleChange} value={details.description || ""} placeholder="Description"></textarea>
-            {
-                tracks.map((track) => <Track {...track} key={track.trackID} />)
-            }
-            {
-                console.log(tracks)
-            }
-        </div>
+            <form onSubmit={handleSubmit}>
+                <textarea className='description' name="description" onChange={handleChange} value={details.description || ""} placeholder="Description"></textarea><br />
+                <label>Make Public  </label>
+                <input type="checkbox" name="public" onChange={handleCheckboxChange} value={details.public} /><br />
+                <button id="saveButton" type="submit">SAVE</button><br />
+                {
+                    tracks.map((track, i) => {
+                        return (
+                            <div className="trackListItem">
+                                <div className="trackRemoveButton">
+                                    <input key={i} type="button" name={i} onClick={removeTrack} value="-" />
+                                </div>
+                                <div className="trackDetails">
+                                    <Track key={i + " " + track.trackID}{...track} />
+                                </div>
+                            </div>
+                        );
+                    })
+                }
+            </form >
+        </div >
 
     );
 }
