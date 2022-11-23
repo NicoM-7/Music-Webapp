@@ -19,7 +19,7 @@ secureListRouter.post('', (req, res) => {
 
     db().connect();
 
-    db().query("INSERT INTO playlists (name, user) VALUES (?, ?)", [req.body.name, req.body.user], (err, data) => {
+    db().query("INSERT INTO playlists (name, user) VALUES (?, ?);", [req.body.name, req.body.user], (err, data) => {
         db().end();
 
         if (err) {
@@ -38,6 +38,26 @@ secureListRouter.post('', (req, res) => {
         }
     });
 });
+
+// Get all lists for this user
+secureListRouter.get('', (req, res) => {
+    db().connect();
+
+    db().query("SELECT * FROM lists WHERE user=?;", [req.query.user], (err, data) => {
+        db().end();
+
+        if (err) {
+            res.status(500).json(err);
+        }
+        else if (data.length === 0) {
+            res.status(404).json("No Lists Found");
+        }
+        else {
+            res.json(data);
+        }
+    });
+});
+
 
 // // Get a list of list names, number of tracks that are saved in each list and the total play time of each list.
 // listRouter.get('', (req, res) => {

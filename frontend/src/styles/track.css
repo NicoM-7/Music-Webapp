@@ -41,17 +41,17 @@ ul {
 .collapsible li#trackID {
     float: left;
     text-align: center;
-    width: 5%;
+    width: 9%;
 }
 
 .collapsible li#trackTitle {
     float: left;
-    width: 45%;
+    width: 43%;
 }
 
 .collapsible li#artistName {
     float: left;
-    width: 45%;
+    width: 43%;
 }
 
 .collapsible li#trackDuration {

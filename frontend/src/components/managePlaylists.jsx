@@ -49,8 +49,8 @@ function CreatePlaylist() {
         <div className='managePlaylists'>
             <div className="selectBox">
                 <form onSubmit={handleSubmit}>
-                    <input type="text" name="name" onChange={handleChange} value={name || ""} placeholder="Playlist Name" />
                     <button type="submit">+</button>
+                    <input type="text" name="name" onChange={handleChange} value={name || ""} placeholder="Playlist Name" />
                 </form>
             </div>
             <div className="playlistBox">
