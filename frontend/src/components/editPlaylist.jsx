@@ -6,8 +6,9 @@ import '../styles/editPlaylist.css';
 function EditPlaylist(playlist) {
 
     let [details, setDetails] = useState(playlist);
-
+    let [savedDetails, setSavedDetails] = useState(playlist);
     let [tracks, setTracks] = useState([]);
+
 
     useEffect(() => {
         fetchTracks();
@@ -16,7 +17,7 @@ function EditPlaylist(playlist) {
     // fetchs the tracks for the selected playlist from backend
     const fetchTracks = async () => {
         let newTracks = [];
-        let trackIds = details.tracks;
+        let trackIds = details.tracks.map(n => parseInt(n)).filter(n => n);
 
         for (let id of trackIds) {
             await fetch("http://" + window.location.hostname + ":9000/api/open/tracks/" + id,
@@ -54,7 +55,7 @@ function EditPlaylist(playlist) {
     // Updates state for checkboxes
     const handleCheckboxChange = (event) => {
         const name = event.target.name;
-        const value = event.target.checked;
+        const value = event.target.checked ? 1 : 0;
         setDetails(values => ({ ...values, [name]: value }));
     }
 
@@ -68,8 +69,11 @@ function EditPlaylist(playlist) {
     // On submission updates selected playlist's details in the backend
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetchTracks();
-        console.log(details);
+        if (JSON.stringify(details) !== JSON.stringify(savedDetails)) {
+            setSavedDetails(details);
+            fetchTracks();
+            console.log(details);
+        }
     }
 
     // Removes the track that was clicked on visually from the page
@@ -85,10 +89,14 @@ function EditPlaylist(playlist) {
     return (
         <div className='editPlaylist'>
             <h1>{details.name}</h1>
+            <p>Created By: {details.user}</p>
+            <p>Number of Tracks: {details.numTracks}</p>
+            <p>Total Playtime: {details.playtime}</p>
+            <p>Last Modified: {details.lastModified}</p>
             <form onSubmit={handleSubmit}>
                 <textarea className='description' name="description" onChange={handleChange} value={details.description || ""} placeholder="Description"></textarea><br />
                 <label>Make Public  </label>
-                <input type="checkbox" name="public" onChange={handleCheckboxChange} value={details.public} /><br />
+                <input type="checkbox" name="public" onChange={handleCheckboxChange} value={details.public === 1 ? true : false} /><br />
                 <button id="saveButton" type="submit">SAVE</button><br />
                 {
                     tracks.map((track, i) => {

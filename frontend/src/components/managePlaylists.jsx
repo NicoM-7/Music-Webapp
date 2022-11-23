@@ -4,14 +4,15 @@ import EditPlaylist from './editPlaylist';
 
 import '../styles/managePlaylist.css';
 
-function CreatePlaylist() {
+function ManagePlaylist() {
     const [name, setName] = useState("");
 
     const [selectedPlaylist, setSelectedPlaylist] = useState({
         name: "Select a Playlist",
+        user: "testUser",
         description: "",
-        tracks: [2, 2, 2, 2, 3, 5],
-        public: false
+        public: 0,
+        tracks: [2, 2, 2, 2, 3, 5]
     });
 
     const handleChange = (event) => {
@@ -65,4 +66,4 @@ function CreatePlaylist() {
     );
 }
 
-export default CreatePlaylist;
+export default ManagePlaylist;

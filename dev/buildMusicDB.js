@@ -196,7 +196,6 @@ function buildTracksDB() {
 
 // =========================================================================================
 
-buildGenresDB();
 buildAlbumsDB();
 buildArtistsDB();
 buildTracksDB();
