@@ -65,22 +65,22 @@ ul {
 
 .content li#albumID {
     float: left;
-    width: 10%;
+    width: 15%;
 }
 
 .content li#albumName {
     float: left;
-    width: 40%;
+    width: 35%;
 }
 
 .content li#artistID {
     float: left;
-    width: 10%;
+    width: 15%;
 }
 
 .content li#artistName {
     float: left;
-    width: 40%;
+    width: 35%;
 }
 
 .content li#trackGenres {
