@@ -12,7 +12,7 @@ function ManagePlaylist() {
         user: "testUser",
         description: "",
         public: 0,
-        tracks: [2, 2, 2, 2, 3, 5]
+        tracks: "2,2,2,2,3,5"
     });
 
     const handleChange = (event) => {

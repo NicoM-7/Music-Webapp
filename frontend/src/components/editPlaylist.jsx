@@ -5,19 +5,24 @@ import '../styles/editPlaylist.css';
 
 function EditPlaylist(playlist) {
 
-    let [details, setDetails] = useState(playlist);
-    let [savedDetails, setSavedDetails] = useState(playlist);
+    let [details, setDetails] = useState({});
+    let [savedDetails, setSavedDetails] = useState({});
     let [tracks, setTracks] = useState([]);
 
 
     useEffect(() => {
-        fetchTracks();
+        setDetails(playlist);
+        setSavedDetails(playlist);
     }, []);
+
+    useEffect(() => {
+        fetchTracks();
+    }, [savedDetails]);
 
     // fetchs the tracks for the selected playlist from backend
     const fetchTracks = async () => {
         let newTracks = [];
-        let trackIds = details.tracks.map(n => parseInt(n)).filter(n => n);
+        let trackIds = details.tracks ? details.tracks.split(",").map(n => parseInt(n)).filter(n => n) : [];
 
         for (let id of trackIds) {
             await fetch("http://" + window.location.hostname + ":9000/api/open/tracks/" + id,
@@ -62,7 +67,7 @@ function EditPlaylist(playlist) {
     // Updates state for tracks box
     const handleTracksChange = (event) => {
         const name = event.target.name;
-        const value = event.target.value.split(",");
+        const value = event.target.value;
         setDetails(values => ({ ...values, [name]: value }));
     }
 
@@ -71,16 +76,15 @@ function EditPlaylist(playlist) {
         e.preventDefault();
         if (JSON.stringify(details) !== JSON.stringify(savedDetails)) {
             setSavedDetails(details);
-            fetchTracks();
             console.log(details);
         }
     }
 
     // Removes the track that was clicked on visually from the page
     const removeTrack = (event) => {
-        let newTrackIds = details.tracks;
+        let newTrackIds = details.tracks.split(",").map(n => parseInt(n)).filter(n => n);
         newTrackIds.splice(event.target.name, 1);
-        setDetails(values => ({ ...values, tracks: newTrackIds }));
+        setDetails(values => ({ ...values, tracks: newTrackIds.toString() }));
         let newTracks = tracks;
         newTracks.splice(event.target.name, 1)
         setTracks(newTracks);
