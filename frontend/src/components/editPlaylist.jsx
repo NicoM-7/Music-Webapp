@@ -57,15 +57,17 @@ function EditPlaylist(playlist) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
+        fetchTracks();
         console.log(details);
     }
 
     const removeTrack = (event) => {
-        let newTracks = details.tracks;
-        newTracks.splice(event.target.name, 1);
-        setDetails(values => ({ ...values, tracks: newTracks }));
-        fetchTracks();
+        let newTrackIds = details.tracks;
+        newTrackIds.splice(event.target.name, 1);
+        setDetails(values => ({ ...values, tracks: newTrackIds }));
+        let newTracks = tracks;
+        newTracks.splice(event.target.name, 1)
+        setTracks(newTracks);
     }
 
     return (
@@ -79,12 +81,12 @@ function EditPlaylist(playlist) {
                 {
                     tracks.map((track, i) => {
                         return (
-                            <div className="trackListItem">
+                            <div className="trackListItem" key={i}>
                                 <div className="trackRemoveButton">
-                                    <input key={i} type="button" name={i} onClick={removeTrack} value="-" />
+                                    <input type="button" name={i} onClick={removeTrack} value="-" />
                                 </div>
                                 <div className="trackDetails">
-                                    <Track key={i + " " + track.trackID}{...track} />
+                                    <Track {...track} />
                                 </div>
                             </div>
                         );
