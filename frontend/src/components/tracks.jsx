@@ -74,9 +74,6 @@ function Tracks() {
                 <input type="number" name="results" onChange={handleChange} value={inputs.results <= maxResults ? inputs.results || "" : maxResults} />
             </form>
             {
-                console.log(tracks)
-            }
-            {
                 tracks.map((track) => <Track {...track} key={track.trackID} />)
             }
         </div>
