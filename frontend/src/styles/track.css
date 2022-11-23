@@ -16,6 +16,7 @@
 }
 
 .content {
+    color: black;
     padding: 0px;
     display: none;
     overflow: hidden;
