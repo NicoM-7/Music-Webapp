@@ -34,3 +34,8 @@ div.trackDetails {
     float: left;
     width: 95%;
 }
+
+textarea#tracksInput {
+    width: 90%;
+    resize: none;
+}

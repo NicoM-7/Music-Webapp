@@ -11,7 +11,7 @@ function EditPlaylist(playlist) {
 
     useEffect(() => {
         fetchTracks();
-    }, [details.tracks]);
+    }, []);
 
     // fetchs the tracks for the selected playlist from backend
     const fetchTracks = async () => {
@@ -58,6 +58,13 @@ function EditPlaylist(playlist) {
         setDetails(values => ({ ...values, [name]: value }));
     }
 
+    // Updates state for tracks box
+    const handleTracksChange = (event) => {
+        const name = event.target.name;
+        const value = event.target.value.split(",");
+        setDetails(values => ({ ...values, [name]: value }));
+    }
+
     // On submission updates selected playlist's details in the backend
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -97,6 +104,8 @@ function EditPlaylist(playlist) {
                         );
                     })
                 }
+                <label>Tracks  </label><br />
+                <textarea id="tracksInput" type="text" name="tracks" onChange={handleTracksChange} value={details.tracks || ""} />
             </form >
         </div >
 
