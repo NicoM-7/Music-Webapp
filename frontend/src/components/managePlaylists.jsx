@@ -9,7 +9,8 @@ function CreatePlaylist() {
 
     const [selectedPlaylist, setSelectedPlaylist] = useState({
         name: "Select a Playlist",
-        description: ""
+        description: "",
+        tracks: "2,3,5"
     });
 
     const handleChange = (event) => {
