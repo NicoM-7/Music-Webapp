@@ -3,10 +3,10 @@ const Joi = require('joi');
 
 const db = require('../DBConnect.js');
 
-const trackRouter = express.Router();
+const openTrackRouter = express.Router();
 
 // Querys db for given trackTitle and/or albumName and returns specified number of results
-trackRouter.get('', (req, res) => {
+openTrackRouter.get('', (req, res) => {
     // Input validation
     // const schema = Joi.object({
     //     trackTitle: Joi.string().allow(""),
@@ -90,7 +90,7 @@ trackRouter.get('', (req, res) => {
 });
 
 // Querys db for given track id and returns 1 result
-trackRouter.get('/:id', (req, res) => {
+openTrackRouter.get('/:id', (req, res) => {
     // Input validation
     const schema = Joi.object({
         id: Joi.number().required()
@@ -133,4 +133,4 @@ trackRouter.get('/:id', (req, res) => {
         });
 });
 
-module.exports = trackRouter;
+module.exports = openTrackRouter;

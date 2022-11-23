@@ -24,9 +24,8 @@ function buildPlaylistsDB() {
     // Creates new table
     db.query(
         `CREATE TABLE playlists (
-        id int NOT NULL AUTO_INCREMENT,
-        name varchar(100) DEFAULT NULL,
-        user varchar(100) DEFAULT NULL,
+        name varchar(100) NOT NULL,
+        user varchar(100) NOT NULL,
         description text,
         public tinyint DEFAULT '0',
         numTracks int DEFAULT NULL,
@@ -34,13 +33,13 @@ function buildPlaylistsDB() {
         rating double DEFAULT NULL,
         lastModified datetime DEFAULT NULL,
         tracks text,
-        PRIMARY KEY (id)
+        PRIMARY KEY (name, user)
         ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;`,
         (err) => {
             if (err) {
                 throw err;
             }
-            console.log("Lists Table Created");
+            console.log("Playlists Table Created");
         }
     );
 }

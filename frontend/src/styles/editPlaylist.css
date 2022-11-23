@@ -1,0 +1,13 @@
+div.editPlaylist {
+    padding: 1%
+}
+
+textarea.description {
+    margin: 0 0 1% 0;
+    width: 90%;
+    resize: none;
+}
+
+h1 {
+    margin: 0 0 1% 0;
+}
