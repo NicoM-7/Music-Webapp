@@ -1,25 +1,27 @@
-import {useState} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {auth} from "../firebase";
-import {GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword} from "firebase/auth";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { auth } from "../firebase";
+import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
 function Login() {
 
     let navigate = useNavigate();
-    const provider = new GoogleAuthProvider(); 
+    const provider = new GoogleAuthProvider();
     const signInWithGoogle = () => {
-    signInWithPopup(auth, provider).then((result) => {
-        if(auth.currentUser != null){
-            navigate("/authenticated");
-        }
-    }).catch((err) => console.log(err));
-}
+        signInWithPopup(auth, provider).then((result) => {
+            if (auth.currentUser != null) {
+                navigate("/authenticated");
+            }
+        }).catch((err) => {
+            console.log(err)
+        });
+    }
     const signUpPage = () => {
         navigate("/signUp");
     }
 
-    const [inputs, setInputs] = useState({
-    });
-
+    const [inputs, setInputs] = useState({});
+    const [emailEmptyError, setEmailError] = useState(false);
+    const [passwordEmptyError, setPasswordError] = useState(false);
 
     const handleChange = (event) => {
         const name = event.target.name;
@@ -30,43 +32,52 @@ function Login() {
     const signIn = (e) => {
 
         e.preventDefault();
+
+        setEmailError(false);
+        setPasswordError(false);
+
         const email = inputs.email;
         const password = inputs.password;
 
+        console.log(email + " " + password);
+        if((email === undefined || email === "") || (password === undefined || password === "")){
+            if(email === undefined || email === ""){
+                setEmailError(true);
+            }
+            if(password === undefined || password === ""){
+                setPasswordError(true);
+            }
+        }
+        else{
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
 
                 const user = userCredential.user;
-                if(user != null){
+                if (user != null) {
                     navigate("/tracks");
                 }
 
             })
             .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
+                console.log(error);
             });
     }
+}
     return (
         <div className="form">
             <form onSubmit={signIn}>
-                <div className="input-container">
-                    <label>Email</label>
-                    <input type="text" name="email" onChange={handleChange} value={inputs.email || ""} required />
-                </div>
-                <div className="input-container">
-                    <label>Password</label>
-                    <input type="password" name="password" onChange={handleChange} value={inputs.password || ""} required />
-                </div>
-                <div className="button-container">
-                    <input type="submit"/>
-                </div>
-                <div className="button-container">
-                    <button onClick={signUpPage}>Sign Up</button>
-                </div>
-                
+                <label>Email</label>
+                <input type="text" name="email" onChange={handleChange} value={inputs.email || ""}/>
+                <label>Password</label>
+                <input type="password" name="password" onChange={handleChange} value={inputs.password || ""}/>
+                <button type="submit">Login</button>
             </form>
+
+            <button onClick={signUpPage}>Sign Up</button>
             <button onClick={signInWithGoogle}>Login With Google</button>
+
+            <p>{emailEmptyError ? "Email empty " : " "} {passwordEmptyError ? "Password empty " : " "}</p>
+
         </div>
     );
 }
