@@ -13,6 +13,7 @@ function EditPlaylist(playlist) {
         fetchTracks();
     }, [details.tracks]);
 
+    // fetchs the tracks for the selected playlist from backend
     const fetchTracks = async () => {
         let newTracks = [];
         let trackIds = details.tracks;
@@ -43,24 +44,28 @@ function EditPlaylist(playlist) {
         setTracks(newTracks);
     }
 
+    // Updates state based on value changes to form fields
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
         setDetails(values => ({ ...values, [name]: value }));
     }
 
+    // Updates state for checkboxes
     const handleCheckboxChange = (event) => {
         const name = event.target.name;
         const value = event.target.checked;
         setDetails(values => ({ ...values, [name]: value }));
     }
 
+    // On submission updates selected playlist's details in the backend
     const handleSubmit = (e) => {
         e.preventDefault();
         fetchTracks();
         console.log(details);
     }
 
+    // Removes the track that was clicked on visually from the page
     const removeTrack = (event) => {
         let newTrackIds = details.tracks;
         newTrackIds.splice(event.target.name, 1);
