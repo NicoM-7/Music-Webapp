@@ -50,7 +50,18 @@ function SignUp() {
                 }
             })
             .catch((error) => {
-                console.log(error);
+
+                const parsedError = error.toString().substring(error.toString().indexOf(":") + 1, error.toString().lastIndexOf("."));
+                console.log(parsedError);
+                if(parsedError === " Firebase: Password should be at least 6 characters (auth/weak-password)"){
+                    alert("Password must be at least 6 characters!");
+                }
+                else if(parsedError === " Firebase: Error (auth/invalid-email)"){
+                    alert("Invalid email address!");    
+                }
+                else if(parsedError === " Firebase: Error (auth/email-already-in-use)"){
+                    alert("This email is already registered!");
+                }
             });
         }
     }
@@ -68,7 +79,7 @@ function SignUp() {
             </form>
 
             <p>{emailEmptyError ? "Email empty " : " "} {passwordEmptyError ? "Password empty " : " "} {usernameEmptyError ? "Username empty " : " "}</p>
-            
+
         </div>
     );
 }

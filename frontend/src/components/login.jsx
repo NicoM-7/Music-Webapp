@@ -12,7 +12,7 @@ function Login() {
                 navigate("/authenticated");
             }
         }).catch((err) => {
-            console.log(err)
+            console.log(err);
         });
     }
     const signUpPage = () => {
@@ -59,7 +59,7 @@ function Login() {
 
             })
             .catch((error) => {
-                console.log(error);
+                alert("Login unsuccsesful");
             });
     }
 }
