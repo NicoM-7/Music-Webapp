@@ -25,7 +25,6 @@ function EditPlaylist(playlist) {
         let trackIds = details.tracks ? details.tracks.split(",").map(n => parseInt(n)).filter(n => n) : [];
 
         for (let id of trackIds) {
-            console.log("Fetching" + id);
             await fetch("http://" + window.location.hostname + ":9000/api/open/tracks/" + id,
                 {
                     method: "GET",
@@ -36,7 +35,6 @@ function EditPlaylist(playlist) {
                 .then(httpResp => {
                     return httpResp.json().then(data => {
                         if (httpResp.ok) {
-                            console.log("Complete " + id);
                             newTracks.push(data[0]);
                         }
                         else {
