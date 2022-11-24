@@ -1,13 +1,16 @@
 import {useState} from 'react';
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import {useNavigate} from 'react-router-dom';
 import { auth } from "../firebase";
 function SignUp() {
 
     let navigate = useNavigate();
 
-    const [inputs, setInputs] = useState({
-    });
+    const [inputs, setInputs] = useState({});
+    const [emailEmptyError, setEmailError] = useState(false);
+    const [passwordEmptyError, setPasswordError] = useState(false);
+    const [usernameEmptyError, setUsernameError] = useState(false);
+    const [accountVerified, setAccountVerified] = useState(false);
 
     const handleChange = (event) => {
         const name = event.target.name;
@@ -18,24 +21,57 @@ function SignUp() {
     const signUp = (e) => {
 
         e.preventDefault();
+
+        setEmailError(false);
+        setPasswordError(false);
+        setUsernameError(false);
+        setAccountVerified(true);
+
+        const username = inputs.uname;
         const email = inputs.email;
         const password = inputs.password;
 
+        if((username === undefined || username === "") || (email === undefined || email === "") || (password === undefined || password === "")){
+            
+            if(username === undefined || username === ""){
+                setUsernameError(true);
+            }
+            if(email === undefined || email === ""){
+                setEmailError(true);
+            }
+            if(password === undefined || password === ""){
+                setPasswordError(true);
+            }
+        }
+        else{
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-
                 const user = userCredential.user;
                 if(user != null){
-                    navigate("/tracks");
+                    sendEmailVerification(user);
+                    setAccountVerified(true);
                 }
-
             })
             .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
 
+                const parsedError = error.toString().substring(error.toString().indexOf(":") + 1, error.toString().lastIndexOf("."));
+                console.log(parsedError);
+                if(parsedError === " Firebase: Password should be at least 6 characters (auth/weak-password)"){
+                    alert("Password must be at least 6 characters!");
+                }
+                else if(parsedError === " Firebase: Error (auth/invalid-email)"){
+                    alert("Invalid email address!");    
+                }
+                else if(parsedError === " Firebase: Error (auth/email-already-in-use)"){
+                    alert("This email is already registered!");
+                }
             });
+        }
+        }
+        const loginPage = (e) => {
+            navigate("login");
     }
+
     return (
         <div>
             <form onSubmit={signUp}>
@@ -47,6 +83,12 @@ function SignUp() {
                 <input type="text" name="password" onChange={handleChange} value={inputs.password || ""} placeholder="Enter Password"></input><br></br>
                 <button type="submit">submit</button>
             </form>
+
+            <button onClick={loginPage}>Back to Login</button>
+
+            <p>{emailEmptyError ? "Email empty " : " "} {passwordEmptyError ? "Password empty " : " "} {usernameEmptyError ? "Username empty " : " "}</p>
+            <p>{accountVerified ? "We have sent a verification email to " + inputs.email : ""}</p>
+
         </div>
     );
 }
