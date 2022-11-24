@@ -22,6 +22,7 @@ function EditPlaylist(playlist) {
     // fetchs the tracks for the selected playlist from backend
     const fetchTracks = async () => {
         let newTracks = [];
+        let totalDuration = 0;
         let trackIds = details.tracks ? details.tracks.split(",").map(n => parseInt(n)).filter(n => n) : [];
 
         for (let id of trackIds) {
@@ -36,6 +37,9 @@ function EditPlaylist(playlist) {
                     return httpResp.json().then(data => {
                         if (httpResp.ok) {
                             newTracks.push(data[0]);
+                            // Calculation for total duration of list
+                            let trackDur = data[0].trackDuration.split(":");
+                            totalDuration += parseInt(trackDur[0]) * 60 + parseInt(trackDur[1]);
                         }
                         else {
                             throw new Error(httpResp.status + "\n" + JSON.stringify(data));
@@ -46,6 +50,12 @@ function EditPlaylist(playlist) {
                     alert(err);
                 });
         }
+
+        setDetails(values => ({ ...values, numTracks: newTracks.length }));
+
+        // Formoting total duration to string for display
+        totalDuration = `${parseInt(totalDuration / 60)}:${totalDuration % 60}`;
+        setDetails(values => ({ ...values, playtime: totalDuration }));
 
         setTracks(newTracks);
     }
