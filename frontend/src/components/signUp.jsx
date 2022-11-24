@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import {useNavigate} from 'react-router-dom';
 import { auth } from "../firebase";
 function SignUp() {
@@ -10,6 +10,7 @@ function SignUp() {
     const [emailEmptyError, setEmailError] = useState(false);
     const [passwordEmptyError, setPasswordError] = useState(false);
     const [usernameEmptyError, setUsernameError] = useState(false);
+    const [accountVerified, setAccountVerified] = useState(false);
 
     const handleChange = (event) => {
         const name = event.target.name;
@@ -24,6 +25,7 @@ function SignUp() {
         setEmailError(false);
         setPasswordError(false);
         setUsernameError(false);
+        setAccountVerified(true);
 
         const username = inputs.uname;
         const email = inputs.email;
@@ -46,7 +48,8 @@ function SignUp() {
             .then((userCredential) => {
                 const user = userCredential.user;
                 if(user != null){
-                    navigate("/tracks");
+                    sendEmailVerification(user);
+                    setAccountVerified(true);
                 }
             })
             .catch((error) => {
@@ -64,6 +67,9 @@ function SignUp() {
                 }
             });
         }
+        }
+        const loginPage = (e) => {
+            navigate("login");
     }
 
     return (
@@ -78,7 +84,10 @@ function SignUp() {
                 <button type="submit">submit</button>
             </form>
 
+            <button onClick={loginPage}>Back to Login</button>
+
             <p>{emailEmptyError ? "Email empty " : " "} {passwordEmptyError ? "Password empty " : " "} {usernameEmptyError ? "Username empty " : " "}</p>
+            <p>{accountVerified ? "We have sent a verification email to " + inputs.email : ""}</p>
 
         </div>
     );

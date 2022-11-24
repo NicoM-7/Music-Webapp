@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth } from "../firebase";
-import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 function Login() {
 
     let navigate = useNavigate();
@@ -39,7 +39,6 @@ function Login() {
         const email = inputs.email;
         const password = inputs.password;
 
-        console.log(email + " " + password);
         if((email === undefined || email === "") || (password === undefined || password === "")){
             if(email === undefined || email === ""){
                 setEmailError(true);
@@ -53,8 +52,13 @@ function Login() {
             .then((userCredential) => {
 
                 const user = userCredential.user;
-                if (user != null) {
+                console.log(user.emailVerified);
+                if (user != null && user.emailVerified) {
                     navigate("/tracks");
+                }
+                else{
+                    alert("Your account is not verified! We have resent a verification link!");
+                    sendEmailVerification(user);
                 }
 
             })
