@@ -1,13 +1,10 @@
 const mysql = require('mysql2');
 
-function newConn() {
-    var conn = mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'root',
-        database: 'lab4db'
-    });
-    return conn;
-}
+var conn = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'root',
+    database: 'lab4db'
+});
 
-module.exports = newConn;
+module.exports = conn;

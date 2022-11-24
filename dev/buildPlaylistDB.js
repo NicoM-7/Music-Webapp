@@ -9,9 +9,9 @@ const db = mysql.createConnection({
 });
 
 // Builds Lists table
-function buildListsDB() {
+function buildPlaylistsDB() {
     // Deletes the table if one already exists
-    db.query("DROP TABLE lists;", (err) => {
+    db.query("DROP TABLE playlists;", (err) => {
         if (err) {
             console.log("No Table to drop");
         }
@@ -23,48 +23,27 @@ function buildListsDB() {
 
     // Creates new table
     db.query(
-        `CREATE TABLE lists (
-        listName VARCHAR(150) NOT NULL,
+        `CREATE TABLE playlists (
+        name varchar(100) NOT NULL,
+        user varchar(100) NOT NULL,
+        description text,
+        public tinyint DEFAULT '0',
         numTracks int DEFAULT NULL,
-        totalDuration VARCHAR(6) DEFAULT NULL,
-        PRIMARY KEY (listName)
-        ) DEFAULT CHARSET=utf8mb4;`, (err) => {
-        if (err) {
-            throw err;
+        playtime varchar(20) DEFAULT NULL,
+        rating double DEFAULT NULL,
+        lastModified datetime DEFAULT NULL,
+        tracks text,
+        PRIMARY KEY (name, user)
+        ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;`,
+        (err) => {
+            if (err) {
+                throw err;
+            }
+            console.log("Playlists Table Created");
         }
-        console.log("Lists Table Created");
-    }
-    );
-}
-
-// Build List Track DB table
-function buildListTrackDetailsDB() {
-    // Deletes the table if one already exists
-    db.query("DROP TABLE listTrackDetails;", (err) => {
-        if (err) {
-            console.log("No Table to drop");
-        }
-        else {
-            console.log("Dropped Table");
-        }
-    }
-    );
-
-    // Creates new table
-    db.query(
-        `CREATE TABLE listTrackDetails (
-        listName VARCHAR(255) NOT NULL,
-        trackID int NOT NULL
-        ) DEFAULT CHARSET=utf8mb4;`, (err) => {
-        if (err) {
-            throw err;
-        }
-        console.log("List Track Details Table Created");
-    }
     );
 }
 
 // =========================================================================================
 
-buildListsDB();
-buildListTrackDetailsDB();
+buildPlaylistsDB();

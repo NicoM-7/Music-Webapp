@@ -1,0 +1,14 @@
+div.selectBox {
+    float: left;
+    width: 10%;
+}
+
+div.playlistBox {
+    float: left;
+    width: 45%;
+}
+
+div.tracksBox {
+    float: left;
+    width: 45%;
+}

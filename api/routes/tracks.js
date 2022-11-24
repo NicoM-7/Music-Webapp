@@ -3,10 +3,10 @@ const Joi = require('joi');
 
 const db = require('../DBConnect.js');
 
-const trackRouter = express.Router();
+const openTrackRouter = express.Router();
 
 // Querys db for given trackTitle and/or albumName and returns specified number of results
-trackRouter.get('', (req, res) => {
+openTrackRouter.get('', (req, res) => {
     // Input validation
     // const schema = Joi.object({
     //     trackTitle: Joi.string().allow(""),
@@ -21,8 +21,6 @@ trackRouter.get('', (req, res) => {
     // }
 
     const handleRes = (err, data) => {
-        db().end();
-
         if (err) {
             res.status(500).json(err);
         }
@@ -34,10 +32,8 @@ trackRouter.get('', (req, res) => {
         }
     }
 
-    db().connect();
-
     if (req.query.similarity === "true") {
-        db().query(`SELECT tracks.trackID,tracks.albumID,
+        db.query(`SELECT tracks.trackID,tracks.albumID,
             albums.albumName,tracks.artistID,
             artists.artistName,tracks.trackTags,
             tracks.trackDateCreated,tracks.trackDateRecorded,
@@ -64,7 +60,7 @@ trackRouter.get('', (req, res) => {
             ], handleRes);
     }
     else {
-        db().query(`SELECT tracks.trackID,tracks.albumID,
+        db.query(`SELECT tracks.trackID,tracks.albumID,
             albums.albumName,tracks.artistID,
             artists.artistName,tracks.trackTags,
             tracks.trackDateCreated,tracks.trackDateRecorded,
@@ -86,11 +82,10 @@ trackRouter.get('', (req, res) => {
                 parseInt(req.query.results)
             ], handleRes);
     }
-
 });
 
 // Querys db for given track id and returns 1 result
-trackRouter.get('/:id', (req, res) => {
+openTrackRouter.get('/:id', (req, res) => {
     // Input validation
     const schema = Joi.object({
         id: Joi.number().required()
@@ -103,9 +98,7 @@ trackRouter.get('/:id', (req, res) => {
 
     const id = req.params.id;
 
-    db().connect();
-
-    db().query('SELECT tracks.trackID,tracks.albumID,' +
+    db.query('SELECT tracks.trackID,tracks.albumID,' +
         'albums.albumName,tracks.artistID,' +
         'artists.artistName,tracks.trackTags,' +
         'tracks.trackDateCreated,tracks.trackDateRecorded,' +
@@ -116,8 +109,6 @@ trackRouter.get('/:id', (req, res) => {
         'LEFT JOIN artists ON tracks.artistID=artists.artistID ' +
         'WHERE tracks.trackID=?' +
         " LIMIT 1;", [id], (err, data) => {
-            db().end();
-
             if (err) {
                 res.status(500).json(err);
                 return;
@@ -133,4 +124,4 @@ trackRouter.get('/:id', (req, res) => {
         });
 });
 
-module.exports = trackRouter;
+module.exports = openTrackRouter;
