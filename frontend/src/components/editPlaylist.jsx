@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import moment from 'moment';
 import Track from './track';
 
 import '../styles/editPlaylist.css';
@@ -85,7 +86,9 @@ function EditPlaylist(playlist) {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (JSON.stringify(details) !== JSON.stringify(savedDetails)) {
-            setSavedDetails(details);
+            let time = moment().format('YYYY-MM-DD HH:mm:ss');
+            setDetails(values => ({ ...values, lastModified: time }));
+            setSavedDetails({ ...details, lastModified: time });
             console.log(details);
         }
     }
