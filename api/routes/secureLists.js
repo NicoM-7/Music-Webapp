@@ -17,11 +17,7 @@ secureListRouter.post('', (req, res) => {
     //     return;
     // }
 
-    db().connect();
-
-    db().query("INSERT INTO playlists (name, user) VALUES (?, ?);", [req.body.name, req.body.user], (err, data) => {
-        db().end();
-
+    db.query("INSERT INTO playlists (name, user) VALUES (?, ?);", [req.body.name, req.body.user], (err, data) => {
         if (err) {
             if (err.code === 'ER_DUP_ENTRY') {
                 res.status(422).json(err.sqlMessage);
@@ -41,11 +37,7 @@ secureListRouter.post('', (req, res) => {
 
 // Get all lists for this user
 secureListRouter.get('', (req, res) => {
-    db().connect();
-
-    db().query("SELECT * FROM lists WHERE user=?;", [req.query.user], (err, data) => {
-        db().end();
-
+    db.query("SELECT * FROM lists WHERE user=?;", [req.query.user], (err, data) => {
         if (err) {
             res.status(500).json(err);
         }
