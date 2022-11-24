@@ -25,7 +25,7 @@ function SignUp() {
         setEmailError(false);
         setPasswordError(false);
         setUsernameError(false);
-        setAccountVerified(true);
+        setAccountVerified(false);
 
         const username = inputs.uname;
         const email = inputs.email;
@@ -69,7 +69,7 @@ function SignUp() {
         }
         }
         const loginPage = (e) => {
-            navigate("login");
+            navigate(-1);
     }
 
     return (

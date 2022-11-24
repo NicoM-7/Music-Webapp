@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth } from "../firebase";
-import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, sendEmailVerification, inMemoryPersistence } from "firebase/auth";
 function Login() {
 
     let navigate = useNavigate();
@@ -50,15 +50,17 @@ function Login() {
         else{
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-
-                const user = userCredential.user;
-                console.log(user.emailVerified);
+                let user = userCredential.user;
                 if (user != null && user.emailVerified) {
                     navigate("/tracks");
                 }
                 else{
-                    alert("Your account is not verified! We have resent a verification link!");
-                    sendEmailVerification(user);
+                    sendEmailVerification(user).then(() => {
+                        alert("Your account isn't verified. We have send an email to " + inputs.email + " with a link to verify your account.")
+                    })
+                    .catch(() => {
+                        alert("A verification email has already been sent! Please wait a bit before sending another!");
+                    })
                 }
 
             })
