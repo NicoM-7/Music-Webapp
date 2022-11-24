@@ -7,6 +7,7 @@ import ManagePlaylists from './components/managePlaylists';
 import PrivateWrapper from "./components/privateWrapper";
 import HomePage from "./components/homePage";
 import SignUp from "./components/signUp";
+import Playlists from './components/playlists';
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
                     <Route element={<PrivateWrapper />}>
                         <Route path="/authenticated" element={<HomePage />} />
                     </Route>
+                    <Route path="/playlists" element={<Playlists />} />
                 </Routes>
             </div>
         </BrowserRouter>
