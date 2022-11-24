@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth } from "../firebase";
-import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, sendEmailVerification, inMemoryPersistence } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, sendEmailVerification} from "firebase/auth";
 function Login() {
 
     let navigate = useNavigate();
@@ -52,7 +52,7 @@ function Login() {
             .then((userCredential) => {
                 let user = userCredential.user;
                 if (user != null && user.emailVerified) {
-                    navigate("/tracks");
+                    navigate("/authenticated");
                 }
                 else{
                     sendEmailVerification(user).then(() => {
@@ -83,7 +83,6 @@ function Login() {
             <button onClick={signInWithGoogle}>Login With Google</button>
 
             <p>{emailEmptyError ? "Email empty " : " "} {passwordEmptyError ? "Password empty " : " "}</p>
-
         </div>
     );
 }

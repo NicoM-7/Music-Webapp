@@ -7,6 +7,9 @@ import ManagePlaylists from './components/managePlaylists';
 import PrivateWrapper from "./components/privateWrapper";
 import HomePage from "./components/homePage";
 import SignUp from "./components/signUp";
+import Logout from './components/logout';
+import ChangePassword from './components/changePassword';
+import ManagePlaylist from './components/managePlaylists';
 
 function App() {
     return (
@@ -15,11 +18,11 @@ function App() {
                 <Routes>
                     <Route path="" element={<HomePage />} />
                     <Route path="/tracks" element={<Tracks />} />
-                    <Route path="/managePlaylists" element={<ManagePlaylists />} />
+                    <Route path="/managePlaylists" element={<ManagePlaylists/>}/>
                     <Route path="/login" element={<Login />} />
                     <Route path="/signUp" element={<SignUp />} />
                     <Route element={<PrivateWrapper />}>
-                        <Route path="/authenticated" element={<HomePage />} />
+                        <Route path="/authenticated" element={<ChangePassword/>} />
                     </Route>
                 </Routes>
             </div>
