@@ -33,47 +33,62 @@ function Login() {
 
         e.preventDefault();
 
+
         setEmailError(false);
         setPasswordError(false);
 
         const email = inputs.email;
         const password = inputs.password;
 
-        if((email === undefined || email === "") || (password === undefined || password === "")){
-            if(email === undefined || email === ""){
+        if ((email === undefined || email === "") || (password === undefined || password === "")) {
+            if (email === undefined || email === "") {
                 setEmailError(true);
             }
-            if(password === undefined || password === ""){
+            if (password === undefined || password === "") {
                 setPasswordError(true);
             }
         }
-        else{
+
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
+                let user = userCredential.user;
+                fetch("http://" + window.location.hostname + ":9000/api/open/usernames/" + user.uid, { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
+                    .then(res => res.json())
+                    .then(data => {
+                        
+                        if (user != null && user.emailVerified && data[0].activated === "true") {
+                            navigate("/management");
+                        }
 
-                const user = userCredential.user;
-                console.log(user.emailVerified);
-                if (user != null && user.emailVerified) {
-                    navigate("/tracks");
-                }
-                else{
-                    alert("Your account is not verified! We have resent a verification link!");
-                    sendEmailVerification(user);
-                }
+                        else if (data[0].activated === "false") {
+                            alert("Your account has been disabled. Please contact your administrator!");
+                        }
 
+                        else {
+                            sendEmailVerification(user).then(() => {
+                                alert("Your account isn't verified. We have send an email to " + inputs.email + " with a link to verify your account.")
+                            })
+                                .catch(() => {
+                                    alert("A verification email has already been sent! Please wait a bit before sending another!");
+                                })
+                        }
+                    })
+                    .catch(err => {
+                        console.log("Error");
+                    })
             })
             .catch((error) => {
                 alert("Login unsuccsesful");
             });
     }
-}
+
     return (
         <div className="form">
             <form onSubmit={signIn}>
                 <label>Email</label>
-                <input type="text" name="email" onChange={handleChange} value={inputs.email || ""}/>
+                <input type="text" name="email" onChange={handleChange} value={inputs.email || ""} />
                 <label>Password</label>
-                <input type="password" name="password" onChange={handleChange} value={inputs.password || ""}/>
+                <input type="password" name="password" onChange={handleChange} value={inputs.password || ""} />
                 <button type="submit">Login</button>
             </form>
 
@@ -81,7 +96,6 @@ function Login() {
             <button onClick={signInWithGoogle}>Login With Google</button>
 
             <p>{emailEmptyError ? "Email empty " : " "} {passwordEmptyError ? "Password empty " : " "}</p>
-
         </div>
     );
 }
