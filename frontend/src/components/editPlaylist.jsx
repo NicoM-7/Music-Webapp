@@ -89,8 +89,36 @@ function EditPlaylist(playlist) {
             let time = moment().format('YYYY-MM-DD HH:mm:ss');
             setDetails(values => ({ ...values, lastModified: time }));
             setSavedDetails({ ...details, lastModified: time });
-            console.log(details);
+            savePlaylist({ ...details, lastModified: time });
         }
+    }
+
+    const savePlaylist = (playlist) => {
+        fetch("http://" + window.location.hostname + ":9000/api/secure/playlists/" + playlist.id,
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    "description": playlist.description,
+                    "public": playlist.public,
+                    "numTracks": playlist.numTracks,
+                    "playtime": playlist.playtime,
+                    "lastModified": playlist.lastModified,
+                    "tracks": playlist.tracks,
+                }),
+                headers: new Headers({
+                    'Content-Type': 'application/json'
+                })
+            })
+            .then(httpResp => {
+                return httpResp.json().then(data => {
+                    if (!httpResp.ok) {
+                        throw new Error(httpResp.status + "\n" + JSON.stringify(data));
+                    }
+                })
+            })
+            .catch(err => {
+                alert(err);
+            });
     }
 
     // Removes the track that was clicked on visually from the page
@@ -113,7 +141,7 @@ function EditPlaylist(playlist) {
             <form onSubmit={handleSubmit}>
                 <textarea className='description' name="description" onChange={handleChange} value={details.description || ""} placeholder="Description"></textarea><br />
                 <label>Make Public  </label>
-                <input type="checkbox" name="public" onChange={handleCheckboxChange} value={details.public === 1 ? true : false} /><br />
+                <input type="checkbox" name="public" onChange={handleCheckboxChange} value={details.public === 1 ? true : false} checked={details.public === 1 ? true : false} /><br />
                 <button id="saveButton" type="submit">SAVE</button><br />
                 {
                     tracks.map((track, i) => {
