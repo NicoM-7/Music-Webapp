@@ -10,6 +10,7 @@ function SignUp() {
     const [emailEmptyError, setEmailError] = useState(false);
     const [passwordEmptyError, setPasswordError] = useState(false);
     const [usernameEmptyError, setUsernameError] = useState(false);
+    const [usernameTakenError, setUsernameTakenError] = useState(false);
     const [accountVerified, setAccountVerified] = useState(false);
 
     const handleChange = (event) => {
@@ -22,6 +23,7 @@ function SignUp() {
 
         e.preventDefault();
 
+        setUsernameError(false);
         setEmailError(false);
         setPasswordError(false);
         setUsernameError(false);
@@ -31,7 +33,20 @@ function SignUp() {
         const email = inputs.email;
         const password = inputs.password;
 
-        if((username === undefined || username === "") || (email === undefined || email === "") || (password === undefined || password === "")){
+        fetch("http://" + window.location.hostname + ":9000/api/usernames", {method: "GET", headers: new Headers({
+            'Content-Type': 'application/json'
+        })})
+        .then((res => res.json()))
+        .then(data => {
+            if(data.some(user => user.username == username).length > 0){
+                setUsernameTakenError(true);
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
+
+        if((username === undefined || username === "") || (email === undefined || email === "") || (password === undefined || password === "") || usernameTakenError){
             
             if(username === undefined || username === ""){
                 setUsernameError(true);
@@ -55,7 +70,7 @@ function SignUp() {
             .catch((error) => {
 
                 const parsedError = error.toString().substring(error.toString().indexOf(":") + 1, error.toString().lastIndexOf("."));
-                console.log(parsedError);
+                
                 if(parsedError === " Firebase: Password should be at least 6 characters (auth/weak-password)"){
                     alert("Password must be at least 6 characters!");
                 }
@@ -88,6 +103,7 @@ function SignUp() {
 
             <p>{emailEmptyError ? "Email empty " : " "} {passwordEmptyError ? "Password empty " : " "} {usernameEmptyError ? "Username empty " : " "}</p>
             <p>{accountVerified ? "We have sent a verification email to " + inputs.email : ""}</p>
+            <p>{usernameTakenError ? "Username" + inputs.username + " is taken!" : ""}</p>
 
         </div>
     );

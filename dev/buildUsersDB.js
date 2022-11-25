@@ -1,0 +1,32 @@
+import mysql from 'mysql2';
+
+const db = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'root',
+    database: 'lab4db',
+    multipleStatements: true
+});
+
+function buildUsersDB() {
+
+    db.query("DROP TABLE users", (err) => {
+        if (err != null) {
+            console.log("No table to drop");
+        }
+    });
+
+    db.query("CREATE TABLE users (email VARCHAR(100) NOT NULL,username VARCHAR(50) NOT NULL,admin VARCHAR(5) NOT NULL,PRIMARY KEY (email));", (err) => {
+        if (err != null) {
+            console.log("Error creating table!");
+        }
+    });
+
+    db.query("INSERT INTO users VALUES (?, ?, ?);", ["se3316.lab4.gan@gmail.com", "administrator", "true"], (err) => {
+        if (err != null) {
+            console.log("Error inserting into table!");
+        }
+    })
+}
+
+buildUsersDB();
