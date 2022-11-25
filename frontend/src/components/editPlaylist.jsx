@@ -14,7 +14,7 @@ function EditPlaylist(playlist) {
     useEffect(() => {
         setDetails(playlist);
         setSavedDetails(playlist);
-    }, []);
+    }, [playlist]);
 
     useEffect(() => {
         fetchTracks();

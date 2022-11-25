@@ -17,7 +17,7 @@ secureListRouter.post('', (req, res) => {
     //     return;
     // }
 
-    db.query("INSERT INTO playlists (name, user) VALUES (?, ?);", [req.body.name, req.body.user], (err, data) => {
+    db.query("INSERT INTO playlists (name, user, tracks, lastModified) VALUES (?, ?, ?, ?);", [req.body.name, req.body.user, req.body.tracks, req.body.lastModified], (err, data) => {
         if (err) {
             if (err.code === 'ER_DUP_ENTRY') {
                 res.status(422).json(err.sqlMessage);
@@ -34,6 +34,22 @@ secureListRouter.post('', (req, res) => {
         }
     });
 });
+
+// Get all users playlists
+secureListRouter.get('', (req, res) => {
+    db.query("SELECT * FROM playlists WHERE user=?;", [req.query.user], (err, data) => {
+        if (err) {
+            res.status(500).json(err);
+        }
+        else if (data.length === 0) {
+            res.status(404).json("No Lists Found");
+        }
+        else {
+            res.json(data);
+        }
+    });
+});
+
 
 // Get all lists for this user
 secureListRouter.get('', (req, res) => {

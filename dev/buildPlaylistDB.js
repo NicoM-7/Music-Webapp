@@ -31,7 +31,7 @@ function buildPlaylistsDB() {
         numTracks int DEFAULT NULL,
         playtime varchar(20) DEFAULT NULL,
         rating double DEFAULT NULL,
-        lastModified datetime DEFAULT NULL,
+        lastModified varchar(20) DEFAULT NULL,
         tracks text,
         PRIMARY KEY (name, user)
         ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;`,
