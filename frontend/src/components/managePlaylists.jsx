@@ -33,6 +33,10 @@ function ManagePlaylist() {
     }, []);
 
     useEffect(() => {
+        setSelectedPlaylist({});
+    }, [playlists]);
+
+    useEffect(() => {
         playlistToSend.current = newPlaylist;
         playlistToSend.current.lastModified = moment().format('YYYY-MM-DD HH:mm:ss');
     }, [newPlaylist]);
@@ -43,41 +47,80 @@ function ManagePlaylist() {
         setNewPlaylist(values => ({ ...values, [name]: value }));
     }
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
+        // If no name or tracks are entered send alert
         if (playlistToSend.current.name === "" || playlistToSend.current.tracks === "") {
             alert("Playlist name and tracks are required fields");
         }
         else {
-            fetch("http://" + window.location.hostname + ":9000/api/secure/playlists",
-                {
-                    method: "POST",
-                    body: JSON.stringify({
-                        "name": playlistToSend.current.name,
-                        "user": playlistToSend.current.user,
-                        "tracks": playlistToSend.current.tracks,
-                        "lastModified": playlistToSend.current.lastModified
-                    }),
-                    headers: new Headers({
-                        'Content-Type': 'application/json'
+            try {
+                // Fetching and checking if the tracks entered exist
+                let newTracks = [];
+                let totalDuration = 0;
+                let trackIds = newPlaylist.tracks ? newPlaylist.tracks.split(",").map(n => parseInt(n)).filter(n => n) : [];
+
+                for (let id of trackIds) {
+                    await fetch("http://" + window.location.hostname + ":9000/api/open/tracks/" + id,
+                        {
+                            method: "GET",
+                            headers: new Headers({
+                                'Content-Type': 'application/json'
+                            })
+                        })
+                        .then(httpResp => {
+                            return httpResp.json().then(data => {
+                                if (httpResp.ok) {
+                                    newTracks.push(data[0]);
+                                    // Calculation for total duration of list
+                                    let trackDur = data[0].trackDuration.split(":");
+                                    totalDuration += parseInt(trackDur[0]) * 60 + parseInt(trackDur[1]);
+                                }
+                                else {
+                                    throw new Error(httpResp.status + "\n" + JSON.stringify(data));
+                                }
+                            })
+                        })
+                        .catch(err => {
+                            throw err;
+                        });
+                }
+
+                fetch("http://" + window.location.hostname + ":9000/api/secure/playlists",
+                    {
+                        method: "POST",
+                        body: JSON.stringify({
+                            "name": playlistToSend.current.name,
+                            "user": playlistToSend.current.user,
+                            "tracks": playlistToSend.current.tracks,
+                            "lastModified": playlistToSend.current.lastModified,
+                            "numTracks": trackIds.length,
+                            "playtime": `${parseInt(totalDuration / 60)}:${totalDuration % 60}`
+                        }),
+                        headers: new Headers({
+                            'Content-Type': 'application/json'
+                        })
                     })
-                })
-                .then(httpResp => {
-                    return httpResp.json().then(data => {
-                        if (httpResp.ok) {
-                            // Clearing new playlist inputs and getting this users playlists from backend
-                            setNewPlaylist(values => ({ ...values, name: "", tracks: "", lastModified: "" }));
-                            getPlaylists(newPlaylist.user);
-                        }
-                        else {
-                            throw new Error(httpResp.status + "\n" + JSON.stringify(data));
-                        }
+                    .then(httpResp => {
+                        return httpResp.json().then(data => {
+                            if (httpResp.ok) {
+                                // Clearing new playlist inputs and getting this users playlists from backend
+                                setNewPlaylist(values => ({ ...values, name: "", tracks: "", lastModified: "" }));
+                                getPlaylists(newPlaylist.user);
+                            }
+                            else {
+                                throw new Error(httpResp.status + "\n" + JSON.stringify(data));
+                            }
+                        })
                     })
-                })
-                .catch(err => {
-                    alert(err);
-                });
+                    .catch(err => {
+                        throw err;
+                    });
+            }
+            catch (err) {
+                alert(err);
+            }
         }
     }
 
@@ -104,7 +147,7 @@ function ManagePlaylist() {
             });
     }
 
-    const selectPlaylist = (event) => {
+    const selectPlaylist = async (event) => {
         setSelectedPlaylist(playlists[event.target.name]);
     }
 
@@ -117,11 +160,29 @@ function ManagePlaylist() {
                     <button type="submit">+</button>
                 </form>
                 {
-                    playlists.map((playlist, i) => <button onClick={selectPlaylist} key={i} name={i}>{playlist.name}</button>)
+                    playlists.map((playlist, i) =>
+                        <div key={i}>
+                            <button onClick={selectPlaylist} name={i}>{playlist.name}</button>
+                        </div>
+                    )
                 }
             </div>
             <div className="playlistBox">
-                <EditPlaylist {...selectedPlaylist} />
+                {
+                    JSON.stringify(selectedPlaylist) === "{}" ? <h1>Select a playlist</h1> : <EditPlaylist
+                        description={selectedPlaylist.description}
+                        id={selectedPlaylist.id}
+                        lastModified={selectedPlaylist.lastModified}
+                        name={selectedPlaylist.name}
+                        numTracks={selectedPlaylist.numTracks}
+                        playtime={selectedPlaylist.playtime}
+                        isPublic={selectedPlaylist.public}
+                        rating={selectedPlaylist.rating}
+                        tracks={selectedPlaylist.tracks}
+                        user={selectedPlaylist.user}
+                        allPlaylists={playlists}
+                        setAllPlaylists={setPlaylists} />
+                }
             </div>
             <div className="tracksBox">
                 <Tracks />

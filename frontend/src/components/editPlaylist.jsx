@@ -4,17 +4,29 @@ import Track from './track';
 
 import '../styles/editPlaylist.css';
 
-function EditPlaylist(playlist) {
+function EditPlaylist({ description, id, lastModified, name, numTracks, playtime, isPublic, rating, tracks, user, allPlaylists, setAllPlaylists }) {
 
     let [details, setDetails] = useState({});
     let [savedDetails, setSavedDetails] = useState({});
-    let [tracks, setTracks] = useState([]);
+    let [tracksList, setTracksList] = useState([]);
 
 
     useEffect(() => {
+        let playlist = {
+            description: description,
+            id: id,
+            lastModified: lastModified,
+            name: name,
+            numTracks: numTracks,
+            playtime: playtime,
+            public: isPublic,
+            rating: rating,
+            tracks: tracks,
+            user: user
+        }
         setDetails(playlist);
         setSavedDetails(playlist);
-    }, [playlist]);
+    }, [description, id, lastModified, name, numTracks, playtime, isPublic, rating, tracks, user]);
 
     useEffect(() => {
         fetchTracks();
@@ -52,13 +64,13 @@ function EditPlaylist(playlist) {
                 });
         }
 
-        setDetails(values => ({ ...values, numTracks: newTracks.length }));
+        setDetails(values => ({ ...values, numTracks: trackIds.length }));
 
-        // Formoting total duration to string for display
+        // Formating total duration to string for display
         totalDuration = `${parseInt(totalDuration / 60)}:${totalDuration % 60}`;
         setDetails(values => ({ ...values, playtime: totalDuration }));
 
-        setTracks(newTracks);
+        setTracksList(newTracks);
     }
 
     // Updates state based on value changes to form fields
@@ -111,7 +123,13 @@ function EditPlaylist(playlist) {
             })
             .then(httpResp => {
                 return httpResp.json().then(data => {
-                    if (!httpResp.ok) {
+                    if (httpResp.ok) {
+                        let newPlaylists = allPlaylists;
+                        let index = newPlaylists.findIndex(playlist => playlist.id === savedDetails.id);
+                        newPlaylists[index] = playlist;
+                        setAllPlaylists(newPlaylists);
+                    }
+                    else {
                         throw new Error(httpResp.status + "\n" + JSON.stringify(data));
                     }
                 })
@@ -126,9 +144,40 @@ function EditPlaylist(playlist) {
         let newTrackIds = details.tracks.split(",").map(n => parseInt(n)).filter(n => n);
         newTrackIds.splice(event.target.name, 1);
         setDetails(values => ({ ...values, tracks: newTrackIds.toString() }));
-        let newTracks = tracks;
+        let newTracks = tracksList;
         newTracks.splice(event.target.name, 1)
-        setTracks(newTracks);
+        setTracksList(newTracks);
+    }
+
+    const deletePlaylist = (event) => {
+        fetch("http://" + window.location.hostname + ":9000/api/secure/playlists/" + id,
+            {
+                method: "DELETE",
+                headers: new Headers({
+                    'Content-Type': 'application/json'
+                })
+            })
+            .then(httpResp => {
+                return httpResp.json().then(data => {
+                    if (httpResp.ok) {
+                        const filteredPlaylists = allPlaylists.filter((playlist) => playlist.id !== savedDetails.id);
+                        setAllPlaylists(filteredPlaylists);
+                        setDetails({
+                            name: "Select a Playlist"
+                        });
+                        setSavedDetails({
+                            name: "Select a Playlist"
+                        });
+                        setTracksList([]);
+                    }
+                    else {
+                        throw new Error(httpResp.status + "\n" + JSON.stringify(data));
+                    }
+                })
+            })
+            .catch(err => {
+                alert(err);
+            });
     }
 
     return (
@@ -142,9 +191,11 @@ function EditPlaylist(playlist) {
                 <textarea className='description' name="description" onChange={handleChange} value={details.description || ""} placeholder="Description"></textarea><br />
                 <label>Make Public  </label>
                 <input type="checkbox" name="public" onChange={handleCheckboxChange} value={details.public === 1 ? true : false} checked={details.public === 1 ? true : false} /><br />
-                <button id="saveButton" type="submit">SAVE</button><br />
+                <button id="saveButton" type="submit">SAVE</button>
+                <input id="saveButton" type="button" value="DELETE" onClick={deletePlaylist} />
+                <br />
                 {
-                    tracks.map((track, i) => {
+                    tracksList.map((track, i) => {
                         return (
                             <div className="trackListItem" key={i}>
                                 <div className="trackRemoveButton">

@@ -17,22 +17,31 @@ secureListRouter.post('', (req, res) => {
     //     return;
     // }
 
-    db.query("INSERT INTO playlists (name, user, tracks, lastModified) VALUES (?, ?, ?, ?);", [req.body.name, req.body.user, req.body.tracks, req.body.lastModified], (err, data) => {
-        if (err) {
-            if (err.code === 'ER_DUP_ENTRY') {
-                res.status(422).json(err.sqlMessage);
-                return;
+    db.query("INSERT INTO playlists (name, user, tracks, lastModified, numTracks, playtime) VALUES (?, ?, ?, ?, ?, ?);",
+        [
+            req.body.name,
+            req.body.user,
+            req.body.tracks,
+            req.body.lastModified,
+            req.body.numTracks,
+            req.body.playtime
+        ],
+        (err, data) => {
+            if (err) {
+                if (err.code === 'ER_DUP_ENTRY') {
+                    res.status(422).json(err.sqlMessage);
+                    return;
+                }
+                else {
+                    res.status(500).json(err);
+                    return;
+                }
             }
             else {
-                res.status(500).json(err);
+                res.json(data);
                 return;
             }
-        }
-        else {
-            res.json(data);
-            return;
-        }
-    });
+        });
 });
 
 // Get all users playlists
@@ -99,7 +108,16 @@ secureListRouter.post('/:id', (req, res) => {
 });
 
 secureListRouter.delete('/:id', (req, res) => {
-    //db.query()
+    db.query("DELETE FROM playlists WHERE id=?", [req.params.id], (err) => {
+        if (err) {
+            res.status(500).json(err);
+            return;
+        }
+        else {
+            res.json("Success");
+            return;
+        }
+    });
 });
 
 module.exports = secureListRouter;
