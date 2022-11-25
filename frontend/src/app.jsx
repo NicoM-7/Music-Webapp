@@ -10,6 +10,7 @@ import SignUp from "./components/signUp";
 import Logout from './components/logout';
 import ChangePassword from './components/changePassword';
 import ManagePlaylist from './components/managePlaylists';
+import Playlists from './components/playlists';
 
 function App() {
     return (
@@ -24,6 +25,7 @@ function App() {
                     <Route element={<PrivateWrapper />}>
                         <Route path="/authenticated" element={<ChangePassword/>} />
                     </Route>
+                    <Route path="/playlists" element={<Playlists />} />
                 </Routes>
             </div>
         </BrowserRouter>

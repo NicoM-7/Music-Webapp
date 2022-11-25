@@ -28,6 +28,7 @@ openTrackRouter.get('', (req, res) => {
             res.status(404).json("No Tracks Found");
         }
         else {
+            console.log(JSON.stringify(data));
             res.json(data);
         }
     }
