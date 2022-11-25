@@ -10,7 +10,7 @@ const AdminWrapper = () => {
     const [loadingState, setLoadingState] = useState("loading");
 
     useEffect(() => {
-        fetch("http://" + window.location.hostname + ":9000/api/open/usernames/" + auth.currentUser.email.toString(), { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
+        fetch("http://" + window.location.hostname + ":9000/api/open/usernames/" + auth.currentUser.uid, { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
             .then(res => res.json())
             .then(data => {
                 setLoadingState("Complete");

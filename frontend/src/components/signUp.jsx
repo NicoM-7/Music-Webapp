@@ -60,7 +60,7 @@ function SignUp() {
                         .then((userCredential) => {
                             const user = userCredential.user;
                             if (user != null) {
-                                fetch("http://" + window.location.hostname + ":9000/api/open/usernames/insert", {method: "POST", body: JSON.stringify({"username": username, "email": email, "administrator": "false"}), headers: new Headers({'Content-Type': 'application/json'})})
+                                fetch("http://" + window.location.hostname + ":9000/api/open/usernames/insert", {method: "POST", body: JSON.stringify({"username": username, "id": user.uid, "administrator": "false", "activated": "true"}), headers: new Headers({'Content-Type': 'application/json'})})
                                 .then(res => res.json)
                                 .then(data => {
                                     console.log("Inserted user into database!");

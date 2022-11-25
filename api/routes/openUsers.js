@@ -17,8 +17,8 @@ openUsersRouter.get('', (req, res) => {
     });
 });
 
-openUsersRouter.get("/:email", (req, res) => {
-    db.query("SELECT * FROM users WHERE email=?;", [req.params.email], (err,data) => {
+openUsersRouter.get("/:id", (req, res) => {
+    db.query("SELECT * FROM users WHERE id=?;", [req.params.id], (err,data) => {
         if(err != null){
             res.send(err);
         }
@@ -29,7 +29,7 @@ openUsersRouter.get("/:email", (req, res) => {
 })
 openUsersRouter.post('/insert', (req, res) => {
 
-    db.query("INSERT INTO users VALUES (?, ?, ?);", [req.body.email, req.body.username, req.body.administrator], (err) => {
+    db.query("INSERT INTO users VALUES (?, ?, ?, ?);", [req.body.id, req.body.username, req.body.administrator, req.body.activated], (err) => {
         
             res.send(err);
         

@@ -16,13 +16,13 @@ function buildUsersDB() {
         }
     });
 
-    db.query("CREATE TABLE users (email VARCHAR(100) NOT NULL,username VARCHAR(50) NOT NULL,admin VARCHAR(5) NOT NULL,PRIMARY KEY (email));", (err) => {
+    db.query("CREATE TABLE users (id VARCHAR(100) NOT NULL,username VARCHAR(50) NOT NULL,admin VARCHAR(5) NOT NULL,activated VARCHAR(5) NOT NULL,PRIMARY KEY (id));", (err) => {
         if (err != null) {
             console.log("Error creating table!");
         }
     });
 
-    db.query("INSERT INTO users VALUES (?, ?, ?);", ["se3316.lab4.gan@gmail.com", "administrator", "true"], (err) => {
+    db.query("INSERT INTO users VALUES (?, ?, ?, ?);", ["yswRKZpXz8U7RWoVR14O0mQDKT93", "administrator", "true", "true"], (err) => {
         if (err != null) {
             console.log("Error inserting into table!");
         }
