@@ -95,13 +95,52 @@ function EditPlaylist({ description, id, lastModified, name, numTracks, playtime
     }
 
     // On submission updates selected playlist's details in the backend
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (JSON.stringify(details) !== JSON.stringify(savedDetails)) {
-            let time = moment().format('YYYY-MM-DD HH:mm:ss');
-            setDetails(values => ({ ...values, lastModified: time }));
-            setSavedDetails({ ...details, lastModified: time });
-            savePlaylist({ ...details, lastModified: time });
+        try {
+            if (JSON.stringify(details) !== JSON.stringify(savedDetails)) {
+                // Fetching and checking if the tracks entered exist
+                let newTracks = [];
+                let totalDuration = 0;
+                let trackIds = details.tracks ? details.tracks.split(",").map(n => parseInt(n)).filter(n => n) : [];
+
+                if (trackIds.length === 0) {
+                    throw new Error("Cannot save a playlist with no tracks");
+                }
+                for (let id of trackIds) {
+                    await fetch("http://" + window.location.hostname + ":9000/api/open/tracks/" + id,
+                        {
+                            method: "GET",
+                            headers: new Headers({
+                                'Content-Type': 'application/json'
+                            })
+                        })
+                        .then(httpResp => {
+                            return httpResp.json().then(data => {
+                                if (httpResp.ok) {
+                                    newTracks.push(data[0]);
+                                    // Calculation for total duration of list
+                                    let trackDur = data[0].trackDuration.split(":");
+                                    totalDuration += parseInt(trackDur[0]) * 60 + parseInt(trackDur[1]);
+                                }
+                                else {
+                                    throw new Error(httpResp.status + "\n" + JSON.stringify(data));
+                                }
+                            })
+                        })
+                        .catch(err => {
+                            throw err;
+                        });
+                }
+
+                let time = moment().format('YYYY-MM-DD HH:mm:ss');
+                setDetails(values => ({ ...values, lastModified: time, tracks: trackIds.toString() }));
+                setSavedDetails({ ...details, lastModified: time, tracks: trackIds.toString() });
+                savePlaylist({ ...details, lastModified: time, tracks: trackIds.toString() });
+            }
+        }
+        catch (err) {
+            alert(err);
         }
     }
 
