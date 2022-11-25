@@ -52,7 +52,7 @@ function Login() {
             .then((userCredential) => {
                 let user = userCredential.user;
                 if (user != null && user.emailVerified) {
-                    navigate("/authenticated");
+                    navigate("/management");
                 }
                 else{
                     sendEmailVerification(user).then(() => {

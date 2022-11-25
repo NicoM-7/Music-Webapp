@@ -1,6 +1,6 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { auth } from "../firebase";
 function SignUp() {
 
@@ -26,65 +26,74 @@ function SignUp() {
         setUsernameError(false);
         setEmailError(false);
         setPasswordError(false);
-        setUsernameError(false);
+        setUsernameTakenError(false);
         setAccountVerified(false);
 
         const username = inputs.uname;
         const email = inputs.email;
         const password = inputs.password;
 
-        fetch("http://" + window.location.hostname + ":9000/api/usernames", {method: "GET", headers: new Headers({
-            'Content-Type': 'application/json'
-        })})
-        .then((res => res.json()))
-        .then(data => {
-            if(data.some(user => user.username == username).length > 0){
-                setUsernameTakenError(true);
-            }
+        fetch("http://" + window.location.hostname + ":9000/api/open/usernames", {method: "GET", headers: new Headers({'Content-Type': 'application/json'})
         })
-        .catch(err => {
-            console.log(err);
-        });
+            .then((res => res.json()))
+            .then(data => {
 
-        if((username === undefined || username === "") || (email === undefined || email === "") || (password === undefined || password === "") || usernameTakenError){
-            
-            if(username === undefined || username === ""){
-                setUsernameError(true);
-            }
-            if(email === undefined || email === ""){
-                setEmailError(true);
-            }
-            if(password === undefined || password === ""){
-                setPasswordError(true);
-            }
-        }
-        else{
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                const user = userCredential.user;
-                if(user != null){
-                    sendEmailVerification(user);
-                    setAccountVerified(true);
+                if (data.some(user => user.username === username)) {
+                    alert("Username taken!");
+                    setUsernameTakenError(true);
+                }
+
+                else if ((username === undefined || username === "") || (email === undefined || email === "") || (password === undefined || password === "") || usernameTakenError) {
+
+                    if (username === undefined || username === "") {
+                        setUsernameError(true);
+                    }
+                    if (email === undefined || email === "") {
+                        setEmailError(true);
+                    }
+                    if (password === undefined || password === "") {
+                        setPasswordError(true);
+                    }
+                }
+                else {
+                    createUserWithEmailAndPassword(auth, email, password)
+                        .then((userCredential) => {
+                            const user = userCredential.user;
+                            if (user != null) {
+                                fetch("http://" + window.location.hostname + ":9000/api/open/usernames/insert", {method: "POST", body: JSON.stringify({"username": username, "email": email, "administrator": "false"}), headers: new Headers({'Content-Type': 'application/json'})})
+                                .then(res => res.json)
+                                .then(data => {
+                                    console.log("Inserted user into database!");
+                                })
+                                .catch(err => {
+                                    console.log(err);
+                                })
+                                sendEmailVerification(user);
+                                setAccountVerified(true);
+                            }
+                        })
+                        .catch((error) => {
+        
+                            const parsedError = error.toString().substring(error.toString().indexOf(":") + 1, error.toString().lastIndexOf("."));
+        
+                            if (parsedError === " Firebase: Password should be at least 6 characters (auth/weak-password)") {
+                                alert("Password must be at least 6 characters!");
+                            }
+                            else if (parsedError === " Firebase: Error (auth/invalid-email)") {
+                                alert("Invalid email address!");
+                            }
+                            else if (parsedError === " Firebase: Error (auth/email-already-in-use)") {
+                                alert("This email is already registered!");
+                            }
+                        });
                 }
             })
-            .catch((error) => {
-
-                const parsedError = error.toString().substring(error.toString().indexOf(":") + 1, error.toString().lastIndexOf("."));
-                
-                if(parsedError === " Firebase: Password should be at least 6 characters (auth/weak-password)"){
-                    alert("Password must be at least 6 characters!");
-                }
-                else if(parsedError === " Firebase: Error (auth/invalid-email)"){
-                    alert("Invalid email address!");    
-                }
-                else if(parsedError === " Firebase: Error (auth/email-already-in-use)"){
-                    alert("This email is already registered!");
-                }
+            .catch(err => {
+                console.log(err);
             });
-        }
-        }
-        const loginPage = (e) => {
-            navigate(-1);
+    }
+    const loginPage = (e) => {
+        navigate(-1);
     }
 
     return (
@@ -103,8 +112,6 @@ function SignUp() {
 
             <p>{emailEmptyError ? "Email empty " : " "} {passwordEmptyError ? "Password empty " : " "} {usernameEmptyError ? "Username empty " : " "}</p>
             <p>{accountVerified ? "We have sent a verification email to " + inputs.email : ""}</p>
-            <p>{usernameTakenError ? "Username" + inputs.username + " is taken!" : ""}</p>
-
         </div>
     );
 }

@@ -5,6 +5,7 @@ const db = require('./DBConnect');
 const trackRouter = require('./routes/tracks');
 const openListRouter = require('./routes/openLists');
 const secureListRouter = require('./routes/secureLists');
+const openUsersRouter = require('./routes/openUsers');
 
 // Express
 const app = express();
@@ -27,6 +28,9 @@ app.use('/api/open/playlists', openListRouter);
 
 // Routes requests for /api/secure/lists
 app.use('/api/secure/playlists', secureListRouter);
+
+// Routes requests for /api/secure/lists
+app.use('/api/open/usernames', openUsersRouter);
 
 // Listening for requests on given port
 const port = process.env.PORT || 9000;

@@ -11,6 +11,8 @@ import Logout from './components/logout';
 import ChangePassword from './components/changePassword';
 import ManagePlaylist from './components/managePlaylists';
 import Playlists from './components/playlists';
+import AdminWrapper from './components/adminWrapper';
+import UserManagement from './components/userManagement';
 
 function App() {
     return (
@@ -24,6 +26,9 @@ function App() {
                     <Route path="/signUp" element={<SignUp />} />
                     <Route element={<PrivateWrapper />}>
                         <Route path="/authenticated" element={<ChangePassword/>} />
+                    </Route>
+                    <Route element={<AdminWrapper/>}>
+                        <Route path="/management" element={<UserManagement/>} />
                     </Route>
                     <Route path="/playlists" element={<Playlists />} />
                 </Routes>
