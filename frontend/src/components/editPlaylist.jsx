@@ -4,17 +4,29 @@ import Track from './track';
 
 import '../styles/editPlaylist.css';
 
-function EditPlaylist(playlist) {
+function EditPlaylist({ description, id, lastModified, name, numTracks, playtime, isPublic, rating, tracks, user, allPlaylists, setAllPlaylists }) {
 
     let [details, setDetails] = useState({});
     let [savedDetails, setSavedDetails] = useState({});
-    let [tracks, setTracks] = useState([]);
+    let [tracksList, setTracksList] = useState([]);
 
 
     useEffect(() => {
+        let playlist = {
+            description: description,
+            id: id,
+            lastModified: lastModified,
+            name: name,
+            numTracks: numTracks,
+            playtime: playtime,
+            public: isPublic,
+            rating: rating,
+            tracks: tracks,
+            user: user
+        }
         setDetails(playlist);
         setSavedDetails(playlist);
-    }, []);
+    }, [description, id, lastModified, name, numTracks, playtime, isPublic, rating, tracks, user]);
 
     useEffect(() => {
         fetchTracks();
@@ -52,13 +64,13 @@ function EditPlaylist(playlist) {
                 });
         }
 
-        setDetails(values => ({ ...values, numTracks: newTracks.length }));
+        setDetails(values => ({ ...values, numTracks: trackIds.length }));
 
-        // Formoting total duration to string for display
+        // Formating total duration to string for display
         totalDuration = `${parseInt(totalDuration / 60)}:${totalDuration % 60}`;
         setDetails(values => ({ ...values, playtime: totalDuration }));
 
-        setTracks(newTracks);
+        setTracksList(newTracks);
     }
 
     // Updates state based on value changes to form fields
@@ -83,14 +95,87 @@ function EditPlaylist(playlist) {
     }
 
     // On submission updates selected playlist's details in the backend
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (JSON.stringify(details) !== JSON.stringify(savedDetails)) {
-            let time = moment().format('YYYY-MM-DD HH:mm:ss');
-            setDetails(values => ({ ...values, lastModified: time }));
-            setSavedDetails({ ...details, lastModified: time });
-            console.log(details);
+        try {
+            if (JSON.stringify(details) !== JSON.stringify(savedDetails)) {
+                // Fetching and checking if the tracks entered exist
+                let newTracks = [];
+                let totalDuration = 0;
+                let trackIds = details.tracks ? details.tracks.split(",").map(n => parseInt(n)).filter(n => n) : [];
+
+                if (trackIds.length === 0) {
+                    throw new Error("Cannot save a playlist with no tracks");
+                }
+                for (let id of trackIds) {
+                    await fetch("http://" + window.location.hostname + ":9000/api/open/tracks/" + id,
+                        {
+                            method: "GET",
+                            headers: new Headers({
+                                'Content-Type': 'application/json'
+                            })
+                        })
+                        .then(httpResp => {
+                            return httpResp.json().then(data => {
+                                if (httpResp.ok) {
+                                    newTracks.push(data[0]);
+                                    // Calculation for total duration of list
+                                    let trackDur = data[0].trackDuration.split(":");
+                                    totalDuration += parseInt(trackDur[0]) * 60 + parseInt(trackDur[1]);
+                                }
+                                else {
+                                    throw new Error(httpResp.status + "\n" + JSON.stringify(data));
+                                }
+                            })
+                        })
+                        .catch(err => {
+                            throw err;
+                        });
+                }
+
+                let time = moment().format('YYYY-MM-DD HH:mm:ss');
+                setDetails(values => ({ ...values, lastModified: time, tracks: trackIds.toString() }));
+                setSavedDetails({ ...details, lastModified: time, tracks: trackIds.toString() });
+                savePlaylist({ ...details, lastModified: time, tracks: trackIds.toString() });
+            }
         }
+        catch (err) {
+            alert(err);
+        }
+    }
+
+    const savePlaylist = (playlist) => {
+        fetch("http://" + window.location.hostname + ":9000/api/secure/playlists/" + playlist.id,
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    "description": playlist.description,
+                    "public": playlist.public,
+                    "numTracks": playlist.numTracks,
+                    "playtime": playlist.playtime,
+                    "lastModified": playlist.lastModified,
+                    "tracks": playlist.tracks,
+                }),
+                headers: new Headers({
+                    'Content-Type': 'application/json'
+                })
+            })
+            .then(httpResp => {
+                return httpResp.json().then(data => {
+                    if (httpResp.ok) {
+                        let newPlaylists = allPlaylists;
+                        let index = newPlaylists.findIndex(playlist => playlist.id === savedDetails.id);
+                        newPlaylists[index] = playlist;
+                        setAllPlaylists(newPlaylists);
+                    }
+                    else {
+                        throw new Error(httpResp.status + "\n" + JSON.stringify(data));
+                    }
+                })
+            })
+            .catch(err => {
+                alert(err);
+            });
     }
 
     // Removes the track that was clicked on visually from the page
@@ -98,9 +183,40 @@ function EditPlaylist(playlist) {
         let newTrackIds = details.tracks.split(",").map(n => parseInt(n)).filter(n => n);
         newTrackIds.splice(event.target.name, 1);
         setDetails(values => ({ ...values, tracks: newTrackIds.toString() }));
-        let newTracks = tracks;
+        let newTracks = tracksList;
         newTracks.splice(event.target.name, 1)
-        setTracks(newTracks);
+        setTracksList(newTracks);
+    }
+
+    const deletePlaylist = (event) => {
+        fetch("http://" + window.location.hostname + ":9000/api/secure/playlists/" + id,
+            {
+                method: "DELETE",
+                headers: new Headers({
+                    'Content-Type': 'application/json'
+                })
+            })
+            .then(httpResp => {
+                return httpResp.json().then(data => {
+                    if (httpResp.ok) {
+                        const filteredPlaylists = allPlaylists.filter((playlist) => playlist.id !== savedDetails.id);
+                        setAllPlaylists(filteredPlaylists);
+                        setDetails({
+                            name: "Select a Playlist"
+                        });
+                        setSavedDetails({
+                            name: "Select a Playlist"
+                        });
+                        setTracksList([]);
+                    }
+                    else {
+                        throw new Error(httpResp.status + "\n" + JSON.stringify(data));
+                    }
+                })
+            })
+            .catch(err => {
+                alert(err);
+            });
     }
 
     return (
@@ -113,10 +229,12 @@ function EditPlaylist(playlist) {
             <form onSubmit={handleSubmit}>
                 <textarea className='description' name="description" onChange={handleChange} value={details.description || ""} placeholder="Description"></textarea><br />
                 <label>Make Public  </label>
-                <input type="checkbox" name="public" onChange={handleCheckboxChange} value={details.public === 1 ? true : false} /><br />
-                <button id="saveButton" type="submit">SAVE</button><br />
+                <input type="checkbox" name="public" onChange={handleCheckboxChange} value={details.public === 1 ? true : false} checked={details.public === 1 ? true : false} /><br />
+                <button id="saveButton" type="submit">SAVE</button>
+                <input id="saveButton" type="button" value="DELETE" onClick={deletePlaylist} />
+                <br />
                 {
-                    tracks.map((track, i) => {
+                    tracksList.map((track, i) => {
                         return (
                             <div className="trackListItem" key={i}>
                                 <div className="trackRemoveButton">

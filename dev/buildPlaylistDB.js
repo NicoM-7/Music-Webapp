@@ -24,6 +24,7 @@ function buildPlaylistsDB() {
     // Creates new table
     db.query(
         `CREATE TABLE playlists (
+        id INT NOT NULL AUTO_INCREMENT,
         name varchar(100) NOT NULL,
         user varchar(100) NOT NULL,
         description text,
@@ -31,9 +32,10 @@ function buildPlaylistsDB() {
         numTracks int DEFAULT NULL,
         playtime varchar(20) DEFAULT NULL,
         rating double DEFAULT NULL,
-        lastModified datetime DEFAULT NULL,
+        lastModified varchar(20) DEFAULT NULL,
         tracks text,
-        PRIMARY KEY (name, user)
+        PRIMARY KEY (id),
+        UNIQUE KEY unique_index (name, user)
         ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;`,
         (err) => {
             if (err) {
