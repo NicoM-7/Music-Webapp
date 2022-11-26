@@ -6,6 +6,7 @@ import Logout from "./logout";
 function Navbar() {
 
     const [username, setUsername] = useState("");
+    const [hasAdmin, setAdmin] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -14,9 +15,11 @@ function Navbar() {
         .then(res => res.json())
         .then(data => {
             if(data[0].admin === "true"){
+                setAdmin(true);
                 setUsername(data[0].username + " (ADMINISTRATOR)");
             }
             else{
+                setAdmin(false);
                 setUsername(data[0].username);
             }
         })
@@ -41,24 +44,56 @@ function Navbar() {
         navigate("/tracks", {replace: true});
     }
 
+    const searchPlaylistButton = () => {
+        navigate("/playlists", {replace: true});
+    }
+
+    const managePlaylistButton = () => {
+        navigate("/managePlaylists", {replace: true});
+    }
+
+    const manageUsersButton = () => {
+        navigate("/management", {replace: true});
+    }
+
+    //TODO
+    const manageReviewsButton = () => {
+       
+    }
+
+    //TODO
+    const refreshPageButton = () => {
+
+    }
+
     return (
         <div>
         <nav>
-            <h1>Spotify</h1>
+            <h1>WELCOME {auth.currentUser === null ? "GUEST" : username } </h1>
             <ul>
                 <li>
                     <button onClick={homeButton}>Home</button>
                 </li>
         
                 <li>
-                    <button onClick={tracksButton}>View Tracks</button>
+                    <button onClick={tracksButton}>View/Search Tracks</button>
+                </li>
+                <li>
+                    <button onClick={searchPlaylistButton}>Search Playlists</button>
+                </li>
+                <li>
+                    {auth.currentUser != null ? <button onClick={managePlaylistButton}>Create/Edit Playlist</button> : null}
+                </li>
+                <li>
+                    {((auth.currentUser != null) && hasAdmin) ? <button onClick={manageUsersButton}>Edit Users</button> : null}
+                </li>
+                <li>
+                    {((auth.currentUser != null) && hasAdmin) ? <button onClick={manageReviewsButton}>Edit Reviews</button> : null}
                 </li>
                 <li>
                     {auth.currentUser === null ? <button onClick={loginButton}>Login</button> : <Logout/> }
                 </li>
-                <li>
-                    {auth.currentUser === null ? <p>Welcome Guest</p> : <p>{username}</p>}
-                </li>
+                
             </ul>
         </nav>
         </div>
