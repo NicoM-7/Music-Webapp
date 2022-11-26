@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth } from "../firebase";
 import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import "../styles/login.css"
+
 function Login() {
 
     let navigate = useNavigate();
@@ -55,7 +57,7 @@ function Login() {
                 fetch("http://" + window.location.hostname + ":9000/api/open/usernames/" + user.uid, { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
                     .then(res => res.json())
                     .then(data => {
-                        
+
                         if (user != null && user.emailVerified && data[0].activated === "true") {
                             navigate("/management");
                         }
@@ -83,17 +85,22 @@ function Login() {
     }
 
     return (
-        <div className="form">
-            <form onSubmit={signIn}>
-                <label>Email</label>
-                <input type="text" name="email" onChange={handleChange} value={inputs.email || ""} />
-                <label>Password</label>
-                <input type="password" name="password" onChange={handleChange} value={inputs.password || ""} />
-                <button type="submit">Login</button>
-            </form>
+        <div className="mainDIV">
+            <div className='container1'>
+                <h1 className='Login'>Log In</h1>
+                <form onSubmit={signIn}>
+                    <input type="text" name="email" onChange={handleChange} placeholder="Email" value={inputs.email || ""} /><br></br><br></br>
+                    <input type="password" name="password" onChange={handleChange} placeholder="Password" value={inputs.password || ""} /><br></br><br></br>
+                    <button type="submit" className='loginButton'>Login</button>
+                </form> <br></br><br></br>
+                <h1 className='Login'>Or Log In With Google</h1>
+                <button className='googleButton' onClick={signInWithGoogle}>Login With Google</button><br></br>
+            </div>
+            <div className='container2'>
+                <h1>New User? Sign Up with Email Below</h1>
+                <button className='signUpButton' onClick={signUpPage}>Sign Up</button>
+            </div>
 
-            <button onClick={signUpPage}>Sign Up</button>
-            <button onClick={signInWithGoogle}>Login With Google</button>
 
             <p>{emailEmptyError ? "Email empty " : " "} {passwordEmptyError ? "Password empty " : " "}</p>
         </div>

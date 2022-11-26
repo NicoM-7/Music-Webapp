@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 import { auth } from "../firebase";
+import "../styles/signUp.css";
 function SignUp() {
 
     let navigate = useNavigate();
@@ -33,7 +34,8 @@ function SignUp() {
         const email = inputs.email;
         const password = inputs.password;
 
-        fetch("http://" + window.location.hostname + ":9000/api/open/usernames", {method: "GET", headers: new Headers({'Content-Type': 'application/json'})
+        fetch("http://" + window.location.hostname + ":9000/api/open/usernames", {
+            method: "GET", headers: new Headers({ 'Content-Type': 'application/json' })
         })
             .then((res => res.json()))
             .then(data => {
@@ -60,22 +62,22 @@ function SignUp() {
                         .then((userCredential) => {
                             const user = userCredential.user;
                             if (user != null) {
-                                fetch("http://" + window.location.hostname + ":9000/api/open/usernames/insert", {method: "POST", body: JSON.stringify({"username": username, "id": user.uid, "administrator": "false", "activated": "true"}), headers: new Headers({'Content-Type': 'application/json'})})
-                                .then(res => res.json)
-                                .then(data => {
-                                    console.log("Inserted user into database!");
-                                })
-                                .catch(err => {
-                                    console.log(err);
-                                })
+                                fetch("http://" + window.location.hostname + ":9000/api/open/usernames/insert", { method: "POST", body: JSON.stringify({ "username": username, "id": user.uid, "administrator": "false", "activated": "true" }), headers: new Headers({ 'Content-Type': 'application/json' }) })
+                                    .then(res => res.json)
+                                    .then(data => {
+                                        console.log("Inserted user into database!");
+                                    })
+                                    .catch(err => {
+                                        console.log(err);
+                                    })
                                 sendEmailVerification(user);
                                 setAccountVerified(true);
                             }
                         })
                         .catch((error) => {
-        
+
                             const parsedError = error.toString().substring(error.toString().indexOf(":") + 1, error.toString().lastIndexOf("."));
-        
+
                             if (parsedError === " Firebase: Password should be at least 6 characters (auth/weak-password)") {
                                 alert("Password must be at least 6 characters!");
                             }
@@ -98,17 +100,19 @@ function SignUp() {
 
     return (
         <div>
-            <form onSubmit={signUp}>
-                <label htmlFor="usernameInput">Username: </label>
-                <input type="text" name="uname" onChange={handleChange} value={inputs.uname || ""} placeholder="Enter Username"></input><br></br>
-                <label htmlFor="emailInput">Email: </label>
-                <input type="text" name="email" onChange={handleChange} value={inputs.email || ""} placeholder="Enter Email"></input><br></br>
-                <label htmlFor="passwordInput">Password: </label>
-                <input type="text" name="password" onChange={handleChange} value={inputs.password || ""} placeholder="Enter Password"></input><br></br>
-                <button type="submit">submit</button>
-            </form>
-
-            <button onClick={loginPage}>Back to Login</button>
+            <div className='container3'>
+                <h1>Already have an account?</h1><br></br>
+                <button onClick={loginPage}>Back to Login</button>
+            </div>
+            <div className='container4'>
+                <h1 className='h1take2'>Create an Account</h1>
+                <form onSubmit={signUp}>
+                    <input type="text" className='usernameInput' name="uname" onChange={handleChange} value={inputs.uname || ""} placeholder="Enter Username"></input><br></br><br></br>
+                    <input type="text" className='emailInput' name="email" onChange={handleChange} value={inputs.email || ""} placeholder="Enter Email"></input>
+                    <input type="text" className='passwordInput' name="password" onChange={handleChange} value={inputs.password || ""} placeholder="Enter Password"></input><br></br><br></br>
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
 
             <p>{emailEmptyError ? "Email empty " : " "} {passwordEmptyError ? "Password empty " : " "} {usernameEmptyError ? "Username empty " : " "}</p>
             <p>{accountVerified ? "We have sent a verification email to " + inputs.email : ""}</p>

@@ -3,7 +3,6 @@ import {useNavigate} from 'react-router-dom';
 
 function HomePage() {
 
-
     let navigate = useNavigate();
     const loginPage = () => {
         navigate("/login");
