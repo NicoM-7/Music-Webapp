@@ -101,11 +101,11 @@ function SignUp() {
     return (
         <div>
             <div className='container3'>
-                <h1 className='h1take2'>Already have an account?</h1><br></br>
+                <h1>Already have an account?</h1><br></br>
                 <button onClick={loginPage}>Back to Login</button>
             </div>
             <div className='container4'>
-                <h1>Create an Account</h1>
+                <h1 className='h1take2'>Create an Account</h1>
                 <form onSubmit={signUp}>
                     <input type="text" className='usernameInput' name="uname" onChange={handleChange} value={inputs.uname || ""} placeholder="Enter Username"></input><br></br><br></br>
                     <input type="text" className='emailInput' name="email" onChange={handleChange} value={inputs.email || ""} placeholder="Enter Email"></input>

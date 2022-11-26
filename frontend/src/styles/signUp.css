@@ -2,15 +2,15 @@
     width: 30%;
     float: left;
     height: 100vw;
-    background-color: #FCBA04;
+    background-color: #590004;
     text-align: center;
-    padding-top: 18%;
+    padding-top: 22.5%;
 }
 .container4{
     width: 70%;
     display: inline-block;
     height: 100vw;
-    background-color: #590004;
+    background-color: #FCBA04;
     text-align: center;
     padding-top: 15%;
 }
@@ -24,10 +24,10 @@
 }
 
 .emailInput{
-    width: 30%;
+    width: 40%;
 }
 
 .passwordInput{
-    width: 30%;
+    width: 40%;
     margin-left: 2%;
 }

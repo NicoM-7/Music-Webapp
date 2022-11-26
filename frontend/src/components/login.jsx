@@ -93,13 +93,12 @@ function Login() {
                     <input type="password" name="password" onChange={handleChange} placeholder="Password" value={inputs.password || ""} /><br></br><br></br>
                     <button type="submit" className='loginButton'>Login</button>
                 </form> <br></br><br></br>
-
-                <h1 className='Login'>New User? Sign Up with Email Below</h1>
-                <button className='signUpButton' onClick={signUpPage}>Sign Up</button>
+                <h1 className='Login'>Or Log In With Google</h1>
+                <button className='googleButton' onClick={signInWithGoogle}>Login With Google</button><br></br>
             </div>
             <div className='container2'>
-                <h1>Or Log In With Google</h1>
-                <button className='googleButton' onClick={signInWithGoogle}>Login With Google</button><br></br>
+                <h1>New User? Sign Up with Email Below</h1>
+                <button className='signUpButton' onClick={signUpPage}>Sign Up</button>
             </div>
 
 
