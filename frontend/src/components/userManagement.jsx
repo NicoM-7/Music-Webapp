@@ -11,7 +11,6 @@ function UserManagement(username) {
         fetch("http://" + window.location.hostname + ":9000/api/admin/usernames", { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
             .then(res => res.json())
             .then(data => {
-                console.log(data);
                 setUsers(data);
             })
             .catch(err => {

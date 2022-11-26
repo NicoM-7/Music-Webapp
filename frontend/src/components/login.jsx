@@ -11,7 +11,7 @@ function Login() {
     const signInWithGoogle = () => {
         signInWithPopup(auth, provider).then((result) => {
             if (auth.currentUser != null) {
-                navigate("/authenticated");
+                navigate("/home");
             }
         }).catch((err) => {
             console.log(err);
@@ -59,7 +59,7 @@ function Login() {
                     .then(data => {
 
                         if (user != null && user.emailVerified && data[0].activated === "true") {
-                            navigate("/management");
+                            navigate("/managePlaylists");
                         }
 
                         else if (data[0].activated === "false") {
