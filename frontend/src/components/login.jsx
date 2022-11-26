@@ -9,7 +9,7 @@ function Login() {
     const signInWithGoogle = () => {
         signInWithPopup(auth, provider).then((result) => {
             if (auth.currentUser != null) {
-                navigate("/authenticated");
+                navigate("/home");
             }
         }).catch((err) => {
             console.log(err);
