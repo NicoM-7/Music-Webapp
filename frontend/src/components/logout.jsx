@@ -8,7 +8,7 @@ function Logout(){
     const navigate = useNavigate();
     const logout = () => {
         signOut(auth).then(() => {
-            navigate("/", {replace: true});
+            navigate("/home", {replace: true});
         })
         .catch((error) => {
             alert("Problem logging out");

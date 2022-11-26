@@ -57,7 +57,7 @@ function Login() {
                     .then(data => {
                         
                         if (user != null && user.emailVerified && data[0].activated === "true") {
-                            navigate("/management");
+                            navigate("/managePlaylists");
                         }
 
                         else if (data[0].activated === "false") {

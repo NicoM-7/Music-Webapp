@@ -27,7 +27,7 @@ function ManagePlaylist() {
     });
 
     useEffect(() => {
-        let user = "test";
+        let user = auth.currentUser.uid;
         setNewPlaylist(values => ({ ...values, user: user }));
         getPlaylists(user);
     }, []);
