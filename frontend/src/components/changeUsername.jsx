@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Navigate, useLocation } from "react-router-dom";
 import { auth } from "../firebase";
 
 function ChangeUsername() {
@@ -28,6 +29,8 @@ function ChangeUsername() {
                     .then(res => res.json())
                     .then(data => {
                         alert("Your username has been changed!");
+                        Navigate(useLocation);
+
                     })
                     .catch(err => {
 

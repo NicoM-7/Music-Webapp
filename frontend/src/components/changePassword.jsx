@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import { updatePassword } from "firebase/auth";
 import { auth } from "../firebase"; 
+import { Navigate } from "react-router-dom";
  
 function ChangePassword(){
 
