@@ -6,7 +6,7 @@ const db = require('../DBConnect.js');
 const openListRouter = express.Router();
 
 // Get all lists
-openListRouter.get('/getPublicPlaylists', (req, res) => {
+openListRouter.get('', (req, res) => {
     db.query("SELECT * FROM playlists WHERE public=1;", (err, data) => {
         if (err) {
             res.status(500).json(err);
