@@ -102,7 +102,7 @@ function SignUp() {
         <div>
             <div className='container3'>
                 <h1>Already have an account?</h1><br></br>
-                <button onClick={loginPage}>Back to Login</button>
+                <button className='submitB' onClick={loginPage}>Back to Login</button>
             </div>
             <div className='container4'>
                 <h1 className='h1take2'>Create an Account</h1>
@@ -110,7 +110,7 @@ function SignUp() {
                     <input type="text" className='usernameInput' name="uname" onChange={handleChange} value={inputs.uname || ""} placeholder="Enter Username"></input><br></br><br></br>
                     <input type="text" className='emailInput' name="email" onChange={handleChange} value={inputs.email || ""} placeholder="Enter Email"></input>
                     <input type="text" className='passwordInput' name="password" onChange={handleChange} value={inputs.password || ""} placeholder="Enter Password"></input><br></br><br></br>
-                    <button type="submit">Submit</button>
+                    <button className='submitB' type="submit">Submit</button>
                 </form>
             </div>
 
