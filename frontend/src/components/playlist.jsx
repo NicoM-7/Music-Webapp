@@ -1,17 +1,36 @@
 import React from "react";
+import { useEffect } from "react";
 import { useState } from "react";
+import Track from "./track";
 
 function Playlist(playlist) {
     
-    const [tracks, setTracks] = useState({});
+    const [tracks, setTracks] = useState([]);
 
-    const getTracks = () => {
-        const trackID = playlist.tracks.toString().split(',');
-        for(let c = 0; c < trackID.length; c++){
-            
+    useEffect(() => {
+        const getTracks = async () => {
+            const trackID = playlist.tracks.toString().split(',');
+            console.log(trackID);
+            const tracks = [];
+            for(let c = 0; c < trackID.length; c++){
+                await fetch("http://" + window.location.hostname + ":9000/api/open/tracks/" + trackID[c], {method: "GET", headers: new Headers({ 'Content-Type': 'application/json' })})
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data)
+                    tracks.push(data[0]);
+                })
+                .catch(err => {
+                    console.log("entered");
+
+                })
+            }
+    
+            setTracks(tracks);
         }
 
-    }
+        getTracks();
+    }, []);
+
     return(
         <React.Fragment>
             <ul>
@@ -24,11 +43,11 @@ function Playlist(playlist) {
                 <li>Rating: {playlist.rating}</li>
                 <li>Last Modified: {playlist.lastModified}</li>
                 <li>
-                    {}
+                    {tracks.map((track) => <Track {...track} key={track.trackID} />)}
                 </li>
             </ul>
         </React.Fragment>
     )
 }
 
-export default UserInfo;
+export default Playlist;
