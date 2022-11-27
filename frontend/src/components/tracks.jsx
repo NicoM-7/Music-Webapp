@@ -62,7 +62,7 @@ function Tracks() {
     }
 
     return (
-        <div>
+        <div className='mainDivTracks'>
             <form onKeyDown={handleSubmit}>
                 <input type="text" name="track" onChange={handleChange} value={inputs.track || ""} placeholder="Search by Track" /><br />
                 <input type="text" name="artist" onChange={handleChange} value={inputs.artist || ""} placeholder="Search by Artist" /><br />
