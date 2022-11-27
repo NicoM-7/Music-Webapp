@@ -97,7 +97,7 @@ function Login() {
                 <button className='loginB' onClick={signInWithGoogle}>Login With Google</button><br></br>
             </div>
             <div className='container2'>
-                <h1>New User? Sign Up with Email Below</h1>
+                <h1>New User? Sign Up with Email Below</h1><br></br>
                 <button className='loginB' onClick={signUpPage}>Sign Up</button>
             </div>
 

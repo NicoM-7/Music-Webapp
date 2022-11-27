@@ -153,36 +153,38 @@ function ManagePlaylist() {
 
     return (
         <div className='managePlaylists'>
-            <div className="selectBox">
-                <form onSubmit={handleSubmit}>
-                    <input type="text" name="name" onChange={handleChange} value={newPlaylist.name || ""} placeholder="Playlist Name" />
-                    <input type="text" name="tracks" onChange={handleChange} value={newPlaylist.tracks || ""} placeholder="Tracks" />
-                    <button type="submit">+</button>
-                </form>
-                {
-                    playlists.map((playlist, i) =>
-                        <div key={i}>
-                            <button onClick={selectPlaylist} name={i}>{playlist.name}</button>
-                        </div>
-                    )
-                }
-            </div>
-            <div className="playlistBox">
-                {
-                    JSON.stringify(selectedPlaylist) === "{}" ? <h1>Select a playlist</h1> : <EditPlaylist
-                        description={selectedPlaylist.description}
-                        id={selectedPlaylist.id}
-                        lastModified={selectedPlaylist.lastModified}
-                        name={selectedPlaylist.name}
-                        numTracks={selectedPlaylist.numTracks}
-                        playtime={selectedPlaylist.playtime}
-                        isPublic={selectedPlaylist.public}
-                        rating={selectedPlaylist.rating}
-                        tracks={selectedPlaylist.tracks}
-                        user={selectedPlaylist.user}
-                        allPlaylists={playlists}
-                        setAllPlaylists={setPlaylists} />
-                }
+            <div className='playlistSide'>
+                <div className="selectBox">
+                    <form onSubmit={handleSubmit}>
+                        <input type="text" name="name" onChange={handleChange} value={newPlaylist.name || ""} placeholder="Playlist Name" /><br></br>
+                        <input type="text" name="tracks" onChange={handleChange} value={newPlaylist.tracks || ""} placeholder="Tracks" />
+                        <button type="submit">+</button>
+                    </form>
+                    {
+                        playlists.map((playlist, i) =>
+                            <div key={i}>
+                                <button onClick={selectPlaylist} name={i}>{playlist.name}</button>
+                            </div>
+                        )
+                    }
+                </div>
+                <div className="playlistBox">
+                    {
+                        JSON.stringify(selectedPlaylist) === "{}" ? <h1 className='cH1'>Select a playlist</h1> : <EditPlaylist
+                            description={selectedPlaylist.description}
+                            id={selectedPlaylist.id}
+                            lastModified={selectedPlaylist.lastModified}
+                            name={selectedPlaylist.name}
+                            numTracks={selectedPlaylist.numTracks}
+                            playtime={selectedPlaylist.playtime}
+                            isPublic={selectedPlaylist.public}
+                            rating={selectedPlaylist.rating}
+                            tracks={selectedPlaylist.tracks}
+                            user={selectedPlaylist.user}
+                            allPlaylists={playlists}
+                            setAllPlaylists={setPlaylists} />
+                    }
+                </div>
             </div>
             <div className="tracksBox">
                 <Tracks />
