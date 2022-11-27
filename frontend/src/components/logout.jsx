@@ -2,6 +2,7 @@ import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 import React from "react";
+import "../styles/navbar.css";
 
 function Logout(){
 
@@ -17,7 +18,7 @@ function Logout(){
 
     return(
         <React.Fragment>
-            <button onClick={logout}>Log Out</button>
+            <button className="navBarB" onClick={logout}>Log Out</button>
         </React.Fragment>
     )
 }

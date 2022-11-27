@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { useLocation, useNavigate } from "react-router-dom";
 import { auth } from "../firebase";
 import Logout from "./logout";
-
+import "../styles/navbar.css";
 function Navbar() {
 
     const [username, setUsername] = useState("");
@@ -61,49 +61,50 @@ function Navbar() {
     }
 
     const refreshPageButton = () => {
-        navigate(useLocation, {replace: true});
+        navigate(useLocation, { replace: true });
     }
 
     const manageAccountButton = () => {
-        navigate("/manageAccount", {replace: true});
+        navigate("/manageAccount", { replace: true });
     }
 
     return (
         <div>
             <nav>
-                <h1>WELCOME {auth.currentUser === null ? "GUEST" : username} </h1>
-                <ul>
-                    <li>
-                        <button onClick={homeButton}>Home</button>
-                    </li>
+                <div className="navBarDiv">
+                    <h1 className="welcomeh1">WELCOME {auth.currentUser === null ? "GUEST" : username} </h1>
+                    <ul>
+                        <li>
+                            <button className="navBarB" onClick={homeButton}>Home</button>
+                        </li>
 
-                    <li>
-                        <button onClick={tracksButton}>View/Search Tracks</button>
-                    </li>
-                    <li>
-                        <button onClick={searchPlaylistButton}>Search Playlists</button>
-                    </li>
-                    <li>
-                        <button onClick={refreshPageButton}>Refresh Page</button>
-                    </li>
-                    <li>
-                        {auth.currentUser != null ? <button onClick={manageAccountButton}>Manage Account</button> : null}
-                    </li>
-                    <li>
-                        {auth.currentUser != null ? <button onClick={managePlaylistButton}>Create/Edit Playlist</button> : null}
-                    </li>
-                    <li>
-                        {((auth.currentUser != null) && hasAdmin) ? <button onClick={manageUsersButton}>Edit Users</button> : null}
-                    </li>
-                    <li>
-                        {((auth.currentUser != null) && hasAdmin) ? <button onClick={manageReviewsButton}>Edit Reviews</button> : null}
-                    </li>
-                    <li>
-                        {auth.currentUser === null ? <button onClick={loginButton}>Login</button> : <Logout />}
-                    </li>
-
-                </ul>
-            </nav>
+                        <li>
+                            <button className="navBarB" onClick={tracksButton}>View/Search Tracks</button>
+                        </li>
+                        <li>
+                            <button className="navBarB" onClick={searchPlaylistButton}>Search Playlists</button>
+                        </li>
+                        <li>
+                            <button className="navBarB" onClick={refreshPageButton}>Refresh Page</button>
+                        </li>
+                        <li>
+                            {auth.currentUser != null ? <button className="navBarB" onClick={manageAccountButton}>Manage Account</button> : null}
+                        </li>
+                        <li>
+                            {auth.currentUser != null ? <button className="navBarB" onClick={managePlaylistButton}>Create/Edit Playlist</button> : null}
+                        </li>
+                        <li>
+                            {((auth.currentUser != null) && hasAdmin) ? <button className="navBarB" onClick={manageUsersButton}>Edit Users</button> : null}
+                        </li>
+                        <li>
+                            {((auth.currentUser != null) && hasAdmin) ? <button className="navBarB" onClick={manageReviewsButton}>Edit Reviews</button> : null}
+                        </li>
+                        <li>
+                            {auth.currentUser === null ? <button className="navBarB" onClick={loginButton}>Login</button> : <Logout />}
+                        </li>
+                    </ul>
+                </div>
+            </nav> <br></br><br></br>
         </div>
     )
 }

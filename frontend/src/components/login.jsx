@@ -89,16 +89,16 @@ function Login() {
             <div className='container1'>
                 <h1 className='Login'>Log In</h1>
                 <form onSubmit={signIn}>
-                    <input type="text" name="email" onChange={handleChange} placeholder="Email" value={inputs.email || ""} /><br></br><br></br>
-                    <input type="password" name="password" onChange={handleChange} placeholder="Password" value={inputs.password || ""} /><br></br><br></br>
-                    <button type="submit" className='loginButton'>Login</button>
+                    <input className='loginInput' type="text" name="email" onChange={handleChange} placeholder="Email" value={inputs.email || ""} /><br></br><br></br>
+                    <input className='loginInput' type="password" name="password" onChange={handleChange} placeholder="Password" value={inputs.password || ""} /><br></br><br></br>
+                    <button type="submit" className='loginB'>Login</button>
                 </form> <br></br><br></br>
                 <h1 className='Login'>Or Log In With Google</h1>
-                <button className='googleButton' onClick={signInWithGoogle}>Login With Google</button><br></br>
+                <button className='loginB' onClick={signInWithGoogle}>Login With Google</button><br></br>
             </div>
             <div className='container2'>
                 <h1>New User? Sign Up with Email Below</h1>
-                <button className='signUpButton' onClick={signUpPage}>Sign Up</button>
+                <button className='loginB' onClick={signUpPage}>Sign Up</button>
             </div>
 
 
