@@ -21,23 +21,22 @@ function App() {
     return (
         <BrowserRouter>
             <div className='App'>
-
+                
                 <Routes>
                     <Route path="" element={<div><Navbar /><HomePage /></div>} />
                     <Route path="/home" element={<div><Navbar /><HomePage /></div>} />
                     <Route path="/tracks" element={<div><Navbar /><Tracks /></div>} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/signUp" element={<SignUp/>} />
-                    <Route path="/playlists" element={<div><Navbar /><Playlists /></div>} />
+                    <Route path="/playlists"  element={<div><Navbar /><Playlists /></div>} />
                     <Route element={<PrivateWrapper />}>
-                        <Route path="/manageAccount" element={<div><Navbar/><ManageAccount/></div>}/>
+                        <Route path="/manageAccount" element={<div><Navbar /><ManageAccount/></div>}/>
                         <Route path="/managePlaylists" element={<div><Navbar /><ManagePlaylists /></div>} />
                     </Route>
                     <Route element={<AdminWrapper/>}>
                         <Route path="/manageUsers" element={<div><Navbar /><UserManagement /></div>} />
                         <Route path="/manageReviews" element={<div><Navbar /><ReviewManagment /></div>} />
                     </Route>
-                    
                 </Routes>
             </div>
         </BrowserRouter>

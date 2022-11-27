@@ -3,7 +3,7 @@ import UserInfo from "./userInfo";
 import React from "react";
 import { useEffect } from 'react';
 
-function UserManagement(username) {
+function UserManagement() {
 
     const [users, setUsers] = useState([]);
 

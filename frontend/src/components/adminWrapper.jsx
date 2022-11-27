@@ -5,7 +5,6 @@ import { auth } from "../firebase";
 
 const AdminWrapper = () => {
 
-
     const [user, setUser] = useState({});
     const [loadingState, setLoadingState] = useState("loading");
 
@@ -22,11 +21,12 @@ const AdminWrapper = () => {
             });
         }
         catch(err){
+            setLoadingState("Complete");
             console.log("Not logged in");
         }
     }, []);
-
-    return (loadingState === "Complete" ? ((auth.currentUser != null && user[0].admin === "true") ? <Outlet /> : <Navigate to="/home" />) : "");
+    
+    return (loadingState === "Complete" ? ((auth.currentUser != null && user[0].admin === "true") ? <Outlet /> : <Navigate to="/home"/>) : "");
 }
 
 export default AdminWrapper;
