@@ -3,6 +3,7 @@ import { useState } from 'react';
 import "../styles/playlist.css"
 import Track from "./track";
 import Playlist from "./playlist";
+import ReviewForm from "./reviewForm";
 
 function Playlists(){
 
@@ -35,6 +36,7 @@ function Playlists(){
                 <input type="text" name="playlist" onChange={handleChange} value={inputs.playlist || ""} placeholder="Search Playlist" /><br />
             </form>
             {playlists.map((playlist) => <Playlist {...playlist} key={playlist.id} />)}
+            <ReviewForm/>
     </React.Fragment>
 )
 }
