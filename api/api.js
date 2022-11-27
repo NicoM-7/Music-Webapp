@@ -6,6 +6,7 @@ const trackRouter = require('./routes/tracks');
 const openListRouter = require('./routes/openLists');
 const secureListRouter = require('./routes/secureLists');
 const openUsersRouter = require('./routes/openUsers');
+const secureUsersRouter = require('./routes/secureUsers')
 const adminRouter = require('./routes/adminUsers');
 
 // Express
@@ -33,7 +34,10 @@ app.use('/api/secure/playlists', secureListRouter);
 // Routes requests for /api/secure/lists
 app.use('/api/open/usernames', openUsersRouter);
 
-app.use("/api/admin", adminRouter)
+app.use('/api/secure/usernames', secureUsersRouter);
+
+app.use("/api/admin", adminRouter);
+
 // Listening for requests on given port
 const port = process.env.PORT || 9000;
 app.listen(port, () => {
