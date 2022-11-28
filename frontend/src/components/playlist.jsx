@@ -2,36 +2,57 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import Track from "./track";
+import ReviewForm from "./reviewForm";
+import Review from "./review";
 
 function Playlist(playlist) {
-    
+
     const [tracks, setTracks] = useState([]);
+    const [reviews, setReviews] = useState([]);
+    const [addReviewButton, addReviewClicked] = useState(false);
+    const [openReviewButton, openReviewClicked] = useState(false);
 
     useEffect(() => {
         const getTracks = async () => {
             const trackID = playlist.tracks.toString().split(',');
             console.log(trackID);
             const tracks = [];
-            for(let c = 0; c < trackID.length; c++){
-                await fetch("http://" + window.location.hostname + ":9000/api/open/tracks/" + trackID[c], {method: "GET", headers: new Headers({ 'Content-Type': 'application/json' })})
-                .then(res => res.json())
-                .then(data => {
-                    console.log(data)
-                    tracks.push(data[0]);
-                })
-                .catch(err => {
-                    console.log("entered");
-
-                })
+            for (let c = 0; c < trackID.length; c++) {
+                await fetch("http://" + window.location.hostname + ":9000/api/open/tracks/" + trackID[c], { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data)
+                        tracks.push(data[0]);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
             }
-    
             setTracks(tracks);
         }
-
         getTracks();
     }, []);
 
-    return(
+    const clickAddReviewButton = (event) => {
+        addReviewClicked(!addReviewButton);
+    }
+
+    const clickExpandReviewsButton = (event) => {
+        openReviewClicked(!openReviewButton);
+        if(openReviewButton){
+            fetch("http://" + window.location.hostname + ":9000/api/secure/playlists/review/" + playlist.id, {method: "GET", headers: new Headers({ 'Content-Type': 'application/json' })})
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+                setReviews(data);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        }
+    }
+
+    return (
         <React.Fragment>
             <ul>
                 <li>Playlist ID: {playlist.id}</li>
@@ -44,6 +65,12 @@ function Playlist(playlist) {
                 <li>Last Modified: {playlist.lastModified}</li>
                 <li>
                     {tracks.map((track) => <Track {...track} key={track.trackID} />)}
+                </li>
+                <li>
+                    <input type="button" name="addReview" onClick={clickAddReviewButton} value={!addReviewButton ? "Add Review" : "Cancel"} /><br />
+                    <input type="button" name="expandReviews" onClick={clickExpandReviewsButton} value={!openReviewButton ? "Open Reviews" : "Close"}/><br />
+                    {addReviewButton ? <ReviewForm {...playlist} key={playlist.id}/> : null}
+                    {openReviewButton ? reviews.map((review) => <Review {...review} key={review.playlistId}/>) : null}
                 </li>
             </ul>
         </React.Fragment>
