@@ -54,7 +54,7 @@ function Login() {
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 let user = userCredential.user;
-                fetch("http://" + window.location.hostname + ":9000/api/open/usernames/" + user.uid, { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
+                fetch("/api/open/usernames/" + user.uid, { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
                     .then(res => res.json())
                     .then(data => {
 

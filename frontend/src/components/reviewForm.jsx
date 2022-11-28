@@ -18,21 +18,21 @@ function ReviewForm(playlist) {
     }
 
     const submitReview = () => {
-        fetch("http://" + window.location.hostname + ":9000/api/secure/playlists/review", {method: "POST", body: JSON.stringify({"reviewId": 2, "playlistId": playlist.id, "name": playlist.name, "user": playlist.user, "rating": rating, "review": inputs.description}), headers: new Headers({ 'Content-Type': 'application/json' })})
-        .then(res => res.json())
-        .then(data => {
-            console.log(data);
-        })
-        .catch(err => {
-            console.log("ERROR");
-        })
+        fetch("/api/secure/playlists/review", { method: "POST", body: JSON.stringify({ "reviewId": 2, "playlistId": playlist.id, "name": playlist.name, "user": playlist.user, "rating": rating, "review": inputs.description }), headers: new Headers({ 'Content-Type': 'application/json' }) })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(err => {
+                console.log("ERROR");
+            })
     }
 
     return (
         <React.Fragment>
             <form>
                 <label>Description: </label>
-                <input type="text" name="description" onChange= {handleChange} value={inputs.description} /><br />
+                <input type="text" name="description" onChange={handleChange} value={inputs.description} /><br />
                 <Rating
                     onClick={handleRating}
                     ratingValue={rating}

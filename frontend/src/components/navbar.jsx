@@ -11,7 +11,7 @@ function Navbar() {
 
     useEffect(() => {
         try {
-            fetch("http://" + window.location.hostname + ":9000/api/open/usernames/" + auth.currentUser.uid, { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
+            fetch("/api/open/usernames/" + auth.currentUser.uid, { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
                 .then(res => res.json())
                 .then(data => {
                     if (data[0].admin === "true") {

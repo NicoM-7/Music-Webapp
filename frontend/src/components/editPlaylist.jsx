@@ -39,7 +39,7 @@ function EditPlaylist({ description, id, lastModified, name, numTracks, playtime
         let trackIds = details.tracks ? details.tracks.split(",").map(n => parseInt(n)).filter(n => n) : [];
 
         for (let id of trackIds) {
-            await fetch("http://" + window.location.hostname + ":9000/api/open/tracks/" + id,
+            await fetch("/api/open/tracks/" + id,
                 {
                     method: "GET",
                     headers: new Headers({
@@ -108,7 +108,7 @@ function EditPlaylist({ description, id, lastModified, name, numTracks, playtime
                     throw new Error("Cannot save a playlist with no tracks");
                 }
                 for (let id of trackIds) {
-                    await fetch("http://" + window.location.hostname + ":9000/api/open/tracks/" + id,
+                    await fetch("/api/open/tracks/" + id,
                         {
                             method: "GET",
                             headers: new Headers({
@@ -145,7 +145,7 @@ function EditPlaylist({ description, id, lastModified, name, numTracks, playtime
     }
 
     const savePlaylist = (playlist) => {
-        fetch("http://" + window.location.hostname + ":9000/api/secure/playlists/" + playlist.id,
+        fetch("/api/secure/playlists/" + playlist.id,
             {
                 method: "POST",
                 body: JSON.stringify({
@@ -189,7 +189,7 @@ function EditPlaylist({ description, id, lastModified, name, numTracks, playtime
     }
 
     const deletePlaylist = (event) => {
-        fetch("http://" + window.location.hostname + ":9000/api/secure/playlists/" + id,
+        fetch("/api/secure/playlists/" + id,
             {
                 method: "DELETE",
                 headers: new Headers({

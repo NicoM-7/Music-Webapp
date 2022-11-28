@@ -32,7 +32,7 @@ function Tracks() {
         if (event.key === "Enter") {
             event.preventDefault();
 
-            fetch("http://" + window.location.hostname + ":9000/api/open/tracks?" +
+            fetch("/api/open/tracks?" +
                 "track=" + inputs.track.trim() +
                 "&artist=" + inputs.artist.trim() +
                 "&album=" + inputs.album.trim() +
