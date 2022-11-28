@@ -1,7 +1,8 @@
 import React from "react";
 import { useState } from 'react';
 import "../styles/playlist.css"
-import Track from "./track";
+
+import Playlist from "./playlist";
 
 function Playlists(){
 
@@ -14,8 +15,9 @@ function Playlists(){
         setInputs(values => ({ ...values, [name]: value }))
     }
 
-    const handleSubmit = () => {
-        fetch("http://" + window.location.hostname + ":9000/api/open/list/playists", {method: "GET", headers: new Headers({ 'Content-Type': 'application/json' })})
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        fetch("http://" + window.location.hostname + ":9000/api/open/playlists/" + inputs.playlist, {method: "GET", headers: new Headers({ 'Content-Type': 'application/json' })})
         .then(res => res.json())
         .then(data => {
             setPlaylists(data);
@@ -25,11 +27,23 @@ function Playlists(){
         })
     }
 
+    const addReview = () => {
+
+    }
+
+    const expandReviews = () => {
+
+    }
+
+    console.log(playlists);
+
     return (
     <React.Fragment>
-            <form onKeyDown={handleSubmit}>
+            <form onSubmit={handleSubmit}>
                 <input type="text" name="playlist" onChange={handleChange} value={inputs.playlist || ""} placeholder="Search Playlist" /><br />
             </form>
+            {playlists.map((playlist) => <Playlist {...playlist} key={playlist.id}/>)}
+            
     </React.Fragment>
 )
 }

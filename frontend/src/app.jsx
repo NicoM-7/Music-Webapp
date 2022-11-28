@@ -29,7 +29,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/signUp" element={<SignUp/>} />
                     <Route path="/playlists"  element={<div><Navbar /><Playlists /></div>} />
-                    <Route element={<PrivateWrapper />}>
+                    <Route element={<PrivateWrapper/>}>
                         <Route path="/manageAccount" element={<div><Navbar /><ManageAccount/></div>}/>
                         <Route path="/managePlaylists" element={<div><Navbar /><ManagePlaylists /></div>} />
                     </Route>

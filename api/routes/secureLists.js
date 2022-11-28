@@ -120,4 +120,29 @@ secureListRouter.delete('/:id', (req, res) => {
     });
 });
 
+secureListRouter.post('/review', (req, res) => {
+    
+    db.query("INSERT INTO reviews VALUES (?, ?, ?, ?, ?, ?);", [req.body.reviewId, req.body.playlistId, req.body.name, req.body.user, req.body.rating, req.body.review], (err) => {
+        if(err != null){
+            res.json(err);
+        }
+        else{
+            res.json("Success");
+        }
+    })
+
+});
+
+secureListRouter.get("/review/:id", (req,res) => {
+
+    db.query("SELECT * FROM reviews WHERE playlistId=?", [req.params.id], (err, data) => {
+        if(err != null){
+            res.json(err);
+        }
+        else{
+            res.json(data);
+        }
+    })
+});
+
 module.exports = secureListRouter;
