@@ -14,7 +14,6 @@ function Review(review) {
                 emptyColor='gray'
                 className='foo' // Will remove the inline style if applied
             />
-            
         </React.Fragment>
     )
 }

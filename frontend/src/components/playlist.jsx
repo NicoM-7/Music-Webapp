@@ -39,6 +39,7 @@ function Playlist(playlist) {
 
     const clickExpandReviewsButton = (event) => {
         openReviewClicked(!openReviewButton);
+        console.log(openReviewButton);
         if(openReviewButton){
             fetch("http://" + window.location.hostname + ":9000/api/secure/playlists/review/" + playlist.id, {method: "GET", headers: new Headers({ 'Content-Type': 'application/json' })})
             .then(res => res.json())
