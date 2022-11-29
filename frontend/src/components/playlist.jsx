@@ -57,7 +57,13 @@ function Playlist(playlist) {
             fetch("/api/secure/playlists/review/" + playlist.id, { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
             .then(res => res.json())
             .then(data => {
-                setReviews(data.map((review) => <Review {...review} key={review.playlistId} />));
+                if(data.length != 0){
+                    setReviews(data.map((review) => <Review {...review} key={review.playlistId} />));
+                }
+                else{
+                    setReviews(<div>This playlist has no reviews yet!</div>)
+                }
+                
             })
             .catch(err => {
                 console.log(err);
