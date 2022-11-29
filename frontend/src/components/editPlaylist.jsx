@@ -9,6 +9,7 @@ function EditPlaylist({ description, id, lastModified, name, numTracks, playtime
     let [details, setDetails] = useState({});
     let [savedDetails, setSavedDetails] = useState({});
     let [tracksList, setTracksList] = useState([]);
+    let [deleteFunction, setdeleteFunction] = useState(<input id="delButton" type="button" value="DELETE" onClick={deletePlaylist} />)
 
 
     useEffect(() => {
@@ -188,35 +189,50 @@ function EditPlaylist({ description, id, lastModified, name, numTracks, playtime
         setTracksList(newTracks);
     }
 
-    const deletePlaylist = (event) => {
-        fetch("/api/secure/playlists/" + id,
-            {
-                method: "DELETE",
-                headers: new Headers({
-                    'Content-Type': 'application/json'
+    function deletePlaylist(event) {
+        if (event.target.value === "DELETE") {
+            setdeleteFunction(
+                <div>
+                    <input id="delButton" type="button" value="CONFIRM" onClick={deletePlaylist} />
+                    <input id="cancelButton" type="button" value="CANCEL" onClick={deletePlaylist} />
+                </div>
+            );
+        }
+        else if (event.target.value === "CONFIRM") {
+            // Deletes playlist
+            fetch("/api/secure/playlists/" + id,
+                {
+                    method: "DELETE",
+                    headers: new Headers({
+                        'Content-Type': 'application/json'
+                    })
                 })
-            })
-            .then(httpResp => {
-                return httpResp.json().then(data => {
-                    if (httpResp.ok) {
-                        const filteredPlaylists = allPlaylists.filter((playlist) => playlist.id !== savedDetails.id);
-                        setAllPlaylists(filteredPlaylists);
-                        setDetails({
-                            name: "Select a Playlist"
-                        });
-                        setSavedDetails({
-                            name: "Select a Playlist"
-                        });
-                        setTracksList([]);
-                    }
-                    else {
-                        throw new Error(httpResp.status + "\n" + JSON.stringify(data));
-                    }
+                .then(httpResp => {
+                    return httpResp.json().then(data => {
+                        if (httpResp.ok) {
+                            const filteredPlaylists = allPlaylists.filter((playlist) => playlist.id !== savedDetails.id);
+                            setAllPlaylists(filteredPlaylists);
+                            setDetails({
+                                name: "Select a Playlist"
+                            });
+                            setSavedDetails({
+                                name: "Select a Playlist"
+                            });
+                            setTracksList([]);
+                            setdeleteFunction(<input id="delButton" type="button" value="DELETE" onClick={deletePlaylist} />);
+                        }
+                        else {
+                            throw new Error(httpResp.status + "\n" + JSON.stringify(data));
+                        }
+                    })
                 })
-            })
-            .catch(err => {
-                alert(err);
-            });
+                .catch(err => {
+                    alert(err);
+                });
+        }
+        else {
+            setdeleteFunction(<input id="delButton" type="button" value="DELETE" onClick={deletePlaylist} />);
+        }
     }
 
     return (
@@ -231,7 +247,9 @@ function EditPlaylist({ description, id, lastModified, name, numTracks, playtime
                 <label>Make Public  </label>
                 <input type="checkbox" name="public" onChange={handleCheckboxChange} value={details.public === 1 ? true : false} checked={details.public === 1 ? true : false} /><br />
                 <button id="saveButton" type="submit">SAVE</button>
-                <input id="saveButton" type="button" value="DELETE" onClick={deletePlaylist} />
+                {
+                    deleteFunction
+                }
                 <br />
                 {
                     tracksList.map((track, i) => {
