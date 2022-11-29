@@ -5,8 +5,11 @@ import Track from "./track";
 import ReviewForm from "./reviewForm";
 import Review from "./review";
 
+import '../styles/playlist.css'
+
 function Playlist(playlist) {
 
+    const [expanded, setExpanded] = useState(false);
     const [tracks, setTracks] = useState([]);
     const [reviews, setReviews] = useState([]);
     const [addReviewButton, addReviewClicked] = useState(false);
@@ -53,17 +56,9 @@ function Playlist(playlist) {
         }
     }
 
-    return (
-        <React.Fragment>
-            <ul>
-                <li>Playlist ID: {playlist.id}</li>
-                <li>Playlist Name: {playlist.name}</li>
-                <li>Created By: {playlist.user}</li>
-                <li>Description: {playlist.description}</li>
-                <li>Number of Tracks: {playlist.numTracks}</li>
-                <li>Total Playtime: {playlist.playtime}</li>
-                <li>Rating: {playlist.rating}</li>
-                <li>Last Modified: {playlist.lastModified}</li>
+    const showExpandedView = () => {
+        return (
+            <div>
                 <li>
                     {tracks.map((track) => <Track {...track} key={track.trackID} />)}
                 </li>
@@ -73,8 +68,32 @@ function Playlist(playlist) {
                     {addReviewButton ? <ReviewForm {...playlist} key={playlist.id} /> : null}
                     {openReviewButton ? reviews.map((review) => <Review {...review} key={review.playlistId} />) : null}
                 </li>
+            </div>
+        );
+    }
+
+    const expand = (event) => {
+        if (event.target == event.currentTarget) {
+            setExpanded(!expanded);
+        }
+    }
+
+    return (
+        <div className="playlist">
+            <ul onClick={expand}>
+                <li onClick={expand}>Playlist ID: {playlist.id}</li>
+                <li onClick={expand}>Playlist Name: {playlist.name}</li>
+                <li onClick={expand}>Created By: {playlist.user}</li>
+                <li onClick={expand}>Description: {playlist.description}</li>
+                <li onClick={expand}>Number of Tracks: {playlist.numTracks}</li>
+                <li onClick={expand}>Total Playtime: {playlist.playtime}</li>
+                <li onClick={expand}>Rating: {playlist.rating}</li>
+                <li onClick={expand}>Last Modified: {playlist.lastModified}</li>
+                {
+                    expanded ? showExpandedView() : <div></div>
+                }
             </ul>
-        </React.Fragment>
+        </div>
     )
 }
 

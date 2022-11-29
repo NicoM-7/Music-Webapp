@@ -7,7 +7,7 @@ const openListRouter = express.Router();
 
 // Get all lists
 openListRouter.get('/:name', (req, res) => {
-    db.query("SELECT * FROM playlists WHERE public=1 AND name=?;", [req.params.name], (err, data) => {
+    db.query("SELECT * FROM playlists WHERE public=1 AND name LIKE ? ORDER BY lastModified DESC;", ["%" + req.params.name + "%"], (err, data) => {
         if (err) {
             res.status(500).json(err);
         }
