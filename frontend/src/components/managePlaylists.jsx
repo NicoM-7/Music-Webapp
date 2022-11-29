@@ -62,7 +62,7 @@ function ManagePlaylist() {
                 let trackIds = newPlaylist.tracks ? newPlaylist.tracks.split(",").map(n => parseInt(n)).filter(n => n) : [];
 
                 for (let id of trackIds) {
-                    await fetch("http://" + window.location.hostname + ":9000/api/open/tracks/" + id,
+                    await fetch("/api/open/tracks/" + id,
                         {
                             method: "GET",
                             headers: new Headers({
@@ -87,7 +87,7 @@ function ManagePlaylist() {
                         });
                 }
 
-                fetch("http://" + window.location.hostname + ":9000/api/secure/playlists",
+                fetch("/api/secure/playlists",
                     {
                         method: "POST",
                         body: JSON.stringify({
@@ -125,7 +125,7 @@ function ManagePlaylist() {
     }
 
     const getPlaylists = (user) => {
-        fetch("http://" + window.location.hostname + ":9000/api/secure/playlists?user=" + user,
+        fetch("/api/secure/playlists?user=" + user,
             {
                 method: "GET",
                 headers: new Headers({

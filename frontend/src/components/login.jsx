@@ -6,11 +6,36 @@ import "../styles/login.css"
 
 function Login() {
 
+    const getJWT = (username) => {
+        fetch("/api/open/usernames/login",
+            {
+                method: "POST",
+                headers: new Headers({ 'Content-Type': 'application/json' }),
+                body: JSON.stringify({
+                    "username": username
+                })
+            })
+            .then(httpResp => {
+                return httpResp.json().then(data => {
+                    if (httpResp.ok) {
+                        document.cookie = `token=${data.accessToken}`;
+                    }
+                    else {
+                        throw new Error(httpResp.status + "\n" + JSON.stringify(data));
+                    }
+                })
+            })
+            .catch(err => {
+                throw err;
+            });
+    }
+
     let navigate = useNavigate();
     const provider = new GoogleAuthProvider();
     const signInWithGoogle = () => {
         signInWithPopup(auth, provider).then((result) => {
             if (auth.currentUser != null) {
+                getJWT(auth.currentUser.uid);
                 navigate("/home");
             }
         }).catch((err) => {
@@ -54,11 +79,13 @@ function Login() {
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 let user = userCredential.user;
-                fetch("http://" + window.location.hostname + ":9000/api/open/usernames/" + user.uid, { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
+                fetch("/api/open/usernames/" + user.uid, { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
                     .then(res => res.json())
                     .then(data => {
 
+                        // logged in successfully
                         if (user != null && user.emailVerified && data[0].activated === "true") {
+                            getJWT(auth.currentUser.uid);
                             navigate("/managePlaylists");
                         }
 
@@ -83,6 +110,8 @@ function Login() {
                 alert("Login unsuccsesful");
             });
     }
+
+
 
     return (
         <div className="mainDIV">

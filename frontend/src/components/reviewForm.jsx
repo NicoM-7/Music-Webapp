@@ -20,7 +20,6 @@ function ReviewForm(playlist) {
     }
 
     const submitReview = () => {
-
         fetch("http://" + window.location.hostname + ":9000/api/secure/playlists/count?userId=" + auth.currentUser.uid + "&playlistId=" + playlist.id, {method: "GET", headers: new Headers({ 'Content-Type': 'application/json' })})
             .then(res => res.json())
             .then(data => {
@@ -41,8 +40,6 @@ function ReviewForm(playlist) {
             .catch(err => {
                 Navigate("/login", {replace: true})
             })
-
-
     }
 
     return (

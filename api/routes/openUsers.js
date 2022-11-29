@@ -1,4 +1,7 @@
+require('dotenv').config();
+
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const db = require('../DBConnect.js');
 
 const openUsersRouter = express.Router();
@@ -18,22 +21,30 @@ openUsersRouter.get('', (req, res) => {
 });
 
 openUsersRouter.get("/:id", (req, res) => {
-    db.query("SELECT * FROM users WHERE id=?;", [req.params.id], (err,data) => {
-        if(err != null){
+    db.query("SELECT * FROM users WHERE id=?;", [req.params.id], (err, data) => {
+        if (err != null) {
             res.send(err);
         }
-        else{
+        else {
             res.json(data);
         }
     })
-})
+});
+
 openUsersRouter.post('/insert', (req, res) => {
 
     db.query("INSERT INTO users VALUES (?, ?, ?, ?);", [req.body.id, req.body.username, req.body.administrator, req.body.activated], (err) => {
-        
-            res.send(err);
-        
+
+        res.send(err);
+
     })
+});
+
+openUsersRouter.post('/login', (req, res) => {
+    const user = { name: req.body.username };
+
+    const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '2h' });
+    res.json({ accessToken: accessToken })
 });
 
 

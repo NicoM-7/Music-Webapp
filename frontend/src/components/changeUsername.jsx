@@ -18,25 +18,25 @@ function ChangeUsername() {
         const user = auth.currentUser;
         const newUsername = inputs.username;
 
-        fetch("http://" + window.location.hostname + ":9000/api/open/usernames", { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
+        fetch("/api/open/usernames", { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
             .then(res => res.json())
             .then(data => {
-                if(data.some(user => user.username === newUsername)){
+                if (data.some(user => user.username === newUsername)) {
                     alert("That username is taken!");
                 }
-                else{
-                fetch("http://" + window.location.hostname + ":9000/api/secure/usernames/update/" + user.uid, { method: "PUT", body: JSON.stringify({ "username": newUsername }), headers: new Headers({ 'Content-Type': 'application/json' }) })
-                    .then(res => res.json())
-                    .then(data => {
-                        alert("Your username has been changed!");
-                        Navigate(useLocation);
+                else {
+                    fetch("/api/secure/usernames/update/" + user.uid, { method: "PUT", body: JSON.stringify({ "username": newUsername }), headers: new Headers({ 'Content-Type': 'application/json' }) })
+                        .then(res => res.json())
+                        .then(data => {
+                            alert("Your username has been changed!");
+                            Navigate(useLocation);
 
-                    })
-                    .catch(err => {
+                        })
+                        .catch(err => {
 
-                        alert("Error changing username. Please try again later")
-                        console.log(err);
-                    })
+                            alert("Error changing username. Please try again later")
+                            console.log(err);
+                        })
                 }
             })
             .catch(err => {

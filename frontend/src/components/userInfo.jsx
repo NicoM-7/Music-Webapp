@@ -7,48 +7,48 @@ function UserInfo(user) {
     const [activationState, setActivationState] = useState(user.activated === "true" ? "true" : "false");
 
     const handleAdminChange = () => {
-        
+
         let tempState = "";
-        if(adminState === "true"){
+        if (adminState === "true") {
             tempState = "false";
         }
-        else{
+        else {
             tempState = "true";
         }
 
-        fetch("http://" + window.location.hostname + ":9000/api/admin/update/admin", {method: "POST", body: JSON.stringify({"admin" : tempState, "id" : user.id}), headers: new Headers({'Content-Type': 'application/json'})})
-        .then(res => res.json())
-        .then(data => {
-            setAdminState(tempState);
-        })
-        .catch(err => {
-            console.log(err);
-            alert("Error updating user!");
-        })
+        fetch("/api/admin/update/admin", { method: "POST", body: JSON.stringify({ "admin": tempState, "id": user.id }), headers: new Headers({ 'Content-Type': 'application/json' }) })
+            .then(res => res.json())
+            .then(data => {
+                setAdminState(tempState);
+            })
+            .catch(err => {
+                console.log(err);
+                alert("Error updating user!");
+            })
     }
 
     const handleActivationChange = () => {
 
         let tempState = "";
-        if(activationState === "true"){
+        if (activationState === "true") {
             tempState = "false";
         }
-        else{
+        else {
             tempState = "true";
         }
 
-        fetch("http://" + window.location.hostname + ":9000/api/admin/update/activation", {method: "POST", body: JSON.stringify({"activation" : tempState, "id" : user.id}), headers: new Headers({'Content-Type': 'application/json'})})
-        .then(res => res.json())
-        .then(data => {
-            setActivationState(tempState);
-        }) 
-        .catch(err => {
-            console.log(err);
-            alert("Error updating user!");
-        })
+        fetch("/api/admin/update/activation", { method: "POST", body: JSON.stringify({ "activation": tempState, "id": user.id }), headers: new Headers({ 'Content-Type': 'application/json' }) })
+            .then(res => res.json())
+            .then(data => {
+                setActivationState(tempState);
+            })
+            .catch(err => {
+                console.log(err);
+                alert("Error updating user!");
+            })
     }
-    
-    return(
+
+    return (
         <React.Fragment>
             <ul>
                 <li>Username: {user.username}</li>
