@@ -1,7 +1,6 @@
 import React from "react";
 import { useState } from 'react';
 import "../styles/playlist.css"
-
 import Playlist from "./playlist";
 
 function Playlists() {
@@ -39,11 +38,12 @@ function Playlists() {
 
     return (
         <React.Fragment>
-            <form onSubmit={handleSubmit}>
-                <input type="text" name="playlist" onChange={handleChange} value={inputs.playlist || ""} placeholder="Search Playlist" /><br />
-            </form>
-            {playlists.map((playlist) => <Playlist {...playlist} key={playlist.id} />)}
-
+            <div className="mainPlaylistDiv">
+                <form onSubmit={handleSubmit}>
+                    <input type="text" name="playlist" onChange={handleChange} value={inputs.playlist || ""} placeholder="Search Playlist" /><br />
+                </form>
+                {playlists.map((playlist) => <Playlist {...playlist} key={playlist.id} />)}
+            </div>
         </React.Fragment>
     )
 }
