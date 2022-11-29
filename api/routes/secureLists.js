@@ -122,7 +122,7 @@ secureListRouter.delete('/:id', (req, res) => {
 
 secureListRouter.put('/review', (req, res) => {
     
-    db.query("INSERT INTO reviews (playlistId, name, user, rating, review, hidden) VALUES (?, ?, ?, ?, ?, ?);", [req.body.playlistId, req.body.name, req.body.user, req.body.rating, req.body.review, "false"], (err) => {
+    db.query("INSERT INTO reviews (playlistId, name, user, rating, review, hidden, date) VALUES (?, ?, ?, ?, ?, ?, ?);", [req.body.playlistId, req.body.name, req.body.user, req.body.rating, req.body.review, "false", req.body.date], (err) => {
         if(err != null){
             res.json(err);
         }
@@ -135,7 +135,7 @@ secureListRouter.put('/review', (req, res) => {
 
 secureListRouter.get("/review/:id", (req,res) => {
 
-    db.query("SELECT reviews.reviewId, reviews.playlistId, reviews.name, reviews.user, users.username, reviews.rating, reviews.review, reviews.hidden FROM reviews LEFT JOIN users ON reviews.user=users.id WHERE playlistId=?", [req.params.id], (err, data) => {
+    db.query("SELECT reviews.reviewId, reviews.playlistId, reviews.name, reviews.user, users.username, reviews.rating, reviews.review, reviews.hidden, reviews.date FROM reviews LEFT JOIN users ON reviews.user=users.id WHERE playlistId=?", [req.params.id], (err, data) => {
         if(err != null){
             res.json(err);
         }

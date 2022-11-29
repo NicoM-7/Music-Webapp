@@ -33,7 +33,7 @@ function Playlists() {
                     <input type="text" name="playlist" onChange={handleChange} value={inputs.playlist || ""} placeholder="Search Playlist" /><br />
                 </form>
                 {
-                    playlists !== "No Lists Found" ? playlists.map((playlist) => <Playlist {...playlist} key={playlist.id} />) : <div></div>
+                    playlists !== "No Lists Found" ? playlists.map((playlist) => <Playlist {...playlist} key={playlist.id} />) : <div>{alert("No results found!")}</div>
                 }
             </div>
         </React.Fragment>
