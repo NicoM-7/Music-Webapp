@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require("cors");
+const jwt = require('jsonwebtoken');
 
 const db = require('./DBConnect');
 const trackRouter = require('./routes/tracks');
@@ -22,20 +23,64 @@ app.use((req, res, next) => { // for all routes
     next(); // keep going
 });
 
+app.use('/api/secure', (req, res, next) => {
+    const authHeader = req.headers.cookie;
+    const token = authHeader && authHeader.split('token=')[1];
+    if (token == null) return res.sendStatus(401);
+
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err) => {
+        console.log(err);
+        if (err) {
+            return res.sendStatus(403);
+        }
+        next();
+    });
+});
+
+app.use('/api/admin', (req, res, next) => {
+    const authHeader = req.headers.cookie;
+    const token = authHeader && authHeader.split('token=')[1];
+    if (token == null) return res.sendStatus(401);
+
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+        console.log(err);
+        if (err) {
+            return res.sendStatus(403);
+        }
+
+        db.query("SELECT admin FROM users WHERE id=?;", [user], (err, data) => {
+            if (err) {
+                res.status(500).json(err);
+            }
+            else if (data.length === 0) {
+                res.status(404).json("No Users Found!");
+            }
+            else if (data[0].admin === "true") {
+                next();
+            }
+            else {
+                res.sendStatus(401);
+            }
+        });
+    });
+});
+
 // Routes requests for /api/open/tracks
 app.use('/api/open/tracks', trackRouter);
 
-// Routes requests for /api/open/lists
+// Routes requests for /api/open/playlists
 app.use('/api/open/playlists', openListRouter);
-
-// Routes requests for /api/secure/lists
-app.use('/api/secure/playlists', secureListRouter);
 
 // Routes requests for /api/secure/lists
 app.use('/api/open/usernames', openUsersRouter);
 
+// Routes requests for /api/secure/usernames
 app.use('/api/secure/usernames', secureUsersRouter);
 
+// Routes requests for /api/secure/playlists
+app.use('/api/secure/playlists', secureListRouter);
+
+// Routes requests for /api/admin
 app.use("/api/admin", adminRouter);
 
 // Listening for requests on given port
