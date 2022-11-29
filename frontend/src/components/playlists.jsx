@@ -26,16 +26,6 @@ function Playlists() {
             })
     }
 
-    const addReview = () => {
-
-    }
-
-    const expandReviews = () => {
-
-    }
-
-    console.log(playlists);
-
     return (
         <React.Fragment>
             <div className="mainPlaylistDiv">
@@ -43,7 +33,7 @@ function Playlists() {
                     <input type="text" name="playlist" onChange={handleChange} value={inputs.playlist || ""} placeholder="Search Playlist" /><br />
                 </form>
                 {
-                    playlists.length !== "No Lists Found" ? playlists.map((playlist) => <Playlist {...playlist} key={playlist.id} />) : <div></div>
+                    playlists !== "No Lists Found" ? playlists.map((playlist) => <Playlist {...playlist} key={playlist.id} />) : <div></div>
                 }
             </div>
         </React.Fragment>

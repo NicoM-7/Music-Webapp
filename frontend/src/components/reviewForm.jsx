@@ -1,6 +1,8 @@
 import React from "react";
 import { useState } from "react";
+import { Navigate } from "react-router-dom";
 import { Rating } from 'react-simple-star-rating';
+import { auth } from "../firebase";
 
 function ReviewForm(playlist) {
 
@@ -18,13 +20,25 @@ function ReviewForm(playlist) {
     }
 
     const submitReview = () => {
-        fetch("/api/secure/playlists/review", { method: "POST", body: JSON.stringify({ "reviewId": 2, "playlistId": playlist.id, "name": playlist.name, "user": playlist.user, "rating": rating, "review": inputs.description }), headers: new Headers({ 'Content-Type': 'application/json' }) })
+        fetch("http://" + window.location.hostname + ":9000/api/secure/playlists/count?userId=" + auth.currentUser.uid + "&playlistId=" + playlist.id, {method: "GET", headers: new Headers({ 'Content-Type': 'application/json' })})
             .then(res => res.json())
             .then(data => {
-                console.log(data);
+                if(data[0].count > 0){
+                    alert("You have already submitted a review for this playlist!")
+                }
+                else{
+                    fetch("http://" + window.location.hostname + ":9000/api/secure/playlists/review", { method: "PUT", body: JSON.stringify({ "playlistId": playlist.id, "name": playlist.name, "user": auth.currentUser.uid, "rating": rating, "review": inputs.description }), headers: new Headers({ 'Content-Type': 'application/json' }) })
+                    .then(res => res.json())
+                    .then(data => {
+                        
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+                }
             })
             .catch(err => {
-                console.log("ERROR");
+                Navigate("/login", {replace: true})
             })
     }
 

@@ -4,7 +4,7 @@ function Review(review) {
 
     return (
         <React.Fragment>
-            <h1>Review by: {review.user}</h1>
+            <h1>Review by: {review.username}</h1>
             <p>Description: {review.review}</p>
             <Rating
                 initialValue={review.rating}
