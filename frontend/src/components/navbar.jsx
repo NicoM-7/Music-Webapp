@@ -15,12 +15,10 @@ function Navbar() {
                 .then(res => res.json())
                 .then(data => {
                     if (data[0].admin === "true") {
-                        console.log("Has Admin")
                         setAdmin(true);
                         setUsername(data[0].username + " (ADMINISTRATOR)");
                     }
                     else {
-                        console.log("Not Admin")
                         setAdmin(false);
                         setUsername(data[0].username);
                     }
@@ -33,8 +31,6 @@ function Navbar() {
             console.log("Not Logged In");
         }
     });
-
-    console.log("Remounted");
 
     const homeButton = () => {
         navigate("/home", { replace: true });

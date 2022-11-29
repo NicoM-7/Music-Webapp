@@ -120,9 +120,9 @@ secureListRouter.delete('/:id', (req, res) => {
     });
 });
 
-secureListRouter.post('/review', (req, res) => {
+secureListRouter.put('/review', (req, res) => {
     
-    db.query("INSERT INTO reviews VALUES (?, ?, ?, ?, ?, ?);", [req.body.reviewId, req.body.playlistId, req.body.name, req.body.user, req.body.rating, req.body.review], (err) => {
+    db.query("INSERT INTO reviews (playlistId, name, user, rating, review, hidden) VALUES (?, ?, ?, ?, ?, ?);", [req.body.playlistId, req.body.name, req.body.user, req.body.rating, req.body.review, "false"], (err) => {
         if(err != null){
             res.json(err);
         }
@@ -135,7 +135,7 @@ secureListRouter.post('/review', (req, res) => {
 
 secureListRouter.get("/review/:id", (req,res) => {
 
-    db.query("SELECT * FROM reviews WHERE playlistId=?", [req.params.id], (err, data) => {
+    db.query("SELECT reviews.reviewId, reviews.playlistId, reviews.name, reviews.user, users.username, reviews.rating, reviews.review, reviews.hidden FROM reviews LEFT JOIN users ON reviews.user=users.id WHERE playlistId=?", [req.params.id], (err, data) => {
         if(err != null){
             res.json(err);
         }
@@ -144,5 +144,19 @@ secureListRouter.get("/review/:id", (req,res) => {
         }
     })
 });
+
+secureListRouter.get("/count", (req,res) => {
+
+    db.query("SELECT count(*) AS count FROM reviews WHERE user=? AND playlistId=?;", [req.query.userId, req.query.playlistId], (err, data) => {
+        if(err != null){
+            res.status(500).json(err)
+        }
+        else{
+            res.json(data);
+        }
+    })
+
+}
+)
 
 module.exports = secureListRouter;

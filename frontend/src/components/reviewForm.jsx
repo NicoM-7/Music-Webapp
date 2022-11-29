@@ -1,6 +1,8 @@
 import React from "react";
 import { useState } from "react";
+import { Navigate } from "react-router-dom";
 import { Rating } from 'react-simple-star-rating';
+import { auth } from "../firebase";
 
 function ReviewForm(playlist) {
 
@@ -18,21 +20,36 @@ function ReviewForm(playlist) {
     }
 
     const submitReview = () => {
-        fetch("http://" + window.location.hostname + ":9000/api/secure/playlists/review", {method: "POST", body: JSON.stringify({"reviewId": 2, "playlistId": playlist.id, "name": playlist.name, "user": playlist.user, "rating": rating, "review": inputs.description}), headers: new Headers({ 'Content-Type': 'application/json' })})
-        .then(res => res.json())
-        .then(data => {
-            console.log(data);
-        })
-        .catch(err => {
-            console.log("ERROR");
-        })
+
+        fetch("http://" + window.location.hostname + ":9000/api/secure/playlists/count?userId=" + auth.currentUser.uid + "&playlistId=" + playlist.id, {method: "GET", headers: new Headers({ 'Content-Type': 'application/json' })})
+            .then(res => res.json())
+            .then(data => {
+                if(data[0].count > 0){
+                    alert("You have already submitted a review for this playlist!")
+                }
+                else{
+                    fetch("http://" + window.location.hostname + ":9000/api/secure/playlists/review", { method: "PUT", body: JSON.stringify({ "playlistId": playlist.id, "name": playlist.name, "user": auth.currentUser.uid, "rating": rating, "review": inputs.description }), headers: new Headers({ 'Content-Type': 'application/json' }) })
+                    .then(res => res.json())
+                    .then(data => {
+                        
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+                }
+            })
+            .catch(err => {
+                Navigate("/login", {replace: true})
+            })
+
+
     }
 
     return (
         <React.Fragment>
             <form>
                 <label>Description: </label>
-                <input type="text" name="description" onChange= {handleChange} value={inputs.description} /><br />
+                <input type="text" name="description" onChange={handleChange} value={inputs.description} /><br />
                 <Rating
                     onClick={handleRating}
                     ratingValue={rating}

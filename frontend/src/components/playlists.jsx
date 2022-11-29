@@ -27,23 +27,12 @@ function Playlists(){
         })
     }
 
-    const addReview = () => {
-
-    }
-
-    const expandReviews = () => {
-
-    }
-
-    console.log(playlists);
-
     return (
     <React.Fragment>
             <form onSubmit={handleSubmit}>
                 <input type="text" name="playlist" onChange={handleChange} value={inputs.playlist || ""} placeholder="Search Playlist" /><br />
             </form>
-            {playlists.map((playlist) => <Playlist {...playlist} key={playlist.id}/>)}
-            
+            {playlists.length > 0 ? playlists.map((playlist) => <Playlist {...playlist} key={playlist.id}/>) : alert("No playlists found")}    
     </React.Fragment>
 )
 }
