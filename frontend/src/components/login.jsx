@@ -12,7 +12,7 @@ function Login() {
                 method: "POST",
                 headers: new Headers({ 'Content-Type': 'application/json' }),
                 body: JSON.stringify({
-                    "name": username
+                    "username": username
                 })
             })
             .then(httpResp => {

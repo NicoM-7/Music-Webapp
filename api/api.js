@@ -29,7 +29,6 @@ app.use('/api/secure', (req, res, next) => {
     if (token == null) return res.sendStatus(401);
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err) => {
-        console.log(err);
         if (err) {
             return res.sendStatus(403);
         }
@@ -43,12 +42,11 @@ app.use('/api/admin', (req, res, next) => {
     if (token == null) return res.sendStatus(401);
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-        console.log(err);
         if (err) {
             return res.sendStatus(403);
         }
 
-        db.query("SELECT admin FROM users WHERE id=?;", [user], (err, data) => {
+        db.query("SELECT admin FROM users WHERE id=?;", [user.name], (err, data) => {
             if (err) {
                 res.status(500).json(err);
             }
