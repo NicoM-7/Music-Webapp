@@ -21,6 +21,8 @@ openTrackRouter.get('', (req, res) => {
     }
 
     // Similarity search enabled
+    // Source: https://github.com/zufuliu/algorithm/blob/main/SimilarText/similar_text.sql - 
+    // I copied this similar_text_ratio function to calculate the dice coefficient between 2 words
     if (req.query.similarity === "true") {
         db.query(`SELECT tracks.trackID,tracks.albumID,
             albums.albumName,tracks.artistID,
