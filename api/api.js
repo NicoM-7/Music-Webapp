@@ -23,6 +23,7 @@ app.use((req, res, next) => { // for all routes
     next(); // keep going
 });
 
+// handle JWT authentication for secure paths
 app.use('/api/secure', (req, res, next) => {
     const authHeader = req.headers.cookie;
     const token = authHeader && authHeader.split('token=')[1];
@@ -36,6 +37,7 @@ app.use('/api/secure', (req, res, next) => {
     });
 });
 
+// handle JWT authentication for admin paths
 app.use('/api/admin', (req, res, next) => {
     const authHeader = req.headers.cookie;
     const token = authHeader && authHeader.split('token=')[1];
@@ -46,6 +48,7 @@ app.use('/api/admin', (req, res, next) => {
             return res.sendStatus(403);
         }
 
+        // Checks if user is an admin
         db.query("SELECT admin FROM users WHERE id=?;", [user.name], (err, data) => {
             if (err) {
                 res.status(500).json(err);

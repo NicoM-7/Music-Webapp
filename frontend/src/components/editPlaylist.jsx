@@ -4,19 +4,24 @@ import Track from './track';
 
 import '../styles/editPlaylist.css';
 
-function EditPlaylist({ description, id, lastModified, name, numTracks, playtime, isPublic, rating, tracks, user, allPlaylists, setAllPlaylists }) {
+function EditPlaylist({ description, id, lastModified, username, name, numTracks, playtime, isPublic, rating, tracks, user, allPlaylists, setAllPlaylists }) {
 
+    // Holds the pending changes the user has made to the playlist
     let [details, setDetails] = useState({});
+    // Holds the last saved state of the playlist in the db
     let [savedDetails, setSavedDetails] = useState({});
+    // Hold the list of tracks objects in the playlist
     let [tracksList, setTracksList] = useState([]);
+    // For delete playlist confirmation
     let [deleteFunction, setdeleteFunction] = useState(<input id="delButton" type="button" value="DELETE" onClick={deletePlaylist} />)
 
-
+    // Sets the details based on props at initialization
     useEffect(() => {
         let playlist = {
             description: description,
             id: id,
             lastModified: lastModified,
+            username: username,
             name: name,
             numTracks: numTracks,
             playtime: playtime,
@@ -27,18 +32,21 @@ function EditPlaylist({ description, id, lastModified, name, numTracks, playtime
         }
         setDetails(playlist);
         setSavedDetails(playlist);
-    }, [description, id, lastModified, name, numTracks, playtime, isPublic, rating, tracks, user]);
+    }, [description, id, lastModified, username, name, numTracks, playtime, isPublic, rating, tracks, user]);
 
+    // Fetchs the track objects whenever the playlist saves
     useEffect(() => {
         fetchTracks();
     }, [savedDetails]);
 
     // fetchs the tracks for the selected playlist from backend
     const fetchTracks = async () => {
+        // Parses the tracks list to an integer list
         let newTracks = [];
         let totalDuration = 0;
         let trackIds = details.tracks ? details.tracks.split(",").map(n => parseInt(n)).filter(n => n) : [];
 
+        // Fetches each track if it exist and calculations total duration for the playlist
         for (let id of trackIds) {
             await fetch("/api/open/tracks/" + id,
                 {
@@ -65,12 +73,10 @@ function EditPlaylist({ description, id, lastModified, name, numTracks, playtime
                 });
         }
 
-        setDetails(values => ({ ...values, numTracks: trackIds.length }));
-
         // Formating total duration to string for display
         totalDuration = `${parseInt(totalDuration / 60)}:${totalDuration % 60}`;
-        setDetails(values => ({ ...values, playtime: totalDuration }));
-
+        setDetails(values => ({ ...values, numTracks: trackIds.length, playtime: totalDuration }));
+        // Updating tracks list
         setTracksList(newTracks);
     }
 
@@ -81,17 +87,10 @@ function EditPlaylist({ description, id, lastModified, name, numTracks, playtime
         setDetails(values => ({ ...values, [name]: value }));
     }
 
-    // Updates state for checkboxes
+    // Updates state for checkboxes in SQL friendly format
     const handleCheckboxChange = (event) => {
         const name = event.target.name;
         const value = event.target.checked ? 1 : 0;
-        setDetails(values => ({ ...values, [name]: value }));
-    }
-
-    // Updates state for tracks box
-    const handleTracksChange = (event) => {
-        const name = event.target.name;
-        const value = event.target.value;
         setDetails(values => ({ ...values, [name]: value }));
     }
 
@@ -105,9 +104,11 @@ function EditPlaylist({ description, id, lastModified, name, numTracks, playtime
                 let totalDuration = 0;
                 let trackIds = details.tracks ? details.tracks.split(",").map(n => parseInt(n)).filter(n => n) : [];
 
+                // If no track id is entered throw error
                 if (trackIds.length === 0) {
                     throw new Error("Cannot save a playlist with no tracks");
                 }
+                // Checks that all track ids entered are vaild
                 for (let id of trackIds) {
                     await fetch("/api/open/tracks/" + id,
                         {
@@ -134,10 +135,12 @@ function EditPlaylist({ description, id, lastModified, name, numTracks, playtime
                         });
                 }
 
+                // saves new playlistinformation everywhere
                 let time = moment().format('YYYY-MM-DD HH:mm:ss');
-                setDetails(values => ({ ...values, lastModified: time, tracks: trackIds.toString() }));
-                setSavedDetails({ ...details, lastModified: time, tracks: trackIds.toString() });
-                savePlaylist({ ...details, lastModified: time, tracks: trackIds.toString() });
+                totalDuration = `${parseInt(totalDuration / 60)}:${totalDuration % 60}`;
+                setDetails(values => ({ ...values, numTracks: trackIds.length, playtime: totalDuration, lastModified: time, tracks: trackIds.toString() }));
+                setSavedDetails({ ...details, numTracks: trackIds.length, playtime: totalDuration, lastModified: time, tracks: trackIds.toString() });
+                savePlaylist({ ...details, numTracks: trackIds.length, playtime: totalDuration, lastModified: time, tracks: trackIds.toString() });
             }
         }
         catch (err) {
@@ -145,6 +148,7 @@ function EditPlaylist({ description, id, lastModified, name, numTracks, playtime
         }
     }
 
+    // Saves the playlist ot the db
     const savePlaylist = (playlist) => {
         fetch("/api/secure/playlists/" + playlist.id,
             {
@@ -164,6 +168,7 @@ function EditPlaylist({ description, id, lastModified, name, numTracks, playtime
             .then(httpResp => {
                 return httpResp.json().then(data => {
                     if (httpResp.ok) {
+                        // Updates the playlist button in the managePlaylist component
                         let newPlaylists = allPlaylists;
                         let index = newPlaylists.findIndex(playlist => playlist.id === savedDetails.id);
                         newPlaylists[index] = playlist;
@@ -181,15 +186,21 @@ function EditPlaylist({ description, id, lastModified, name, numTracks, playtime
 
     // Removes the track that was clicked on visually from the page
     const removeTrack = (event) => {
+        // Splits tracks text area by commas parses everything to and integer and filters for valid integers
         let newTrackIds = details.tracks.split(",").map(n => parseInt(n)).filter(n => n);
+        // Removes tracks at the tracks remove buttons index
         newTrackIds.splice(event.target.name, 1);
+        // Updates the text area
         setDetails(values => ({ ...values, tracks: newTrackIds.toString() }));
+        // Same thing as above but for the track object
         let newTracks = tracksList;
         newTracks.splice(event.target.name, 1)
         setTracksList(newTracks);
     }
 
+    // Deletes a playlist
     function deletePlaylist(event) {
+        // First click of the delete button replaces it with 2 buttons for cancel or confirmation
         if (event.target.value === "DELETE") {
             setdeleteFunction(
                 <div>
@@ -198,6 +209,7 @@ function EditPlaylist({ description, id, lastModified, name, numTracks, playtime
                 </div>
             );
         }
+        // If confirm is clicked proceed with deletion
         else if (event.target.value === "CONFIRM") {
             // Deletes playlist
             fetch("/api/secure/playlists/" + id,
@@ -210,15 +222,8 @@ function EditPlaylist({ description, id, lastModified, name, numTracks, playtime
                 .then(httpResp => {
                     return httpResp.json().then(data => {
                         if (httpResp.ok) {
-                            const filteredPlaylists = allPlaylists.filter((playlist) => playlist.id !== savedDetails.id);
+                            const filteredPlaylists = allPlaylists.filter((playlist) => playlist.id !== id);
                             setAllPlaylists(filteredPlaylists);
-                            setDetails({
-                                name: "Select a Playlist"
-                            });
-                            setSavedDetails({
-                                name: "Select a Playlist"
-                            });
-                            setTracksList([]);
                             setdeleteFunction(<input id="delButton" type="button" value="DELETE" onClick={deletePlaylist} />);
                         }
                         else {
@@ -230,6 +235,7 @@ function EditPlaylist({ description, id, lastModified, name, numTracks, playtime
                     alert(err);
                 });
         }
+        // Otherwise cancel was clicked and set button back to initial state
         else {
             setdeleteFunction(<input id="delButton" type="button" value="DELETE" onClick={deletePlaylist} />);
         }
@@ -238,7 +244,7 @@ function EditPlaylist({ description, id, lastModified, name, numTracks, playtime
     return (
         <div className='editPlaylist'>
             <h1>{details.name}</h1>
-            <p>Created By: {details.user}</p>
+            <p>Created By: {details.username}</p>
             <p>Number of Tracks: {details.numTracks}</p>
             <p>Total Playtime: {details.playtime}</p>
             <p>Last Modified: {details.lastModified}</p>
@@ -266,7 +272,7 @@ function EditPlaylist({ description, id, lastModified, name, numTracks, playtime
                     })
                 }
                 <label>Tracks  </label><br />
-                <textarea id="tracksInput" type="text" name="tracks" onChange={handleTracksChange} value={details.tracks || ""} />
+                <textarea id="tracksInput" type="text" name="tracks" onChange={handleChange} value={details.tracks || ""} />
             </form >
         </div >
 

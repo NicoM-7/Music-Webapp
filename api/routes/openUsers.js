@@ -40,6 +40,7 @@ openUsersRouter.post('/insert', (req, res) => {
     })
 });
 
+// Generates JWT
 openUsersRouter.post('/login', (req, res) => {
     const user = { name: req.body.username };
 

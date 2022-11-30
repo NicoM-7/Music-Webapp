@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import Tracks from './tracks';
 import EditPlaylist from './editPlaylist';
@@ -8,6 +8,7 @@ import { auth } from '../firebase.js';
 import { useRef } from 'react';
 
 function ManagePlaylist() {
+    // Stores data for the new playlist form
     const [newPlaylist, setNewPlaylist] = useState({
         name: "",
         user: "",
@@ -15,10 +16,16 @@ function ManagePlaylist() {
         lastModified: ""
     });
 
+    // Stores a list of the users playlists
     const [playlists, setPlaylists] = useState([]);
 
+    // Stores the selected playlist
     const [selectedPlaylist, setSelectedPlaylist] = useState({});
 
+    // Stores the playlist selection buttons
+    const [playlistButtons, setPlaylistButtons] = useState(<div></div>)
+
+    // Stores the new playlist that is about to sent to the server for creation this is nessecary for saving the time the user last made changes
     const playlistToSend = useRef({
         name: "",
         user: "",
@@ -26,27 +33,33 @@ function ManagePlaylist() {
         lastModified: ""
     });
 
+    // Gets user info and retrives playlist from the db
     useEffect(() => {
         let user = auth.currentUser.uid;
         setNewPlaylist(values => ({ ...values, user: user }));
         getPlaylists(user);
     }, []);
 
+    // When the list of playlists updates the selected playlist is cleared and the buttons are rebuilt
     useEffect(() => {
         setSelectedPlaylist({});
+        setPlaylistButtons(playlists.map((playlist, i) => <div key={i}><button onClick={selectPlaylist} name={i}>{playlist.name}</button><br /></div>));
     }, [playlists]);
 
+    // Whenever a change is made the the new playlist for the time of that change is logged in the playlist to send
     useEffect(() => {
         playlistToSend.current = newPlaylist;
         playlistToSend.current.lastModified = moment().format('YYYY-MM-DD HH:mm:ss');
     }, [newPlaylist]);
 
+    // handles changes for the new playist creation form
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
         setNewPlaylist(values => ({ ...values, [name]: value }));
     }
 
+    // handles submission of a new playlist
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -56,11 +69,12 @@ function ManagePlaylist() {
         }
         else {
             try {
-                // Fetching and checking if the tracks entered exist
+                // Parsing whatever the user type to an integer list
                 let newTracks = [];
                 let totalDuration = 0;
                 let trackIds = newPlaylist.tracks ? newPlaylist.tracks.split(",").map(n => parseInt(n)).filter(n => n) : [];
 
+                // Checking the db for tracks that match integers in the list and calculating the total duration
                 for (let id of trackIds) {
                     await fetch("/api/open/tracks/" + id,
                         {
@@ -87,6 +101,8 @@ function ManagePlaylist() {
                         });
                 }
 
+
+                // Creating the new playlist
                 fetch("/api/secure/playlists",
                     {
                         method: "POST",
@@ -115,7 +131,7 @@ function ManagePlaylist() {
                         })
                     })
                     .catch(err => {
-                        throw err;
+                        alert(err);
                     });
             }
             catch (err) {
@@ -124,6 +140,7 @@ function ManagePlaylist() {
         }
     }
 
+    // Gets this users playlist from the db
     const getPlaylists = (user) => {
         fetch("/api/secure/playlists?user=" + user,
             {
@@ -147,7 +164,8 @@ function ManagePlaylist() {
             });
     }
 
-    const selectPlaylist = async (event) => {
+    // Sets the selected playlist based on the button the user clicked
+    const selectPlaylist = (event) => {
         setSelectedPlaylist(playlists[event.target.name]);
     }
 
@@ -161,11 +179,7 @@ function ManagePlaylist() {
                         <button type="submit">+</button>
                     </form>
                     {
-                        playlists.map((playlist, i) =>
-                            <div key={i}>
-                                <button onClick={selectPlaylist} name={i}>{playlist.name}</button>
-                            </div>
-                        )
+                        playlistButtons
                     }
                 </div>
                 <div className="playlistBox">
@@ -174,6 +188,7 @@ function ManagePlaylist() {
                             description={selectedPlaylist.description}
                             id={selectedPlaylist.id}
                             lastModified={selectedPlaylist.lastModified}
+                            username={selectedPlaylist.username}
                             name={selectedPlaylist.name}
                             numTracks={selectedPlaylist.numTracks}
                             playtime={selectedPlaylist.playtime}

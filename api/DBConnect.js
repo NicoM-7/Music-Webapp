@@ -1,5 +1,6 @@
 const mysql = require('mysql2');
 
+// Stores MySQL connection information
 var conn = mysql.createConnection({
     host: 'localhost',
     user: 'root',
