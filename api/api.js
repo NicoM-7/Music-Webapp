@@ -8,7 +8,7 @@ const openListRouter = require('./routes/openLists');
 const secureListRouter = require('./routes/secureLists');
 const openUsersRouter = require('./routes/openUsers');
 const secureUsersRouter = require('./routes/secureUsers')
-const adminRouter = require('./routes/adminUsers');
+const adminRouter = require('./routes/adminRouter');
 
 // Express
 const app = express();

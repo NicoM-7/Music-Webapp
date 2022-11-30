@@ -36,7 +36,7 @@ function Playlist(playlist) {
     }, []);
 
     useEffect(() => {
-        fetch("http://" + window.location.hostname + ":9000/api/open/playlists/rating/" + playlist.id, { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
+        fetch("/api/open/playlists/rating/" + playlist.id, { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
             .then(res => res.json())
             .then(data => {
                 setRating(data);
