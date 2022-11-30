@@ -54,7 +54,7 @@ function Playlist(playlist) {
     const clickExpandReviewsButton = (event) => {
 
         if(!openReviewButton){
-            fetch("/api/secure/playlists/review/" + playlist.id, { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
+            fetch("/api/open/playlists/review/" + playlist.id, { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
             .then(res => res.json())
             .then(data => {
                 if(data.length != 0){
