@@ -21,6 +21,7 @@ import CreateAcceptableUsePolicy from './components/createAcceptableUsePolicy';
 import TakedownPolicy from './components/takedownPolicy';
 import AcceptableUsePolicy from './components/acceptableUsePolicy';
 import TakedownProcedureDocument from './components/takedownProcedureDocument';
+import Policies from './components/policies';
 
 function App() {
     return (
@@ -33,6 +34,7 @@ function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/signUp" element={<SignUp/>} />
                     <Route path="/playlists"  element={<div><Navbar /><Playlists /></div>} />
+                    <Route path="/policies" element={<div><Navbar /><Policies /></div>}/>
                     <Route path="/privacyPolicy"  element={<div><Navbar /><PrivacyPolicy /></div>} />
                     <Route path="/takedownPolicy"  element={<div><Navbar /><TakedownPolicy /></div>} />
                     <Route path="/acceptableUsePolicy"  element={<div><Navbar /><AcceptableUsePolicy /></div>} />
