@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { auth } from "../firebase";
+import "../styles/changePassword.css";
 
 function ChangeUsername() {
 
@@ -46,11 +47,11 @@ function ChangeUsername() {
     }
 
     return (
-        <div>
+        <div className="cPadding">
             <form onSubmit={changeUsername}>
-                <label>Change Username</label>
-                <input type="text" name="username" onChange={handleChange} value={inputs.username || ""} />
-                <button type="submit">Change Username</button>
+                <label className="cLabel">Change Username</label>
+                <input className="cInput" type="text" name="username" placeholder="Change Username" onChange={handleChange} value={inputs.username || ""} />
+                <button className="cButton" type="submit">Change Username</button>
             </form>
         </div>
     )
