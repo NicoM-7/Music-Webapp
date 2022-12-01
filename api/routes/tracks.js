@@ -1,5 +1,4 @@
 const express = require('express');
-const Joi = require('joi');
 
 const db = require('../DBConnect.js');
 
@@ -7,19 +6,7 @@ const openTrackRouter = express.Router();
 
 // Querys db for given trackTitle and/or albumName and returns specified number of results
 openTrackRouter.get('', (req, res) => {
-    // Input validation
-    // const schema = Joi.object({
-    //     trackTitle: Joi.string().allow(""),
-    //     albumName: Joi.when("trackTitle", { is: "", then: Joi.string(), otherwise: Joi.string().allow("") }),
-    //     results: Joi.number().required()
-    // })
-    //     .or("trackTitle", "albumName");
-    // const result = schema.validate(req.query);
-    // if (result.error) {
-    //     res.status(400).json(result.error.details[0].message);
-    //     return;
-    // }
-
+    // Response Handler
     const handleRes = (err, data) => {
         if (err) {
             res.status(500).json(err);
@@ -33,6 +20,9 @@ openTrackRouter.get('', (req, res) => {
         }
     }
 
+    // Similarity search enabled
+    // Source: https://github.com/zufuliu/algorithm/blob/main/SimilarText/similar_text.sql - 
+    // I copied this similar_text_ratio function to calculate the dice coefficient between 2 words
     if (req.query.similarity === "true") {
         db.query(`SELECT tracks.trackID,tracks.albumID,
             albums.albumName,tracks.artistID,
@@ -60,6 +50,7 @@ openTrackRouter.get('', (req, res) => {
                 parseInt(req.query.results)
             ], handleRes);
     }
+    // Similarity search disabled
     else {
         db.query(`SELECT tracks.trackID,tracks.albumID,
             albums.albumName,tracks.artistID,
@@ -87,16 +78,6 @@ openTrackRouter.get('', (req, res) => {
 
 // Querys db for given track id and returns 1 result
 openTrackRouter.get('/:id', (req, res) => {
-    // Input validation
-    const schema = Joi.object({
-        id: Joi.number().required()
-    });
-    const result = schema.validate({ id: parseInt(req.params.id) });
-    if (result.error) {
-        res.status(400).json(result.error.details[0].message);
-        return;
-    }
-
     const id = req.params.id;
 
     db.query('SELECT tracks.trackID,tracks.albumID,' +

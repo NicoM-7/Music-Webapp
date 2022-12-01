@@ -2,6 +2,7 @@ import '../styles/track.css'
 
 function Track(track) {
 
+    // Handles toggleing between collapsed and expanded for each track element 
     const toggleCollapsible = (event) => {
         event.stopPropagation();
 
@@ -15,6 +16,7 @@ function Track(track) {
         }
     }
 
+    // Handles search query for youtube to "hopefully" find track
     const openYoutube = async (event) => {
         window.open(`https://www.youtube.com/results?search_query=${track.artistName}+${track.trackTitle}`, '_blank', 'noopener,noreferrer');
     }

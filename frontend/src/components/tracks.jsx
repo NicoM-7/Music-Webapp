@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Track from './track';
 
 function Tracks() {
+    // Hold values of the search form
     const [inputs, setInputs] = useState({
         track: "",
         artist: "",
@@ -12,22 +13,27 @@ function Tracks() {
         results: 10,
     });
 
+    // holds the list of track objects
     const [tracks, setTracks] = useState([]);
 
+    // Max number of results user can request from the server at a time
     const maxResults = 50;
 
+    // Handles changes to the search form
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
         setInputs(values => ({ ...values, [name]: value }));
     }
 
+    // Handles changes for the check boxes
     const handleCheckboxChange = (event) => {
         const name = event.target.name;
         const value = event.target.checked;
         setInputs(values => ({ ...values, [name]: value }));
     }
 
+    // Handles from submission to search db for tracks
     const handleSubmit = (event) => {
         if (event.key === "Enter") {
             event.preventDefault();

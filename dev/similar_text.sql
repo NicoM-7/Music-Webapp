@@ -1,5 +1,3 @@
-COMMENT 'Source: https://github.com/zufuliu/algorithm/blob/main/SimilarText/similar_text.sql - I copied this entire .sql file for creating a function to calculate the dice coefficient between 2 words'
-
 DELIMITER $$
 
 CREATE FUNCTION `similar_text`(
