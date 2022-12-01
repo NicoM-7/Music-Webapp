@@ -10,7 +10,6 @@ const secureListRouter = require('./routes/secureLists');
 const openUsersRouter = require('./routes/openUsers');
 const secureUsersRouter = require('./routes/secureUsers')
 const adminRouter = require('./routes/adminRouter');
-const { REFUSED } = require('dns');
 
 // Express
 const app = express();
@@ -89,7 +88,7 @@ app.get("/api/open/takedownPolicy", (req, res) => {
     }
     catch (err) {
         res.json("No Content");
-        
+
     }
 });
 
@@ -100,7 +99,7 @@ app.get("/api/open/acceptableUsePolicy", (req, res) => {
         res.json(data);
     }
     catch (err) {
-        res.json("No Content");  
+        res.json("No Content");
     }
 });
 

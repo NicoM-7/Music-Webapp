@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path: '../api/.env' });
 
 const express = require('express');
 const jwt = require('jsonwebtoken');
