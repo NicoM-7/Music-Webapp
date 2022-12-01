@@ -22,7 +22,7 @@ function buildUsersDB() {
         }
     });
 
-    db.query("INSERT INTO users VALUES (?, ?, ?, ?);", ["yswRKZpXz8U7RWoVR14O0mQDKT93", "administrator", "true", "true"], (err) => {
+    db.query("INSERT INTO users VALUES (?, ?, ?, ?);", ["NOnFENDiSGSNLUzEJFADA0X2zA42", "administrator", "true", "true"], (err) => {
         if (err != null) {
             console.log("Error inserting into table!");
         }
