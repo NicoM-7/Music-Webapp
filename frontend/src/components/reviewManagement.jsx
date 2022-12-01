@@ -16,7 +16,7 @@ function ReviewManagement() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetch("/api/open/playlists/" + inputs.playlist, { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
+        fetch("/api/open/playlists?name=" + (inputs.playlist !== undefined ? inputs.playlist : ""), { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
             .then(res => res.json())
             .then(data => {
                 console.log(data);
