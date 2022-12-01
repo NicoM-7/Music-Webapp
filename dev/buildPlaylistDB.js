@@ -36,7 +36,7 @@ function buildPlaylistsDB() {
         tracks text,
         PRIMARY KEY (id),
         UNIQUE KEY unique_index (name, user)
-        ) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;`,
+        ) DEFAULT CHARSET=utf8mb4;`,
         (err) => {
             if (err) {
                 throw err;
