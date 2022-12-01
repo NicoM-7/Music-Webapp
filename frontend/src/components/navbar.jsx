@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase";
 import Logout from "./logout";
 import "../styles/navbar.css";
@@ -52,16 +52,16 @@ function Navbar() {
         navigate("/managePlaylists", { replace: true });
     }
 
+    const policiesButton = () => {
+        navigate("/policies", { replace: true });
+    }
+
     const manageUsersButton = () => {
         navigate("/manageUsers", { replace: true });
     }
 
     const manageReviewsButton = () => {
         navigate("/manageReviews", { replace: true });
-    }
-
-    const refreshPageButton = () => {
-        navigate(useLocation, { replace: true });
     }
 
     const manageAccountButton = () => {
@@ -89,7 +89,7 @@ function Navbar() {
                             <button className="navBarB" onClick={searchPlaylistButton}>Search Playlists</button>
                         </li>
                         <li>
-                            <button className="navBarB" onClick={refreshPageButton}>Refresh Page</button>
+                            <button className="navBarB" onClick={policiesButton}>Policies</button>
                         </li>
                         <li>
                             {auth.currentUser != null ? <button className="navBarB" onClick={manageAccountButton}>Manage Account</button> : null}

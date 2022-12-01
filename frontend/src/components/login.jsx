@@ -34,28 +34,32 @@ function Login() {
     const provider = new GoogleAuthProvider();
     const signInWithGoogle = () => {
         signInWithPopup(auth, provider).then((result) => {
-            if (auth.currentUser != null) {
                 fetch("/api/open/usernames/" + auth.currentUser.uid, { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
                     .then(res => res.json())
                     .then(data => {
-                        if (data.length === 0) {
-                            fetch("/api/open/usernames/insertGoogleUser", { method: "POST", body: JSON.stringify({"username": auth.currentUser.displayName, "id": auth.currentUser.uid }), headers: new Headers({ 'Content-Type': 'application/json' }) })
+                        if (data.length === 0 && auth.currentUser != null) {
+                            fetch("/api/open/usernames/insertGoogleUser", { method: "POST", body: JSON.stringify({ "username": auth.currentUser.displayName, "id": auth.currentUser.uid }), headers: new Headers({ 'Content-Type': 'application/json' }) })
                                 .then(res => res.json())
                                 .then(data => {
-
+                                    getJWT(auth.currentUser.uid);
+                                    navigate("/home");
                                 })
                                 .catch(err => {
-                                    console.log(err);
-                                }); 
+                                    alert("Error");
+                                });
                         }
-                        getJWT(auth.currentUser.uid);
-                        navigate("/home");
+
+                        else if (auth.currentUser != null && data[0].activated === "true") {
+                            getJWT(auth.currentUser.uid);
+                            navigate("/home");
+                        }
+                        else if(data[0].activated === "false"){
+                            alert("Your account has been disabled. Please contact your administrator!");
+                        }
                     })
                     .catch(err => {
                         console.log(err);
                     })
-
-            }
         })
             .catch((err) => {
                 console.log(err);
@@ -79,7 +83,6 @@ function Login() {
 
         e.preventDefault();
 
-
         setEmailError(false);
         setPasswordError(false);
 
@@ -101,7 +104,6 @@ function Login() {
                 fetch("/api/open/usernames/" + user.uid, { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
                     .then(res => res.json())
                     .then(data => {
-
                         // logged in successfully
                         if (user != null && user.emailVerified && data[0].activated === "true") {
                             getJWT(auth.currentUser.uid);
@@ -130,7 +132,9 @@ function Login() {
             });
     }
 
-
+    const homePage = () => {
+        navigate("/home", { replace: true });
+    }
 
     return (
         <div className="mainDIV">
@@ -150,6 +154,7 @@ function Login() {
                 <h1>New User? Sign Up with Email Below</h1><br></br>
                 <button className='loginB' onClick={signUpPage}>Sign Up</button>
             </div>
+            <button onClick={homePage}>Back to Home Page</button>
 
         </div>
     );
