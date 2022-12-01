@@ -121,7 +121,9 @@ function Login() {
                     <input className='loginInput' type="text" name="email" onChange={handleChange} placeholder="Email" value={inputs.email || ""} /><br></br><br></br>
                     <input className='loginInput' type="password" name="password" onChange={handleChange} placeholder="Password" value={inputs.password || ""} /><br></br><br></br>
                     <button type="submit" className='loginB'>Login</button>
-                </form> <br></br><br></br>
+                </form>
+                <h1 className='Login'>{emailEmptyError ? "Email empty " : " "} {passwordEmptyError ? "Password empty " : " "}</h1>
+                <br></br><br></br>
                 <h1 className='Login'>Or Log In With Google</h1>
                 <button className='loginB' onClick={signInWithGoogle}>Login With Google</button><br></br>
             </div>
@@ -130,8 +132,6 @@ function Login() {
                 <button className='loginB' onClick={signUpPage}>Sign Up</button>
             </div>
 
-
-            <p>{emailEmptyError ? "Email empty " : " "} {passwordEmptyError ? "Password empty " : " "}</p>
         </div>
     );
 }
