@@ -1,14 +1,16 @@
 import React from "react";
 import ChangePassword from "./changePassword";
 import ChangeUsername from "./changeUsername";
-function ManageAccount(){
+function ManageAccount() {
 
-    return(
-        <React.Fragment>
-        <ChangeUsername/>
-        <br></br>
-        <ChangePassword/>
-        </React.Fragment>
+    return (
+        <div className="mainPlaylistDiv">
+            <React.Fragment>
+                <ChangeUsername />
+                <br></br>
+                <ChangePassword />
+            </React.Fragment>
+        </div>
     )
 
 }
