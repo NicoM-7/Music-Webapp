@@ -8,13 +8,16 @@ const openUsersRouter = express.Router();
 
 openUsersRouter.get('', (req, res) => {
     db.query("SELECT username FROM users;", (err, data) => {
+        console.log(data);
         if (err) {
             res.status(500).json(err);
         }
         else if (data.length === 0) {
-            res.status(404).json("No Users Found!");
+
+            res.json([]);
         }
         else {
+
             res.json(data);
         }
     });
@@ -23,6 +26,7 @@ openUsersRouter.get('', (req, res) => {
 openUsersRouter.get("/:id", (req, res) => {
     db.query("SELECT * FROM users WHERE id=?;", [req.params.id], (err, data) => {
         if (err != null) {
+
             res.send(err);
         }
         else {
@@ -34,9 +38,7 @@ openUsersRouter.get("/:id", (req, res) => {
 openUsersRouter.post('/insert', (req, res) => {
 
     db.query("INSERT INTO users VALUES (?, ?, ?, ?);", [req.body.id, req.body.username, req.body.administrator, req.body.activated], (err) => {
-
         res.send(err);
-
     })
 });
 
@@ -47,6 +49,38 @@ openUsersRouter.post('/login', (req, res) => {
     const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '2h' });
     res.json({ accessToken: accessToken })
 });
+
+openUsersRouter.post("/insertGoogleUser", (req, res) => {
+
+    let username = req.body.username;
+
+    db.query("SELECT username FROM users;", (err, data) => {
+        if (err) {
+            console.log(err);
+        }
+
+        let c = 1;
+        while (true) {
+            if (data.some(user => user.username === username)) {
+                username = req.body.username + " (" + c + ")";
+            }
+            else {
+                break;
+            }
+            c++;
+        }
+
+        db.query("INSERT INTO users VALUES (?, ?, ?, ?);", [req.body.id, username, "false", "true"], (err) => {
+            if (err != null) {
+                res.status(500).json(err);
+            }
+            else {
+                res.json(username);
+            }
+        })
+    });
+});
+
 
 
 module.exports = openUsersRouter;
