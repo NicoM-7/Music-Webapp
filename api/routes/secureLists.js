@@ -132,9 +132,10 @@ secureListRouter.delete('/:id', (req, res) => {
 });
 
 secureListRouter.put('/review', (req, res) => {
+    
+    db.query("INSERT INTO reviews (playlistId, name, user, rating, review, hidden, date) VALUES (?, ?, ?, ?, ?, ?, ?);", [req.body.playlistId, req.body.name, req.body.user, req.body.rating, req.body.review, "false", req.body.date], (err) => {
+        if(err != null){
 
-    db.query("INSERT INTO reviews (playlistId, name, user, rating, review, hidden) VALUES (?, ?, ?, ?, ?, ?);", [req.body.playlistId, req.body.name, req.body.user, req.body.rating, req.body.review, "false"], (err) => {
-        if (err != null) {
             res.json(err);
         }
         else {

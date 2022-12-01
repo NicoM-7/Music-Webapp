@@ -20,9 +20,23 @@ openListRouter.get('', (req, res) => {
     });
 });
 
+openListRouter.get("/review/:id", (req,res) => {
+
+    db.query("SELECT reviews.reviewId, reviews.playlistId, reviews.name, reviews.user, users.username, reviews.rating, reviews.review, reviews.hidden, reviews.date FROM reviews LEFT JOIN users ON reviews.user=users.id WHERE playlistId=? AND hidden='false';", [req.params.id], (err, data) => {
+        if(err != null){
+            res.json(err);
+        }
+        else{
+            res.json(data);
+        }
+    })
+});
+
 openListRouter.get("/rating/:id", (req, res) => {
-    db.query("SELECT rating FROM reviews WHERE playlistId=? AND hidden=false", [req.params.id], (err, data) => {
-        if (err != null) {
+
+    db.query("SELECT rating FROM reviews WHERE playlistId=? AND hidden='false'", [req.params.id], (err, data) => {
+        if(err != null){
+
             res.status(500).json(err);
         }
         else {

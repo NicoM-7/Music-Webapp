@@ -68,6 +68,10 @@ function Navbar() {
         navigate("/manageAccount", { replace: true });
     }
 
+    const DMCAButton = () => {
+        navigate("/manageDMCA", { replace: true });
+    }
+
     return (
         <div>
             <nav>
@@ -98,6 +102,9 @@ function Navbar() {
                         </li>
                         <li>
                             {((auth.currentUser != null) && hasAdmin) ? <button className="navBarB" onClick={manageReviewsButton}>Edit Reviews</button> : null}
+                        </li>
+                        <li>
+                            {((auth.currentUser != null) && hasAdmin) ? <button className="navBarB" onClick={DMCAButton}>Manage DMCA</button> : null}
                         </li>
                         <li>
                             {auth.currentUser === null ? <button className="navBarB" onClick={loginButton}>Login</button> : <Logout />}
