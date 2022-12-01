@@ -35,12 +35,31 @@ function Login() {
     const signInWithGoogle = () => {
         signInWithPopup(auth, provider).then((result) => {
             if (auth.currentUser != null) {
-                getJWT(auth.currentUser.uid);
-                navigate("/home");
+                fetch("/api/open/usernames/" + auth.currentUser.uid, { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.length === 0) {
+                            fetch("/api/open/usernames/insertGoogleUser", { method: "POST", body: JSON.stringify({"username": auth.currentUser.displayName, "id": auth.currentUser.uid }), headers: new Headers({ 'Content-Type': 'application/json' }) })
+                                .then(res => res.json())
+                                .then(data => {
+
+                                })
+                                .catch(err => {
+                                    console.log(err);
+                                }); 
+                        }
+                        getJWT(auth.currentUser.uid);
+                        navigate("/home");
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+
             }
-        }).catch((err) => {
-            console.log(err);
-        });
+        })
+            .catch((err) => {
+                console.log(err);
+            });
     }
     const signUpPage = () => {
         navigate("/signUp");
@@ -86,7 +105,7 @@ function Login() {
                         // logged in successfully
                         if (user != null && user.emailVerified && data[0].activated === "true") {
                             getJWT(auth.currentUser.uid);
-                            navigate("/managePlaylists");
+                            navigate("/home");
                         }
 
                         else if (data[0].activated === "false") {

@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require("cors");
 const jwt = require('jsonwebtoken');
+const fs = require("fs");
 
 const db = require('./DBConnect');
 const trackRouter = require('./routes/tracks');
@@ -9,6 +10,7 @@ const secureListRouter = require('./routes/secureLists');
 const openUsersRouter = require('./routes/openUsers');
 const secureUsersRouter = require('./routes/secureUsers')
 const adminRouter = require('./routes/adminRouter');
+const { REFUSED } = require('dns');
 
 // Express
 const app = express();
@@ -63,6 +65,43 @@ app.use('/api/admin', (req, res, next) => {
     });
 });
 
+
+app.get("/api/open/privacyPolicy", (req, res) => {
+
+    try {
+
+        const data = fs.readFileSync('privacyPolicy.txt', 'utf8');
+        res.json(data);
+    }
+    catch (err) {
+        res.json("No Content");
+    }
+});
+
+app.get("/api/open/takedownPolicy", (req, res) => {
+
+    try {
+        const data = fs.readFileSync('takedownPolicy.txt', 'utf8');
+        res.json(data);
+    }
+    catch (err) {
+        res.json("No Content");
+        
+    }
+});
+
+app.get("/api/open/acceptableUsePolicy", (req, res) => {
+
+    try {
+        const data = fs.readFileSync('acceptableUsePolicy.txt', 'utf8');
+        res.json(data);
+    }
+    catch (err) {
+        res.json("No Content");  
+    }
+});
+
+
 // Routes requests for /api/open/tracks
 app.use('/api/open/tracks', trackRouter);
 
@@ -80,6 +119,7 @@ app.use('/api/secure/playlists', secureListRouter);
 
 // Routes requests for /api/admin
 app.use("/api/admin", adminRouter);
+
 
 // Listening for requests on given port
 const port = process.env.PORT || 9000;
