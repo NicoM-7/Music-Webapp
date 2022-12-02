@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
-import { convertFromHTML, EditorState } from "draft-js";
+import { EditorState } from "draft-js";
 import { convertToHTML } from 'draft-convert';
 import DOMPurify from 'dompurify';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -14,7 +14,6 @@ function CreateTakedownPolicy() {
   const [convertedContent, setConvertedContent] = useState(null);
 
   const handleEditorChange = (state) => {
-    console.log(state);
     setEditorState(state);
     convertContentToHTML();
   }
@@ -30,7 +29,7 @@ function CreateTakedownPolicy() {
     fetch("/api/admin/update/takedownPolicy", { method: "POST", body: JSON.stringify({ "html": DOMPurify.sanitize(convertedContent) }), headers: new Headers({ 'Content-Type': 'application/json' }) })
       .then(res => res.json())
       .then(data => {
-        console.log("Entered");
+        alert("Policy has been updated");
       })
       .catch(err => {
         console.log(err);

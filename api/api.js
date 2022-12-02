@@ -72,7 +72,7 @@ app.get("/api/open/privacyPolicy", (req, res) => {
 
     try {
 
-        const data = fs.readFileSync('privacyPolicy.txt', 'utf8');
+        const data = fs.readFileSync('../api/policies/privacyPolicy.txt', 'utf8');
         res.json(data);
     }
     catch (err) {
@@ -83,7 +83,7 @@ app.get("/api/open/privacyPolicy", (req, res) => {
 app.get("/api/open/takedownPolicy", (req, res) => {
 
     try {
-        const data = fs.readFileSync('takedownPolicy.txt', 'utf8');
+        const data = fs.readFileSync('../api/policies/takedownPolicy.txt', 'utf8');
         res.json(data);
     }
     catch (err) {
@@ -95,7 +95,7 @@ app.get("/api/open/takedownPolicy", (req, res) => {
 app.get("/api/open/acceptableUsePolicy", (req, res) => {
 
     try {
-        const data = fs.readFileSync('acceptableUsePolicy.txt', 'utf8');
+        const data = fs.readFileSync('../api/policies/acceptableUsePolicy.txt', 'utf8');
         res.json(data);
     }
     catch (err) {

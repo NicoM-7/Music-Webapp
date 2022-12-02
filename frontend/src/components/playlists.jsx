@@ -23,13 +23,19 @@ function Playlists() {
         e.preventDefault();
         //gets playlist search results from user input
         fetch("/api/open/playlists?name=" + (inputs.playlist !== undefined ? inputs.playlist : ""), { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
-            .then(res => res.json())
-            .then(data => {
-                setPlaylists(data);
+            .then(httpResp => {
+                return httpResp.json().then(data => {
+                    if (httpResp.ok) {
+                        setPlaylists(data);
+                    }
+                    else {
+                        throw new Error(httpResp.status + "\n" + JSON.stringify(data));
+                    }
+                })
             })
             .catch(err => {
-                console.log(err);
-            })
+                alert(err);
+            });
     }
 
     //returns form with user input and display lists
@@ -40,7 +46,7 @@ function Playlists() {
                     <input className="inputSearch" type="text" name="playlist" onChange={handleChange} value={inputs.playlist || ""} placeholder="Search Playlist" /><br />
                 </form>
                 {
-                    playlists !== "No Lists Found" ? playlists.map((playlist) => <Playlist {...playlist} key={playlist.id} />) : <div>{alert("No results found!")}</div>
+                    playlists !== "No Lists Found" ? playlists.map((playlist) => <Playlist {...playlist} key={playlist.id} />) : <div></div>
                 }
             </div>
         </React.Fragment>

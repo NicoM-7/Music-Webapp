@@ -1,6 +1,5 @@
 import { useState } from "react";
 import React from "react";
-import { useEffect } from 'react';
 import ReviewInfo from "./playlistInfo";
 import "../styles/track.css";
 import "../styles/homePage.css";
@@ -44,7 +43,7 @@ function ReviewManagement() {
                     playlists !== "No Lists Found" ? playlists.map((playlist) => <ReviewInfo {...playlist} key={playlist.id} />) : <div>{alert("No results found!")}</div>
                 }
             </div>
-            
+
         </React.Fragment>
     )
 }
