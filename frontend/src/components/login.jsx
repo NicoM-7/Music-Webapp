@@ -158,10 +158,10 @@ function Login() {
             </div>
             <div className='container2'>
                 <h1>New User? Sign Up with Email Below</h1><br></br>
-                <button className='loginB' onClick={signUpPage}>Sign Up</button>
+                <button className='loginB' onClick={signUpPage}>Sign Up</button><br /><br /><br />
+                <h1>Or Go Back To The Home Page</h1>
+                <button className='loginB' onClick={homePage}>Back to Home Page</button>
             </div>
-            <button onClick={homePage}>Back to Home Page</button>
-
         </div>
     );
 }
