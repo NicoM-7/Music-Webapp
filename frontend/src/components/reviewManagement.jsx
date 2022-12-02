@@ -2,6 +2,8 @@ import { useState } from "react";
 import React from "react";
 import { useEffect } from 'react';
 import ReviewInfo from "./playlistInfo";
+import "../styles/track.css";
+import "../styles/homePage.css";
 
 function ReviewManagement() {
 
@@ -29,9 +31,9 @@ function ReviewManagement() {
 
     return (
         <React.Fragment>
-            <div className="mainPlaylistDiv">
+            <div className="defaultMargin">
                 <form onSubmit={handleSubmit}>
-                    <input type="text" name="playlist" onChange={handleChange} value={inputs.playlist || ""} placeholder="Search Playlist" /><br />
+                    <input className="inputSearch" type="text" name="playlist" onChange={handleChange} value={inputs.playlist || ""} placeholder="Search Playlist" /><br />
                 </form>
                 {
                     playlists !== "No Lists Found" ? playlists.map((playlist) => <ReviewInfo {...playlist} key={playlist.id} />) : <div>{alert("No results found!")}</div>

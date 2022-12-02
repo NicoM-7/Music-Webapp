@@ -4,6 +4,7 @@ import { convertFromHTML, EditorState } from "draft-js";
 import { convertToHTML } from 'draft-convert';
 import DOMPurify from 'dompurify';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import "../styles/dmca.css";
 
 function CreateTakedownPolicy(){
 
@@ -40,7 +41,7 @@ function CreateTakedownPolicy(){
           editorState={editorState}
           onEditorStateChange={handleEditorChange}
         />
-    <button onClick={createMarkup}>Save Changes</button>
+    <button className="submitButton" onClick={createMarkup}>Save Changes</button>
     </React.Fragment>
   )
 }

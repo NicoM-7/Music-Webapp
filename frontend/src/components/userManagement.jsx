@@ -2,7 +2,6 @@ import { useState } from "react";
 import UserInfo from "./userInfo";
 import React from "react";
 import { useEffect } from 'react';
-import "../styles/userManagement.css";
 
 function UserManagement() {
 
@@ -20,7 +19,7 @@ function UserManagement() {
     }, []);
 
     return (
-        <div className="mainDivUM">
+        <div>
             <React.Fragment>
                 {users.map((user) => <UserInfo {...user} key={user.id} />)}
             </React.Fragment>

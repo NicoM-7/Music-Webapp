@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import "../styles/userInfo.css";
 
 function UserInfo(user) {
 
@@ -51,13 +52,13 @@ function UserInfo(user) {
     return (
         <React.Fragment>
             <ul>
-                <li>Username: {user.username}</li>
-                <li>ID: {user.id}</li>
-                <li>
+                <li className="userLI">Username: {user.username}</li>
+                <li className="userLI">ID: {user.id}</li>
+                <li className="userLI">
                     <label>Has Admin: </label>
                     <input type="checkbox" name="public" onChange={handleAdminChange} checked={adminState === "true" ? true : false} /><br />
                 </li>
-                <li>
+                <li className="userLI">
                     <label>Activated: </label>
                     <input type="checkbox" name="public" onChange={handleActivationChange} checked={activationState === "true" ? true : false} /><br />
                 </li>

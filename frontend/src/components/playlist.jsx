@@ -77,14 +77,13 @@ function Playlist(playlist) {
 
 const showExpandedView = () => {
     return (
-        <div>
-
+        <div><br />
             <li>
                 {tracks.map((track) => <Track {...track} key={track.trackID} />)}
             </li>
             <li>
-                <input type="button" name="addReview" onClick={clickAddReviewButton} value={!addReviewButton ? "Add Review" : "Close"} /><br />
-                <input type="button" name="expandReviews" onClick={clickExpandReviewsButton} value={!openReviewButton ? "Open Reviews" : "Close"} /><br />
+                <input className="inputButton" type="button" name="addReview" onClick={clickAddReviewButton} value={!addReviewButton ? "Add Review" : "Close"} /><br />
+                <input className="inputButton" type="button" name="expandReviews" onClick={clickExpandReviewsButton} value={!openReviewButton ? "Open Reviews" : "Close"} /><br />
                 {addReviewButton ? <ReviewForm {...playlist} key={playlist.id} /> : null}
                 {reviews}
             </li>
@@ -99,8 +98,8 @@ const expand = (event) => {
 }
 
 return (
-    <div className="playlist">
-        <ul onClick={expand}>
+    <div>
+        <ul className="backgroundUL" onClick={expand}>
             <li onClick={expand}>Playlist ID: {playlist.id}</li>
             <li onClick={expand}>Playlist Name: {playlist.name}</li>
             <li onClick={expand}>Created By: {playlist.username}</li>

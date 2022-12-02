@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useState} from "react";
 import { Rating } from "react-simple-star-rating";
+import "../styles/userInfo.css";
 
 function ReviewInfo(review){
 
@@ -113,9 +114,9 @@ function ReviewInfo(review){
         <React.Fragment>
             <br></br>
             <ul>
-                <li>Review By: {review.username}</li>
-                <li>Description: {review.review}</li>
-                <li>Rating: {<Rating
+                <li className="userLI">Review By: {review.username}</li>
+                <li className="userLI">Description: {review.review}</li>
+                <li className="userLI">Rating: {<Rating
                 initialValue={review.rating}
                 size={20}
                 readonly={review.rating > 0}
@@ -123,20 +124,22 @@ function ReviewInfo(review){
                 emptyColor='gray'
                 className='foo' // Will remove the inline style if applied
             />}</li>
-            <li>Takedown Request: {dmca.takedown != undefined ? dmca.takedown : null}
+            <li className="userLI">Takedown Request: {dmca.takedown != undefined ? dmca.takedown : null}
             <input type="button" name="submitTakedown" onClick={takedownButton} value={!takedown ? "Enter Date" : "Cancel"} />
                 {takedown ? <div><input type="text" name="takedown" onChange={handleInputs} value={inputs.takedown || ""}/><button onClick={saveTakedown}>Save</button></div> : null}
             </li>
-            <li>Infringement Notice: {dmca.infringement != undefined ? dmca.infringement : null}
+            <li className="userLI">Infringement Notice: {dmca.infringement != undefined ? dmca.infringement : null}
                 <input type="button" name="submitInfringement" onClick={infringementButton} value={!infringement ? "Enter Date" : "Cancel"} />
                 {infringement ? <div><input type="text" name="infringement" onChange={handleInputs} value={inputs.infringement || ""}/><button onClick={saveInfringement}>Save</button></div> : null}
             </li>
-            <li>Dispute Claim: {dmca.dispute != undefined ? dmca.dispute : null}
+            <li className="userLI">Dispute Claim: {dmca.dispute != undefined ? dmca.dispute : null}
                 <input type="button" name="submitTakedown" onClick={disputeButton} value={!dispute ? "Enter Date" : "Cancel"} />
                 {dispute ? <div><input type="text" name="dispute" onChange={handleInputs} value={inputs.dispute || ""}/><button onClick={saveDispute}>Save</button></div> : null}
             </li>
+            <li className="userLI">
                 <label>Hidden: </label>
                 <input type="checkbox" name="public" onChange={handleChange} checked={hidden === "true" ? true : false} /><br />
+            </li>
             </ul>
             <br></br>
         </React.Fragment>

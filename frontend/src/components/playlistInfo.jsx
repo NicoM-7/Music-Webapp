@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Rating } from "react-simple-star-rating";
 import ReviewInfo from "./reviewInfo";
+import "../styles/userInfo.css";
 
 function PlaylistInfo(playlist) {
 
@@ -38,12 +39,11 @@ function PlaylistInfo(playlist) {
     });
     return (
         <React.Fragment>
-            
             <ul>
-                <li>Playlist By: {playlist.username}</li>
-                <li>Playlist Name: {playlist.name}</li>
-                <li>Description: {playlist.description}</li>
-                <li>Rating: {rating != null ? <Rating
+                <li className="userLI">Playlist By: {playlist.username}</li>
+                <li className="userLI">Playlist Name: {playlist.name}</li>
+                <li className="userLI">Description: {playlist.description}</li>
+                <li className="userLI">Rating: {rating != null ? <Rating
                 initialValue={rating}
                 size={20}
                 readonly={rating > 0}

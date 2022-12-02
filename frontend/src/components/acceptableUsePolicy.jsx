@@ -1,12 +1,13 @@
 import React from "react"
 import { useState, useEffect } from "react"
+import '../styles/dmca.css';
 
 function AcceptableUsePolicy() {
 
     const [html, setHTML] = useState(null);
 
     useEffect(() => {
-        fetch("/api/open/acceptableUsePolicy", { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' })})
+        fetch("/api/open/acceptableUsePolicy", { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
             .then(res => res.json())
             .then(data => {
                 console.log(data);
@@ -20,7 +21,9 @@ function AcceptableUsePolicy() {
 
     return (
         <React.Fragment>
-            <div dangerouslySetInnerHTML={{__html: html}}></div>
+            <div className="dmcaP">
+                <div dangerouslySetInnerHTML={{ __html: html }}></div>
+            </div>
         </React.Fragment>
     )
 }

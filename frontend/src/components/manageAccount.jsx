@@ -4,7 +4,7 @@ import ChangeUsername from "./changeUsername";
 function ManageAccount() {
 
     return (
-        <div className="mainPlaylistDiv">
+        <div>
             <React.Fragment>
                 <ChangeUsername />
                 <br></br>

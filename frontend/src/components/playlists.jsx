@@ -1,6 +1,8 @@
 import React from "react";
 import { useState } from 'react';
-import "../styles/playlists.css"
+import "../styles/playlists.css";
+import "../styles/homePage.css";
+import "../styles/track.css";
 import Playlist from "./playlist";
 
 function Playlists() {
@@ -28,9 +30,9 @@ function Playlists() {
 
     return (
         <React.Fragment>
-            <div className="mainPlaylistDiv">
+            <div className="defaultMargin">
                 <form onSubmit={handleSubmit}>
-                    <input type="text" name="playlist" onChange={handleChange} value={inputs.playlist || ""} placeholder="Search Playlist" /><br />
+                    <input className="inputSearch" type="text" name="playlist" onChange={handleChange} value={inputs.playlist || ""} placeholder="Search Playlist" /><br />
                 </form>
                 {
                     playlists !== "No Lists Found" ? playlists.map((playlist) => <Playlist {...playlist} key={playlist.id} />) : <div>{alert("No results found!")}</div>
