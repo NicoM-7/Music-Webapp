@@ -3,6 +3,7 @@ const db = require('../DBConnect.js');
 
 const secureUsersRouter = express.Router();
 
+//updates user's username
 secureUsersRouter.put('/update/:id', (req, res) => {
     db.query("UPDATE users SET username=? WHERE id=?;", [req.body.username, req.params.id], (err, data) => {
         if (err) {

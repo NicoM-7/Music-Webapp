@@ -6,6 +6,7 @@ const db = require('../DBConnect.js');
 
 const openUsersRouter = express.Router();
 
+//gets username
 openUsersRouter.get('', (req, res) => {
     db.query("SELECT username FROM users;", (err, data) => {
         console.log(data);
@@ -23,6 +24,7 @@ openUsersRouter.get('', (req, res) => {
     });
 });
 
+//gets user based on id
 openUsersRouter.get("/:id", (req, res) => {
     db.query("SELECT * FROM users WHERE id=?;", [req.params.id], (err, data) => {
         if (err != null) {
@@ -35,6 +37,7 @@ openUsersRouter.get("/:id", (req, res) => {
     })
 });
 
+//posts new user in mySQL
 openUsersRouter.post('/insert', (req, res) => {
 
     db.query("INSERT INTO users VALUES (?, ?, ?, ?);", [req.body.id, req.body.username, req.body.administrator, req.body.activated], (err) => {
@@ -50,6 +53,7 @@ openUsersRouter.post('/login', (req, res) => {
     res.json({ accessToken: accessToken })
 });
 
+//posts new google user into mySQL
 openUsersRouter.post("/insertGoogleUser", (req, res) => {
 
     let username = req.body.username;

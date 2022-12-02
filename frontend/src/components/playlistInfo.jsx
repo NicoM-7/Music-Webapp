@@ -6,11 +6,13 @@ import ReviewInfo from "./reviewInfo";
 import "../styles/userInfo.css";
 
 function PlaylistInfo(playlist) {
-
+    
+    //state for reviews and ratings
     const [reviews, setReviews] = useState([]);
     const [rating, setRating] = useState(null);
 
     useEffect(() => {
+        //get all reviews for playlist
         fetch("/api/admin/review/" + playlist.id ,{method: "GET", headers: new Headers({ 'Content-Type': 'application/json' })})
         .then(res => res.json())
         .then(data => {
@@ -28,6 +30,7 @@ function PlaylistInfo(playlist) {
     }, []);
 
     useEffect(() => {
+        //get ratings for playlist
         fetch("/api/open/playlists/rating/" + playlist.id, { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
             .then(res => res.json())
             .then(data => {
@@ -37,6 +40,7 @@ function PlaylistInfo(playlist) {
                 console.log(err);
             })
     });
+    //returns playlist information
     return (
         <React.Fragment>
             <ul>

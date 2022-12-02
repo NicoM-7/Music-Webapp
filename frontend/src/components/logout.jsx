@@ -6,6 +6,7 @@ import "../styles/navbar.css";
 
 function Logout(){
 
+    //logout button in nav bar
     const navigate = useNavigate();
     const logout = () => {
         signOut(auth).then(() => {

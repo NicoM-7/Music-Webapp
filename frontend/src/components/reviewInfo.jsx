@@ -5,6 +5,7 @@ import "../styles/userInfo.css";
 
 function ReviewInfo(review){
 
+    //sets states
     const [inputs, setInputs] = useState({});
     const [hidden, setHidden] = useState(review.hidden === "true" ? "true" : "false");
     const [dmca, setDMCA] = useState({});
@@ -25,6 +26,7 @@ function ReviewInfo(review){
         })
     }, [save]);
 
+    //detects user changes
     const handleChange = () => {
 
         let tempState = "";
@@ -35,6 +37,7 @@ function ReviewInfo(review){
             tempState = "true";
         }
 
+        //posts toggle for hidden review
         fetch("/api/admin/update/review", { method: "POST", body: JSON.stringify({ "hidden": tempState, "reviewId": review.reviewId }), headers: new Headers({ 'Content-Type': 'application/json' }) })
             .then(res => res.json())
             .then(data => {
@@ -46,12 +49,14 @@ function ReviewInfo(review){
             })
     }
 
+    //gets user input
     const handleInputs = (event) => {
         const name = event.target.name;
         const value = event.target.value;
         setInputs(values => ({ ...values, [name]: value }))
     }
 
+    //button to report dcma infractions
     const takedownButton = () => {
         setTakedown(!takedown);
     }
@@ -64,6 +69,7 @@ function ReviewInfo(review){
         setDispute(!dispute);
     }
 
+    //posts takedown report
     const saveTakedown = () => {
         
         setSave(true);
@@ -80,6 +86,7 @@ function ReviewInfo(review){
         });
     }
 
+    //posts infringement report
     const saveInfringement = () => {
         setSave(true);
         
@@ -94,6 +101,7 @@ function ReviewInfo(review){
         });
     }
 
+    //posts dispute report
     const saveDispute = () => {
 
         setSave(true);
@@ -110,6 +118,7 @@ function ReviewInfo(review){
         });
     }
 
+    //returns form to input dcma infraction reports
     return (
         <React.Fragment>
             <br></br>

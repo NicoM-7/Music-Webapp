@@ -4,9 +4,11 @@ import '../styles/dmca.css';
 
 function AcceptableUsePolicy() {
 
+    //state for use policy
     const [html, setHTML] = useState(null);
 
     useEffect(() => {
+        //gets acceptable use policy
         fetch("/api/open/acceptableUsePolicy", { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
             .then(res => res.json())
             .then(data => {
@@ -19,6 +21,7 @@ function AcceptableUsePolicy() {
             })
     }, []);
 
+    //returns policy
     return (
         <React.Fragment>
             <div className="dmcaP">

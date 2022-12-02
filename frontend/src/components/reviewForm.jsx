@@ -7,31 +7,36 @@ import moment from "moment";
 
 function ReviewForm(playlist) {
 
+    //state for ratings, inputs, and buttonState
     const [rating, setRating] = useState(0) // initial rating value
     const [inputs, setInputs] = useState({});
     const [buttonState, setButtonState] = useState(false);
     const navigate = useNavigate();
 
+    //detects user change
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
         setInputs(values => ({ ...values, [name]: value }))
     }
 
+    //detects new rating
     const handleRating = (rate) => {
         setRating(rate)
     }
 
+    //submits review
     const submitReview = () => {
         if (auth.currentUser != null) {
             if (buttonState) {
+                //checks to see if user already posted review
                 fetch("/api/secure/playlists/count?userId=" + auth.currentUser.uid + "&playlistId=" + playlist.id, { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
                     .then(res => res.json())
                     .then(data => {
                         if (data[0].count > 0) {
                             alert("You have already submitted a review for this playlist!")
                         }
-                        else {
+                        else { //if no review posted, then add review
                             fetch("/api/secure/playlists/review", { method: "PUT", body: JSON.stringify({ "playlistId": playlist.id, "name": playlist.name, "user": auth.currentUser.uid, "rating": rating, "review": inputs.description, "date": moment().format('YYYY-MM-DD HH:mm:ss') }), headers: new Headers({ 'Content-Type': 'application/json' }) })
                                 .then(res => res.json())
                                 .then(data => {
@@ -53,6 +58,7 @@ function ReviewForm(playlist) {
         }
     }
 
+    //returns review
     return (
         <React.Fragment>
             <form>

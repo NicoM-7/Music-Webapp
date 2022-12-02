@@ -7,17 +7,21 @@ import "../styles/homePage.css";
 
 function ReviewManagement() {
 
+    //state for inputs and playlists
     const [inputs, setInputs] = useState({});
     const [playlists, setPlaylists] = useState([]);
 
+    //detects user changes
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
         setInputs(values => ({ ...values, [name]: value }))
     }
 
+    //detects user submit
     const handleSubmit = (e) => {
         e.preventDefault();
+        //gets all reviews for playlist
         fetch("/api/open/playlists?name=" + (inputs.playlist !== undefined ? inputs.playlist : ""), { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
             .then(res => res.json())
             .then(data => {
@@ -29,6 +33,7 @@ function ReviewManagement() {
             })
     }
 
+    //return list of playlists and reviews
     return (
         <React.Fragment>
             <div className="defaultMargin">

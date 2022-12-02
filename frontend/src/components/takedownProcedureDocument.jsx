@@ -2,6 +2,7 @@ import React from "react";
 
 function TakedownProcedureDocument() {
 
+    //returns text of takedown procedure
     return (
         <React.Fragment>
             <h2>DMCA takedown procedure</h2>

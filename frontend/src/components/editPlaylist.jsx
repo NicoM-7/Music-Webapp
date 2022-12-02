@@ -241,6 +241,7 @@ function EditPlaylist({ description, id, lastModified, username, name, numTracks
         }
     }
 
+    //returns playlist information
     return (
         <div className='editPlaylist'>
             <h1>{details.name}</h1>

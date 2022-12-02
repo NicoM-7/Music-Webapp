@@ -8,6 +8,7 @@ function HomePage() {
         navigate("/login");
     };
 
+    //returns home page with text
     return (
         <div className='defaultMargin'>
             <h1>Free Music Archive ReST API</h1>

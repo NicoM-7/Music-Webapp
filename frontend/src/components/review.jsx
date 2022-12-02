@@ -2,6 +2,7 @@ import React from "react";
 import {Rating} from 'react-simple-star-rating';
 function Review(review) {
 
+    //returns review information with review parameter
     return (
         <React.Fragment>
             <h1>Review by: {review.username} on {review.date.toString()}</h1>

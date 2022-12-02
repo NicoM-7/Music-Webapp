@@ -4,9 +4,11 @@ import '../styles/dmca.css';
 
 function TakedownPolicy() {
 
+    //state html
     const [html, setHTML] = useState(null);
 
     useEffect(() => {
+        //gets admin inputted takedown policy
         fetch("/api/open/takedownPolicy", { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
             .then(res => res.json())
             .then(data => {
@@ -19,6 +21,7 @@ function TakedownPolicy() {
             })
     }, []);
 
+    //displays takedown policy
     return (
         <React.Fragment>
             <div className="dmcaP">

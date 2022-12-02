@@ -5,9 +5,11 @@ import { useEffect } from 'react';
 
 function UserManagement() {
 
+    //state for users
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
+        //gets all usernames
         fetch("/api/admin/usernames", { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
             .then(res => res.json())
             .then(data => {
@@ -18,6 +20,7 @@ function UserManagement() {
             })
     }, []);
 
+    //returns information on all users
     return (
         <div>
             <React.Fragment>

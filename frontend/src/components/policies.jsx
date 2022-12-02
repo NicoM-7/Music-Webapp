@@ -5,6 +5,7 @@ import "../styles/policies.css";
 
 function Policies() {
 
+    //buttons to guide to each policy
     const navigate = useNavigate();
 
     const privacyPolicyButton = () => {
@@ -19,6 +20,7 @@ function Policies() {
         navigate("/acceptableUsePolicy", { replace: true });
     }
 
+    //returns a page of buttons
     return (
         <React.Fragment>
             <div className="defaultMargin">

@@ -68,6 +68,7 @@ function Tracks() {
         }
     }
 
+    //returns search bar for tracks and displays results
     return (
         <div className='defaultMargin'>
             <form onKeyDown={handleSubmit}>

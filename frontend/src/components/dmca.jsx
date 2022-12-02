@@ -4,6 +4,7 @@ import "../styles/dmca.css";
 
 function DMCA(){
 
+    //sets navigate to their respective policy
     const navigate = useNavigate();
     const privacyPolicyButton = () => {
         navigate("/createPrivacyPolicy", {replace: true});
@@ -21,6 +22,7 @@ function DMCA(){
         navigate("/takedownProcedureDocument", {replace: true});
     }
 
+    //returns list of buttons
     return (
         <React.Fragment>
             <button className="dcmaButton" onClick={privacyPolicyButton}>Create and Edit Privacy and Secuirity Policiy</button>
