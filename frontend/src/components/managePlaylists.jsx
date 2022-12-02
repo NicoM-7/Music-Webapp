@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import Tracks from './tracks';
 import EditPlaylist from './editPlaylist';
-
 import '../styles/managePlaylist.css';
 import { auth } from '../firebase.js';
 import { useRef } from 'react';
@@ -170,17 +169,20 @@ function ManagePlaylist() {
     }
 
     return (
-        <div className='managePlaylists'>
+        <div>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
             <div className='playlistSide'>
                 <div className="selectBox">
                     <form onSubmit={handleSubmit}>
-                        <input type="text" name="name" onChange={handleChange} value={newPlaylist.name || ""} placeholder="Playlist Name" /><br></br>
-                        <input type="text" name="tracks" onChange={handleChange} value={newPlaylist.tracks || ""} placeholder="Tracks" />
-                        <button type="submit">+</button>
+                        <input className="playlistSearch" type="text" name="name" onChange={handleChange} value={newPlaylist.name || ""} placeholder="Playlist Name" />
+                        <input className="playlistSearch" type="text" name="tracks" onChange={handleChange} value={newPlaylist.tracks || ""} placeholder="Tracks" />
+                        <button className='addButton' type="submit"><i class="fa fa-plus"></i></button>
                     </form>
-                    {
-                        playlistButtons
-                    }
+                    <div>
+                        {
+                            playlistButtons
+                        }
+                    </div>
                 </div>
                 <div className="playlistBox">
                     {

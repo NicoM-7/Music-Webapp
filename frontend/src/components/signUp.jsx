@@ -7,6 +7,7 @@ function SignUp() {
 
     let navigate = useNavigate();
 
+    //state for inputs and errors
     const [inputs, setInputs] = useState({});
     const [emailEmptyError, setEmailError] = useState(false);
     const [passwordEmptyError, setPasswordError] = useState(false);
@@ -14,6 +15,7 @@ function SignUp() {
     const [usernameTakenError, setUsernameTakenError] = useState(false);
     const [accountVerified, setAccountVerified] = useState(false);
 
+    //detects user change
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
@@ -24,27 +26,32 @@ function SignUp() {
 
         e.preventDefault();
 
+        //sets errors to false
         setUsernameError(false);
         setEmailError(false);
         setPasswordError(false);
         setUsernameTakenError(false);
         setAccountVerified(false);
 
+        //user inputs
         const username = inputs.uname;
         const email = inputs.email;
         const password = inputs.password;
 
+        //gets all usernames
         fetch("/api/open/usernames", {
             method: "GET", headers: new Headers({ 'Content-Type': 'application/json' })
         })
             .then((res => res.json()))
             .then(data => {
 
+                //if username found, return username taken
                 if (data.some(user => user.username === username)) {
                     alert("Username taken!");
                     setUsernameTakenError(true);
                 }
 
+                //if username not valid, set errors to true
                 else if ((username === undefined || username === "") || (email === undefined || email === "") || (password === undefined || password === "") || usernameTakenError) {
 
                     if (username === undefined || username === "") {
@@ -57,11 +64,12 @@ function SignUp() {
                         setPasswordError(true);
                     }
                 }
-                else {
+                else { //else, create username
                     createUserWithEmailAndPassword(auth, email, password)
                         .then((userCredential) => {
                             const user = userCredential.user;
                             if (user != null) {
+                                //posts account info to database
                                 fetch("/api/open/usernames/insert", { method: "POST", body: JSON.stringify({ "username": username, "id": user.uid, "administrator": "false", "activated": "true" }), headers: new Headers({ 'Content-Type': 'application/json' }) })
                                     .then(res => res.json)
                                     .then(data => {
@@ -74,6 +82,7 @@ function SignUp() {
                                 setAccountVerified(true);
                             }
                         })
+                        //if firebase error
                         .catch((error) => {
 
                             const parsedError = error.toString().substring(error.toString().indexOf(":") + 1, error.toString().lastIndexOf("."));
@@ -98,6 +107,7 @@ function SignUp() {
         navigate(-1);
     }
 
+    //returns sign up page
     return (
         <div>
             <div className='container3'>

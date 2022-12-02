@@ -1,5 +1,6 @@
 import mysql from 'mysql2';
 
+//connects to mySQL database
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -8,6 +9,7 @@ const db = mysql.createConnection({
     multipleStatements: true
 });
 
+//builds users table template
 function buildUsersDB() {
 
     db.query("DROP TABLE users", (err) => {

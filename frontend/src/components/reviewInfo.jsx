@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import { useState} from "react";
 import { Rating } from "react-simple-star-rating";
+import "../styles/userInfo.css";
 
 function ReviewInfo(review){
 
+    //sets states
     const [inputs, setInputs] = useState({});
     const [hidden, setHidden] = useState(review.hidden === "true" ? "true" : "false");
     const [dmca, setDMCA] = useState({});
@@ -24,6 +26,7 @@ function ReviewInfo(review){
         })
     }, [save]);
 
+    //detects user changes
     const handleChange = () => {
 
         let tempState = "";
@@ -34,6 +37,7 @@ function ReviewInfo(review){
             tempState = "true";
         }
 
+        //posts toggle for hidden review
         fetch("/api/admin/update/review", { method: "POST", body: JSON.stringify({ "hidden": tempState, "reviewId": review.reviewId }), headers: new Headers({ 'Content-Type': 'application/json' }) })
             .then(res => res.json())
             .then(data => {
@@ -45,12 +49,14 @@ function ReviewInfo(review){
             })
     }
 
+    //gets user input
     const handleInputs = (event) => {
         const name = event.target.name;
         const value = event.target.value;
         setInputs(values => ({ ...values, [name]: value }))
     }
 
+    //button to report dcma infractions
     const takedownButton = () => {
         setTakedown(!takedown);
     }
@@ -63,6 +69,7 @@ function ReviewInfo(review){
         setDispute(!dispute);
     }
 
+    //posts takedown report
     const saveTakedown = () => {
         
         setSave(true);
@@ -79,6 +86,7 @@ function ReviewInfo(review){
         });
     }
 
+    //posts infringement report
     const saveInfringement = () => {
         setSave(true);
         
@@ -93,6 +101,7 @@ function ReviewInfo(review){
         });
     }
 
+    //posts dispute report
     const saveDispute = () => {
 
         setSave(true);
@@ -109,13 +118,14 @@ function ReviewInfo(review){
         });
     }
 
+    //returns form to input dcma infraction reports
     return (
         <React.Fragment>
             <br></br>
             <ul>
-                <li>Review By: {review.username}</li>
-                <li>Description: {review.review}</li>
-                <li>Rating: {<Rating
+                <li className="userLI">Review By: {review.username}</li>
+                <li className="userLI">Description: {review.review}</li>
+                <li className="userLI">Rating: {<Rating
                 initialValue={review.rating}
                 size={20}
                 readonly={review.rating > 0}
@@ -123,20 +133,22 @@ function ReviewInfo(review){
                 emptyColor='gray'
                 className='foo' // Will remove the inline style if applied
             />}</li>
-            <li>Takedown Request: {dmca.takedown != undefined ? dmca.takedown : null}
+            <li className="userLI">Takedown Request: {dmca.takedown != undefined ? dmca.takedown : null}
             <input type="button" name="submitTakedown" onClick={takedownButton} value={!takedown ? "Enter Date" : "Cancel"} />
                 {takedown ? <div><input type="text" name="takedown" onChange={handleInputs} value={inputs.takedown || ""}/><button onClick={saveTakedown}>Save</button></div> : null}
             </li>
-            <li>Infringement Notice: {dmca.infringement != undefined ? dmca.infringement : null}
+            <li className="userLI">Infringement Notice: {dmca.infringement != undefined ? dmca.infringement : null}
                 <input type="button" name="submitInfringement" onClick={infringementButton} value={!infringement ? "Enter Date" : "Cancel"} />
                 {infringement ? <div><input type="text" name="infringement" onChange={handleInputs} value={inputs.infringement || ""}/><button onClick={saveInfringement}>Save</button></div> : null}
             </li>
-            <li>Dispute Claim: {dmca.dispute != undefined ? dmca.dispute : null}
+            <li className="userLI">Dispute Claim: {dmca.dispute != undefined ? dmca.dispute : null}
                 <input type="button" name="submitTakedown" onClick={disputeButton} value={!dispute ? "Enter Date" : "Cancel"} />
                 {dispute ? <div><input type="text" name="dispute" onChange={handleInputs} value={inputs.dispute || ""}/><button onClick={saveDispute}>Save</button></div> : null}
             </li>
+            <li className="userLI">
                 <label>Hidden: </label>
                 <input type="checkbox" name="public" onChange={handleChange} checked={hidden === "true" ? true : false} /><br />
+            </li>
             </ul>
             <br></br>
         </React.Fragment>

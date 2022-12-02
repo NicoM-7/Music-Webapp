@@ -21,6 +21,7 @@ function Track(track) {
         window.open(`https://www.youtube.com/results?search_query=${track.artistName}+${track.trackTitle}`, '_blank', 'noopener,noreferrer');
     }
 
+    //returns track information
     return (
         <div>
             <button type="button" className="collapsible">

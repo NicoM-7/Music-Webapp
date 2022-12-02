@@ -3,8 +3,9 @@ import ChangePassword from "./changePassword";
 import ChangeUsername from "./changeUsername";
 function ManageAccount() {
 
+    //returns both change username component and change password component
     return (
-        <div className="mainPlaylistDiv">
+        <div>
             <React.Fragment>
                 <ChangeUsername />
                 <br></br>

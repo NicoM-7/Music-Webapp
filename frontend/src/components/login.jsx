@@ -6,6 +6,7 @@ import "../styles/login.css"
 
 function Login() {
 
+    //sends and gets JSON Web Token between website and firebase
     const getJWT = (username) => {
         fetch("/api/open/usernames/login",
             {
@@ -30,6 +31,7 @@ function Login() {
             });
     }
 
+    //log in with google
     let navigate = useNavigate();
     const provider = new GoogleAuthProvider();
     const signInWithGoogle = () => {
@@ -69,10 +71,12 @@ function Login() {
         navigate("/signUp");
     }
 
+    //sets state for user input and errors
     const [inputs, setInputs] = useState({});
     const [emailEmptyError, setEmailError] = useState(false);
     const [passwordEmptyError, setPasswordError] = useState(false);
 
+    //gets input from user
     const handleChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
@@ -98,6 +102,7 @@ function Login() {
             }
         }
 
+        //sign in with email and password through firebase
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 let user = userCredential.user;
@@ -136,6 +141,7 @@ function Login() {
         navigate("/home", { replace: true });
     }
 
+    //returns login page with inputs for username and password
     return (
         <div className="mainDIV">
             <div className='container1'>
@@ -152,10 +158,10 @@ function Login() {
             </div>
             <div className='container2'>
                 <h1>New User? Sign Up with Email Below</h1><br></br>
-                <button className='loginB' onClick={signUpPage}>Sign Up</button>
+                <button className='loginB' onClick={signUpPage}>Sign Up</button><br /><br /><br />
+                <h1>Or Go Back To The Home Page</h1>
+                <button className='loginB' onClick={homePage}>Back to Home Page</button>
             </div>
-            <button onClick={homePage}>Back to Home Page</button>
-
         </div>
     );
 }

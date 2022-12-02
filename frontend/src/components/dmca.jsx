@@ -1,8 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import "../styles/dmca.css";
 
 function DMCA(){
 
+    //sets navigate to their respective policy
     const navigate = useNavigate();
     const privacyPolicyButton = () => {
         navigate("/createPrivacyPolicy", {replace: true});
@@ -20,12 +22,13 @@ function DMCA(){
         navigate("/takedownProcedureDocument", {replace: true});
     }
 
+    //returns list of buttons
     return (
         <React.Fragment>
-            <button onClick={privacyPolicyButton}>Create and Edit Privacy and Secuirity Policiy</button>
-            <button onClick={takedownPolicyButton}>Create and Edit Takedown Policy</button>
-            <button onClick={acceptableUsePolicyButton}>Create and Edit Acceptable Use Policy</button>
-            <button onClick={takedownProcedureButton}>Takedown Procedure Document</button>
+            <button className="dcmaButton" onClick={privacyPolicyButton}>Create and Edit Privacy and Secuirity Policiy</button>
+            <button className="dcmaButton" onClick={takedownPolicyButton}>Create and Edit Takedown Policy</button>
+            <button className="dcmaButton" onClick={acceptableUsePolicyButton}>Create and Edit Acceptable Use Policy</button>
+            <button className="dcmaButton" onClick={takedownProcedureButton}>Takedown Procedure Document</button>
         </React.Fragment>
     )
 }

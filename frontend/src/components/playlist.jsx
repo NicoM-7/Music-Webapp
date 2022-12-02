@@ -9,6 +9,7 @@ import '../styles/playlist.css'
 
 function Playlist(playlist) {
 
+    //state for expanded, tracks, reviews, ratings, addReviewButton, and openReviewButton
     const [expanded, setExpanded] = useState(false);
     const [tracks, setTracks] = useState([]);
     const [reviews, setReviews] = useState([]);
@@ -18,9 +19,11 @@ function Playlist(playlist) {
 
     useEffect(() => {
         const getTracks = async () => {
+            //gets tracks in playlist
             const trackID = playlist.tracks.toString().split(',');
             const tracks = [];
             for (let c = 0; c < trackID.length; c++) {
+                //gets track info
                 await fetch("/api/open/tracks/" + trackID[c], { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
                     .then(res => res.json())
                     .then(data => {
@@ -36,6 +39,7 @@ function Playlist(playlist) {
     }, []);
 
     useEffect(() => {
+        //gets playlist ratings
         fetch("/api/open/playlists/rating/" + playlist.id, { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
             .then(res => res.json())
             .then(data => {
@@ -46,14 +50,15 @@ function Playlist(playlist) {
             })
     });
 
+    //toggles add review text box
     const clickAddReviewButton = (event) => {
-
         addReviewClicked(!addReviewButton);
     }
 
+    //toggles expanded reviews 
     const clickExpandReviewsButton = (event) => {
-
         if(!openReviewButton){
+            //gets all reviews for a playlist
             fetch("/api/open/playlists/review/" + playlist.id, { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
             .then(res => res.json())
             .then(data => {
@@ -76,15 +81,15 @@ function Playlist(playlist) {
     }
 
 const showExpandedView = () => {
+    //returns if expanded
     return (
-        <div>
-
+        <div><br />
             <li>
                 {tracks.map((track) => <Track {...track} key={track.trackID} />)}
             </li>
             <li>
-                <input type="button" name="addReview" onClick={clickAddReviewButton} value={!addReviewButton ? "Add Review" : "Close"} /><br />
-                <input type="button" name="expandReviews" onClick={clickExpandReviewsButton} value={!openReviewButton ? "Open Reviews" : "Close"} /><br />
+                <input className="inputButton" type="button" name="addReview" onClick={clickAddReviewButton} value={!addReviewButton ? "Add Review" : "Close"} /><br />
+                <input className="inputButton" type="button" name="expandReviews" onClick={clickExpandReviewsButton} value={!openReviewButton ? "Open Reviews" : "Close"} /><br />
                 {addReviewButton ? <ReviewForm {...playlist} key={playlist.id} /> : null}
                 {reviews}
             </li>
@@ -98,9 +103,10 @@ const expand = (event) => {
     }
 }
 
+//returns if not expanded
 return (
-    <div className="playlist">
-        <ul onClick={expand}>
+    <div>
+        <ul className="backgroundUL" onClick={expand}>
             <li onClick={expand}>Playlist ID: {playlist.id}</li>
             <li onClick={expand}>Playlist Name: {playlist.name}</li>
             <li onClick={expand}>Created By: {playlist.username}</li>

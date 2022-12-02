@@ -5,12 +5,14 @@ import Logout from "./logout";
 import "../styles/navbar.css";
 function Navbar() {
 
+    //state for username and hasAdmin
     const [username, setUsername] = useState("");
     const [hasAdmin, setAdmin] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
         try {
+            //checks if user is admin
             fetch("/api/open/usernames/" + auth.currentUser.uid, { method: "GET", headers: new Headers({ 'Content-Type': 'application/json' }) })
                 .then(res => res.json())
                 .then(data => {
@@ -32,6 +34,7 @@ function Navbar() {
         }
     });
 
+    //all buttons in nav bar
     const homeButton = () => {
         navigate("/home", { replace: true });
     }
@@ -72,6 +75,7 @@ function Navbar() {
         navigate("/manageDMCA", { replace: true });
     }
 
+    //returns button in nav bar
     return (
         <div>
             <nav>
